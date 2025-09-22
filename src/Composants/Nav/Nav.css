@@ -1,0 +1,129 @@
+#container-navigation{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    /* margin: 0 auto; */
+    width: 50%;
+    height: 40px;
+    padding: 1px;
+    border-radius: 0 0 12px 12px;
+    background-color: white;
+    /* background-color: blue; */
+    box-shadow: 0 0 5px #eee;
+    transition: all 0.5s ease-in-out;
+    z-index: 3;
+}
+
+#container-navigation.show{
+    height: 160px;
+}
+
+
+#container-navigation .navigation{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    top: -110px;
+    margin-top: 10px;
+    /* background-color: salmon; */
+    transition: all 0.5s ease-in-out;
+}
+
+#container-navigation .navigation.show{
+    top: 0;
+}
+
+#container-navigation .navigation ul li{
+    display: inline-block;
+    margin: 0 20px;
+}
+
+#container-navigation .navigation ul li .bloc-item-nav{
+    height: 100px;
+    padding: 0 30px;
+    /* background-color: white; */
+    border-radius: 10px;
+    cursor: pointer;
+    /* transition: all 0.2s ease-in-out; */
+    text-align: center;
+}
+
+#container-navigation .navigation ul li .bloc-item-nav:hover{
+    /* border: 1px solid #eee; */
+    box-shadow: 0 0 2px #eee;
+}
+
+#container-navigation .navigation ul li .bloc-item-nav.current{
+    background-color: rgba(33, 150, 243, 0.9);
+    
+}
+
+#container-navigation .navigation ul li .bloc-item-nav .icon{
+    font-weight: 100;
+}
+
+#container-navigation .navigation ul li .bloc-item-nav .icon .fas{
+    /* font-weight: lighter!important; */
+    margin-top: 50px;
+    font-size: 25px;
+    color: #c2c2c2;
+}
+
+#container-navigation .navigation ul li .bloc-item-nav p{
+    margin: 5px 0;
+    color: #c2c2c2;
+    font-weight: lighter;
+    letter-spacing: 1px;
+}
+
+
+
+
+#container-navigation .container-btn-toggle-navigation{
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    border-top: 1px solid #eee;
+    /* background-color: brown; */
+    bottom: 0;
+    padding: 5px;
+}
+
+#container-navigation .container-btn-toggle-navigation .icon{
+    line-height: 40px;
+    float: right;
+    margin-right: 10px;
+}
+
+#container-navigation .container-btn-toggle-navigation .icon .fas{
+    font-size: 28px;
+    cursor: pointer;
+    transform: rotate(180deg);
+    transition: all 0.5s ease-in-out;
+    text-align: center;
+}
+
+#container-navigation .container-btn-toggle-navigation .icon .fas.active{
+    transform: rotate(0deg);
+}
+
+#container-navigation .container-btn-toggle-navigation .icon .fas:hover{
+    text-shadow: 0 0 5px #eee;
+}
+
+.fond{
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.589);
+    transition: all 0.5s ease-in-out;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.fond.show{
+    opacity: 1;
+    pointer-events: initial;
+}

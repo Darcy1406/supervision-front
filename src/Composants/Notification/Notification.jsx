@@ -1,0 +1,16 @@
+import React from 'react'
+
+export default function Notification({notification}) {
+  return ( 
+    <>
+        {
+            notification.map((item, index) => (
+            <div key={index} className='bg-white px-2 py-4 mx-2 mb-2 border-b border-gray-300 shadow-sm cursor-pointer rounded-lg duration-150 ease-in-out hover:bg-gray-100'>
+                <p>{item}</p>
+            </div>
+
+            ))
+        }
+    </>
+  )
+}
