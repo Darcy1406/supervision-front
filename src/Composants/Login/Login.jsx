@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useReducer, useState } from 'react'
+import { NavLink, Router, useLocation, useNavigate } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
 import './Login.css'
 
@@ -10,6 +10,8 @@ export default function Login() {
   const [identifiant, setIdentifiant] = useState("")
   const [role, setRole] = useState("")
   const [password, setPassword] = useState("")
+
+  const navigate = useNavigate();
 
 
   async function fetchCsrfToken() {
@@ -23,10 +25,10 @@ export default function Login() {
   const send_login = (e) => {
     e.preventDefault();
 
-    if(!captchaToken){
-      alert("Veuillez valider le reCAPTCHA");
-      return
-    }
+    // if(!captchaToken){
+    //   alert("Veuillez valider le reCAPTCHA");
+    //   return
+    // }
 
     const csrftoken = document.cookie.split("; ").find((row) => row.startsWith("csrftoken="))?.split("=")[1];
 
@@ -46,7 +48,7 @@ export default function Login() {
       body: JSON.stringify({
         identifiant,
         password,
-        token: captchaToken
+        // token: captchaToken
       }),
     })
     .then(response => {
@@ -56,7 +58,13 @@ export default function Login() {
       return response.json();
     })
     .then(data => {
-      console.log(data);
+      console.log(data.message);
+      if(data.message == 'Correcte'){
+        navigate('./main')
+      }
+      else{
+        alert('Mot de paase incorrecte')
+      }
     })
     .catch(error => {
       console.log('Erreur : ', error);
@@ -109,10 +117,10 @@ export default function Login() {
                 </select>
               </div>
 
-              <ReCAPTCHA 
+              {/* <ReCAPTCHA 
                 sitekey='6LeVF8srAAAAALAiB0y2lXFh1y8facfBKsJU-Foq'
                 onChange={setCaptchaToken}
-              />
+              /> */}
 
               <NavLink to='/inscription' style={{ textDecoration: 'underline' }} className='block my-4 float-right'>S'inscrire</NavLink>
 
