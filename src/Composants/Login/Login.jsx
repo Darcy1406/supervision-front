@@ -2,6 +2,7 @@ import React, { useReducer, useState } from 'react'
 import { NavLink, Router, useLocation, useNavigate } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
 import './Login.css'
+import { API_URL } from '../../Config'
 
 
 export default function Login() {
@@ -15,7 +16,7 @@ export default function Login() {
 
 
   async function fetchCsrfToken() {
-    const response = await fetch("http://127.0.0.1:8000/api/csrf/", {
+    const response = await fetch(`${API_URL}/api/csrf/`, {
       credentials: "include"  // pour recevoir le cookie
     });
     // le cookie csrftoken est maintenant dans le navigateur
@@ -38,7 +39,7 @@ export default function Login() {
     formData.append('role', role)
     formData.append('token', captchaToken)
 
-    fetch("http://127.0.0.1:8000/users/login", {
+    fetch(`${API_URL}/users/login`, {
       method: 'post',
       headers: {
         "Content-Type": "application/json",
