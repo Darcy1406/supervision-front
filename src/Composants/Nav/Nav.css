@@ -3,7 +3,8 @@
     left: 50%;
     transform: translateX(-50%);
     /* margin: 0 auto; */
-    width: 50%;
+    width: 60%;
+    min-width: 800px;
     height: 40px;
     padding: 1px;
     border-radius: 0 0 12px 12px;

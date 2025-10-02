@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import { NavLink, useLocation } from 'react-router-dom';
 import './Nav.css';
+import { useAuthentification } from '../../hooks/useAuthentification';
 
 export default function Nav() {
 
@@ -18,6 +19,8 @@ export default function Nav() {
 
     const location = useLocation();
 
+    const { logout } = useAuthentification()
+
   return (
     <>
     
@@ -26,9 +29,9 @@ export default function Nav() {
             <nav className='navigation' ref={ref_navigation}>
                 <ul>
 
-                    <NavLink to='/main' onClick={show_or_close_navigation}>
+                    <NavLink to='/main/dashboard' onClick={show_or_close_navigation}>
                         <li>
-                            <div className={location.pathname == '/main' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
+                            <div className={location.pathname == '/main/dashboard' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
                                 <span className='icon'>
                                     <i className="fas fa-columns"></i>
                                 </span>
@@ -70,6 +73,18 @@ export default function Nav() {
                             </div>
                         </li>
                     </NavLink>
+                    
+                    <button onClick={() => { logout(); show_or_close_navigation() }} className='current'>
+                        <li>
+                            <div className='bloc-item-nav'>
+                                <span className='icon'>
+                                    <i className="fas fa-sign-out-alt"></i>
+                                </span>
+                                {/* <NavLink style={{display: 'block'}} to='/main/rapport'>Rapports</NavLink> */}
+                                <p>Deconnexion</p>
+                            </div>
+                        </li>
+                    </button>
 
 
                     {/* <li>
