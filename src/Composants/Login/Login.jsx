@@ -2,74 +2,28 @@ import React, { useReducer, useState } from 'react'
 import { NavLink, Router, useLocation, useNavigate } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
 import './Login.css'
+import { API_URL } from '../../Config'
+import { getCSRFToken } from '../../utils/csrf'
+import { useAuthentification } from '../../hooks/useAuthentification'
 
 
 export default function Login() {
 
-  const [captchaToken, setCaptchaToken] = useState(null);
+  // const [captchaToken, setCaptchaToken] = useState(null);
   const [identifiant, setIdentifiant] = useState("")
-  const [role, setRole] = useState("")
+  // const [role, setRole] = useState("")
   const [password, setPassword] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const navigate = useNavigate();
-
-
-  async function fetchCsrfToken() {
-    const response = await fetch("http://127.0.0.1:8000/api/csrf/", {
-      credentials: "include"  // pour recevoir le cookie
-    });
-    // le cookie csrftoken est maintenant dans le navigateur
-  }
+  // const navigate = useNavigate();
 
 
-  const send_login = (e) => {
-    e.preventDefault();
+  // async function fetchCsrfToken() {
+  //   const response = 
+  //   // le cookie csrftoken est maintenant dans le navigateur
+  // }
 
-    // if(!captchaToken){
-    //   alert("Veuillez valider le reCAPTCHA");
-    //   return
-    // }
-
-    const csrftoken = document.cookie.split("; ").find((row) => row.startsWith("csrftoken="))?.split("=")[1];
-
-    const formData = new FormData();
-    formData.append('identifiant', identifiant)
-    formData.append('password', password)
-    formData.append('role', role)
-    formData.append('token', captchaToken)
-
-    fetch("http://127.0.0.1:8000/users/login", {
-      method: 'post',
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrftoken, // ✅ envoie du token CSRF
-      },
-      credentials: "include", // important pour que le cookie soit envoyé
-      body: JSON.stringify({
-        identifiant,
-        password,
-        // token: captchaToken
-      }),
-    })
-    .then(response => {
-      if(!response.ok){
-        throw new Error('Error HTTP' + response.status)
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log(data.message);
-      if(data.message == 'Correcte'){
-        navigate('./main')
-      }
-      else{
-        alert('Mot de paase incorrecte')
-      }
-    })
-    .catch(error => {
-      console.log('Erreur : ', error);
-    });
-  }
+  const { login } = useAuthentification()
 
   return (
     <div className='flex items-center justify-center w-screen h-screen bg-gray-50'>
@@ -78,12 +32,12 @@ export default function Login() {
           <p className='text-3xl text-center font-bold'>Connexion</p>
           <span className='block text-center mb-6'>Connectez-vous a votre compte</ span>
 
-          <div className='w-125 h-140 py-4 px-6 rounded-xl bg-white shadow-md'>
+          <div className='w-125 h-125 py-4 px-6 rounded-xl bg-white shadow-md'>
 
             <p className='font-bold text-2xl mb-2'>Se connecter</p>
             <span>Entrez vos identifiants pour acceder a votre compte</span>
 
-            <form onSubmit={(e) => send_login(e)}>
+            <form onSubmit={(e) => login(e, identifiant, password, setIsSubmitting)}>
 
               {/* Email */}
               <div className='my-4'>
@@ -108,14 +62,14 @@ export default function Login() {
               </div>
 
               {/* Rôle */}
-              <div className='my-4'>
+              {/* <div className='my-4'>
                 <label htmlFor="" className='block mb-2 font-semibold'>Rôle</label>
                 <select name="" id="" className='border border-gray-200 block w-full p-2 rounded-lg' defaultValue={role} onChange={(e) => setRole(e.target.value)} required>
                   <option value="" disabled>Quel est votre rôle</option>
                   <option value="Auditeur">Auditeur</option>
                   <option value="Chef d'Unité">Chef d'Unité</option>
                 </select>
-              </div>
+              </div> */}
 
               {/* <ReCAPTCHA 
                 sitekey='6LeVF8srAAAAALAiB0y2lXFh1y8facfBKsJU-Foq'
@@ -124,7 +78,9 @@ export default function Login() {
 
               <NavLink to='/inscription' style={{ textDecoration: 'underline' }} className='block my-4 float-right'>S'inscrire</NavLink>
 
-              <button className='bg-black w-full text-white py-2 rounded-xl cursor-pointer duration-150 hover:text-lg'>Se connecter</button>
+              <button className='bg-black w-full text-white py-2 rounded-xl cursor-pointer duration-150 hover:text-lg'>
+                { isSubmitting ? "Connexion..." : "Se connecter" }
+              </button>
 
             </form>
             
