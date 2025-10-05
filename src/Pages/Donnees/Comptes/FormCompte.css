@@ -1,0 +1,17 @@
+#form_compte{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 3;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s ease-in-out;
+}
+
+#form_compte.show{
+    opacity: 1;
+    pointer-events: initial;
+}
