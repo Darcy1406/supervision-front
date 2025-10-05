@@ -6,7 +6,7 @@ import { getCSRFToken } from "../utils/csrf";
  * @param {string} url 
  * @param {FetchEventInit} options 
  */
-export function useFetch(url, method, body = {}) {
+export function useFetch(url, method, body = {}, reset) {
     
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState(null)
@@ -67,7 +67,7 @@ export function useFetch(url, method, body = {}) {
             })
         }
 
-    }, [])
+    }, [reset])
 
     return {
         loading: loading,

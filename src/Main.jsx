@@ -7,6 +7,7 @@ import Notification from './Composants/Notification/Notification.jsx';
 import { API_URL } from './Config.js';
 import { useUserStore } from './store/useUserStore.js';
 import { useAuthentification } from './hooks/useAuthentification.js';
+import { Alert } from './Composants/Alert/Alert';
 
 
 export default function Main() {
@@ -67,6 +68,8 @@ export default function Main() {
 
             <div className='container-body w-5/6'>
                 <Outlet />
+
+                {/* <Alert /> */}
             </div>
 
           </div>
