@@ -95,7 +95,7 @@ export default function Depenses({setTotal, setDepenses}) {
                               name="" 
                               id="" 
                               value={formattedValue} 
-                              onChange={(e) => handleChange(compte, e.target.value)}
+                              onChange={(e) => handleChange(compte, e.target.value.replace(/\s/g, ""))}
                             />Ar
                           </td>
                         </tr>
@@ -206,7 +206,7 @@ export default function Depenses({setTotal, setDepenses}) {
                               name="" 
                               id="" 
                               value={formattedValue} 
-                              onChange={(e) => handleChange(compte, e.target.value)}/>Ar
+                              onChange={(e) => handleChange(compte, e.target.value.replace(/\s/g, ""))}/>Ar
                           </td>
                         </tr>
                       )

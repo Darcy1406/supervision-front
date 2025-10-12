@@ -70,8 +70,7 @@ export default function Tsdmt() {
       return response.json();
     })
     .then(data => {
-      console.log(data);
-      setResult(data);
+      send_tsdmt(data['id_fichier']);
     })
     .catch(error => {
       console.log('Erreur : ', error);
@@ -80,8 +79,8 @@ export default function Tsdmt() {
     // sendData(`${API_URL}/data/document/save`, 'POST', {"document": doc, "file": doc['fichier']}, setResult)
   }
   
-  const send_tsdmt = () => {
-    sendData(`${API_URL}/data/transcription/create`, 'POST', { "recettes": recettes, "depenses": depenses, "report": parseInt(report, 10), "solde": (parseInt(report, 10) + parseInt(total_recettes, 10) - parseInt(total_depenses, 10)), "natures": ['recettes', 'depenses', 'report', 'solde']}, setResult)
+  const send_tsdmt = (id_doc) => {
+    sendData(`${API_URL}/data/transcription/create`, 'POST', { "recettes": recettes, "depenses": depenses, "report": parseInt(report, 10), "solde": (parseInt(report, 10) + parseInt(total_recettes, 10) - parseInt(total_depenses, 10)), "natures": ['recettes', 'depenses', 'report', 'solde'], 'id_doc': id_doc}, setResult)
   }
 
 
@@ -104,108 +103,6 @@ export default function Tsdmt() {
 
 
   return (
-    // <section className='tsdmt'>
-
-    //   <div className='container-tsdmt w-full gap-4 flex justify-center pt-4'>
-
-    //     <div className='box-recettes w-130 bg-white rounded-xl shadow-lg pb-2'>
-
-    //       <p className='bg-gray-300 p-4 text-2xl italic font-semibold rounded-t-xl text-center'>Recettes</p>
-
-    //       <form action="" className='px-4 my-4'>
-    //         {/* Numero de compte */}
-    //         <div className='field'>
-    //           <div className="control">
-    //             <label className='label'>Numero de compte</label>
-    //             <input type="number" className="input" placeholder='Entrer le numero de compte'/>
-    //           </div>
-    //         </div>
-
-    //         {/* Libelle */}
-    //         <div className='field'>
-    //           <div className="control">
-    //             <label className='label'>Libellé</label>
-    //             <textarea name="" className='textarea' placeholder='Le libellé du compte ici'></textarea>
-    //           </div>
-    //         </div>
-
-    //         <div className='field'>
-    //           <div className="control">
-    //             <label className='label'>Montant</label>
-    //             <input type="number" className='input' placeholder='Entrer le montant'/>
-    //           </div>
-    //         </div>
-
-    //         <button className='bg-black cursor-pointer px-4 py-2 text-white rounded-sm shadow-xs mt-2'>
-    //           <span className='icon'>
-    //             <i className='fas fa-check-circle'></i>
-    //           </span>
-    //           Valider
-    //         </button>
-
-    //         <div className='mx-6 inline-block is-pulled-right'>
-    //           <p className=''>Montant total : 0 Ar</p>
-    //           <p>Nombre de depenses validées : 0</p>
-    //         </div>
-
-    //       </form>
-
-    //     </div>
-
-    //     <div className='box-depenses w-130 bg-white rounded-xl shadow-lg duration-150'>
-
-    //       <p className='bg-gray-300 p-4 text-2xl font-semibold italic rounded-t-xl text-center'>Dépenses</p>
-
-    //       <form action="" className='px-4 my-4'>
-    //         {/* Numero de compte */}
-    //         <div className='field'>
-    //           <div className="control">
-    //             <label className='label'>Numero de compte</label>
-    //             <input type="number" className="input" placeholder='Entrer le numero de compte'/>
-    //           </div>
-    //         </div>
-
-    //         {/* Libelle */}
-    //         <div className='field'>
-    //           <div className="control">
-    //             <label className='label'>Libellé</label>
-    //             <textarea name="" className='textarea' placeholder='Le libellé du compte ici'></textarea>
-    //           </div>
-    //         </div>
-
-    //         <div className='field'>
-    //           <div className="control">
-    //             <label className='label'>Montant</label>
-    //             <input type="number" className='input' placeholder='Entrer le montant'/>
-    //           </div>
-    //         </div>
-
-    //         <button className='bg-black cursor-pointer px-4 py-2 text-white rounded-sm shadow-xs mt-2'>
-    //           <span className='icon'>
-    //             <i className='fas fa-check-circle'></i>
-    //           </span>
-    //           Valider
-    //         </button>
-
-    //         <div className='mx-6 inline-block is-pulled-right'>
-    //           <p className=''>Montant total : 0Ar</p>
-    //           <p>Nombre de depenses validées : 0</p>
-    //         </div>
-
-    //       </form>
-    //     </div>
-        
-
-    //   </div>
-
-    //   <button className='button is-link is-block mx-auto my-4'>
-    //     <span className='icone mx-1'>
-    //       <i class="fas fa-info"></i>
-    //     </span>
-    //     Transcrire les donnees
-    //   </button>
-
-    // </section>
 
     <section id='tsdmt'>
       <div className='border border-red-400 w-full h-150 flex gap-4 justify-center pt-2'>
@@ -284,7 +181,7 @@ export default function Tsdmt() {
 
 
           <div className='mt-4'>
-            <button className='button is-dark is-block mx-auto' onClick={send_tsdmt}>
+            <button className='button is-dark is-block mx-auto' onClick={send_document}>
               <span className='mx-1'>
                 <i className='fas fa-check-circle'></i>
               </span>
@@ -300,7 +197,6 @@ export default function Tsdmt() {
       <Modal isVisible={isVisible} setIsvisible={setIsvisible}>
         <SaveFile type_piece="TSDMT" setFichier={setDoc}/>
       </Modal>
-      {/* <ChooseFile isVisible={isVisible} setIsvisible={setIsvisible} setDocuments={setDoc}/> */}
 
     </section>
 

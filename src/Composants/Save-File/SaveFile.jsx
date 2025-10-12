@@ -69,7 +69,8 @@ export default function SaveFile({type_piece, setFichier}) {
                 <datalist id='poste_comptable'>
                     {
                         postes_comptables && postes_comptables.map((item, index) => (
-                            <option value={item["id"]} key={index}>{ item['nom_poste_comptable'] + " " + item["prenom_poste_comptable"] }</option>
+                            // <option value={item["id"]} key={index}>{ item['nom_poste_comptable'] + " " + item["prenom_poste_comptable"] }</option>
+                            <option value={item['nom_poste_comptable'] + " " + item["prenom_poste_comptable"]} key='index' />
                         ))
                     }
                   
@@ -135,9 +136,9 @@ export default function SaveFile({type_piece, setFichier}) {
                         <label className="label">Décade</label>
                         <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['decade']} onChange={(e) => handleChange('decade', e.target.value)}>
                             <option value="" disabled>Choisissez le décade du document</option>
-                            <option value="1ère">1ère</option>
-                            <option value="2ème">2ème</option>
-                            <option value="3ème">3ème</option>
+                            <option value="1ère décade">1ère</option>
+                            <option value="2ème décade">2ème</option>
+                            <option value="3ème décade">3ème</option>
                         </select>
                     </div>
                 </div>

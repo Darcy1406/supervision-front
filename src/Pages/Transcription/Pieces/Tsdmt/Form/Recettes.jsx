@@ -93,7 +93,7 @@ export default function Recettes({ total, setTotal, setRecettes }) {
                               name="" 
                               id="" 
                               value={formattedValue}
-                              onChange={(e) => handleChange(compte, e.target.value) }
+                              onChange={(e) => handleChange(compte, e.target.value.replace(/\s/g, "")) }
                             />Ar
                           </td>
                         </tr>
@@ -204,7 +204,7 @@ export default function Recettes({ total, setTotal, setRecettes }) {
                               name="" 
                               id="" 
                               value={formattedValue} 
-                              onChange={(e) =>  handleChange(compte, e.target.value) }
+                              onChange={(e) =>  handleChange(compte, e.target.value.replace(/\s/g, "")) }
                             />Ar
                           </td>
                         </tr>
