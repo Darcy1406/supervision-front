@@ -103,78 +103,8 @@ export default function Depenses({setTotal, setDepenses}) {
                     })
                   }
 
-
-                  {/* <tr>
-                    <td>1811212</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>181122</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>1811231</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>1811232</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>1811233</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>1811234</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>1811238</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>181124</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>181125</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>181128</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr> */}
-
                 </tbody>
+
               </table>
 
             </div>
@@ -213,64 +143,9 @@ export default function Depenses({setTotal, setDepenses}) {
                     })
                   }
 
-                  {/* <tr>
-                    <td>45213</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>45218</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>4522</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>4528</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>452842</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>4786</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>4787</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr> */}
-
                 </tbody>
-              </table>
 
-              {/* <button className='button is-dark'>
-                  <span className='mx-1'>
-                    <i className='fas fa-check-circle'></i>
-                  </span>
-                  Valider
-              </button> */}
+              </table>
 
             </div>
             

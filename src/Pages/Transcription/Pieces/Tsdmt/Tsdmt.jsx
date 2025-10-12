@@ -8,6 +8,7 @@ import { API_URL } from '../../../../Config';
 import Modal from '../../../../Composants/Modal/Modal.jsx';
 import SaveFile from '../../../../Composants/Save-File/SaveFile.jsx';
 import { getCSRFToken } from '../../../../utils/csrf.js';
+import { Alert } from '../../../../Composants/Alert/Alert.jsx';
 
 export default function Tsdmt() {
 
@@ -26,7 +27,15 @@ export default function Tsdmt() {
 
   const [isVisible, setIsvisible] = useState(false);
 
-  const [result, setResult] = useState(false);
+  const [reset_file, setResetFile] = useState(null);
+
+  const [result, setResult] = useState("");
+
+
+  const handleResetFile = (fn) => {
+    setResetFile(() => fn);
+  }
+
 
   const get_report_formatted = () => {
     setReportFormatted(formatNumber(report));
@@ -79,8 +88,11 @@ export default function Tsdmt() {
     // sendData(`${API_URL}/data/document/save`, 'POST', {"document": doc, "file": doc['fichier']}, setResult)
   }
   
+
   const send_tsdmt = (id_doc) => {
     sendData(`${API_URL}/data/transcription/create`, 'POST', { "recettes": recettes, "depenses": depenses, "report": parseInt(report, 10), "solde": (parseInt(report, 10) + parseInt(total_recettes, 10) - parseInt(total_depenses, 10)), "natures": ['recettes', 'depenses', 'report', 'solde'], 'id_doc': id_doc}, setResult)
+    setDoc(null);
+    reset_file();
   }
 
 
@@ -105,7 +117,7 @@ export default function Tsdmt() {
   return (
 
     <section id='tsdmt'>
-      <div className='border border-red-400 w-full h-150 flex gap-4 justify-center pt-2'>
+      <div className='w-full h-150 flex gap-4 justify-center pt-2'>
 
         {/* Tableau des recettes */}
         <Recettes total={total_recettes} setTotal={setTotalRecettes} setRecettes={setRecettes}/>
@@ -195,8 +207,14 @@ export default function Tsdmt() {
       </div>
 
       <Modal isVisible={isVisible} setIsvisible={setIsvisible}>
-        <SaveFile type_piece="TSDMT" setFichier={setDoc}/>
+        <SaveFile type_piece="TSDMT" setFichier={setDoc} onRegisterResetFile={handleResetFile}/>
       </Modal>
+
+      {
+        result ?
+          <Alert message={result['message']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300'/>
+        : null
+      }
 
     </section>
 
