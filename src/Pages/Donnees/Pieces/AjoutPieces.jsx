@@ -16,6 +16,22 @@ export function AjoutPieces({isVisible, setIsvisible, data=[], setData, refresh,
 
     const [result, setResult] = useState("");
 
+    const [type_poste_comptable, setTypePosteComptable] = useState({
+        "PP": false,
+        "TG/TP": false,
+        "ACPDC": false,
+        "EPA": false,
+        "EPIC": false,
+    })
+
+
+    const handleChange = (item, value) => {
+        setTypePosteComptable(prev => ({
+            ...prev,
+            [item]: value,
+          }));
+    }
+
 
     const show_form_modal = () => {
         ref_form_modal.current.classList.add('show');
@@ -38,7 +54,7 @@ export function AjoutPieces({isVisible, setIsvisible, data=[], setData, refresh,
     const handlesbumit = (e) => {
         e.preventDefault();
         if(btn_form.current.textContent == 'Ajouter'){
-            sendData(`${API_URL}/data/piece/create`, 'POST', {nom_piece, periode}, setResult);
+            sendData(`${API_URL}/data/piece/create`, 'POST', {nom_piece, periode, "poste_comptable": type_poste_comptable}, setResult);
             
             // setRefresh(!refresh)
         }
@@ -103,7 +119,7 @@ export function AjoutPieces({isVisible, setIsvisible, data=[], setData, refresh,
   return (
     <div id='ajout_piece' ref={ref_form_modal}>
 
-        <div className="container-form w-130 h-90 bg-white mx-auto my-2 p-2 rounded-xl shadow-2xl border-2-b border-blue-400">
+        <div className="container-form w-130 bg-white mx-auto my-2 p-2 rounded-xl shadow-2xl border-2-b border-blue-400">
 
             <span className='block text-right is-marginless cursor-pointer' ref={ref_close_modal} onClick={close_form_modal}>
                 <i className='fas fa-times-circle block text-xl text-red-600 duration:150 ease-in-out hover:text-red-700'></i>
@@ -112,12 +128,14 @@ export function AjoutPieces({isVisible, setIsvisible, data=[], setData, refresh,
             <p className='text-center my-2 text-2xl font-semibold'>Ajouter une pièce</p>
 
             <form onSubmit={(e) => { handlesbumit(e); setRefresh(!refresh) } } className='px-8'>
+
                 <div className='field'>
                     <div className="control">
                         <label className="label">Nom</label>
                         <input type="text" className="input" placeholder='Entrer le nom de la pièce' value={nom_piece} onChange={(e) => setNomPiece(e.target.value)}/>
                     </div>
                 </div>
+
                 <div className='field'>
                     <div className="control">
                         <label className="label">Période</label>
@@ -129,6 +147,42 @@ export function AjoutPieces({isVisible, setIsvisible, data=[], setData, refresh,
                         </select>
                     </div>
                 </div>
+
+                <div className="field">
+                    <div className="control">
+                        <label className='label'>Qui sont les postes comptables pouvant rendre la piece ?</label>
+                        <div className='flex gap-4'>
+
+                            <label htmlFor="">
+                                <input type="checkbox" checked={type_poste_comptable['PP']} onChange={(e) => handleChange('PP', e.target.checked)}/>
+                                PP
+                            </label>
+
+                            <label htmlFor="">
+                                <input type="checkbox" checked={type_poste_comptable['TG/TP']} onChange={(e) => handleChange('TG/TP', e.target.checked)}/>
+                                TG/TP
+                            </label>
+
+                            <label htmlFor="">
+                                <input type="checkbox" checked={type_poste_comptable['ACPDC']} onChange={(e) => handleChange('ACPDC', e.target.checked)}/>
+                                ACPDC
+                            </label>
+
+                            <label htmlFor="">
+                                <input type="checkbox" checked={type_poste_comptable['EPA']} onChange={(e) => handleChange('EPA', e.target.checked)}/>
+                                EPA
+                            </label>
+
+                            <label htmlFor="">
+                                <input type="checkbox" checked={type_poste_comptable['EPIC']} onChange={(e) => handleChange('EPIC', e.target.checked)}/>
+                                EPIC
+                            </label>
+
+                        </div>
+
+                    </div>
+                </div>
+
                 <button type="submit" className={ data.length > 0 ? 'bg-black cursor-pointer px-4 py-2 text-white rounded-sm my-2' : 'bg-blue-500 cursor-pointer px-4 py-2 text-white rounded-sm my-2'} ref={btn_form}>
                     <span className='icone mx-1'>
                         <i className={ data.length > 0 ? 'fas fa-check' : 'fas fa-plus'}></i>

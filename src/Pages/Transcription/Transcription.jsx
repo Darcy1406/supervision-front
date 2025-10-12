@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import Abc from './Composants/Abc';
-import Cde from './Composants/Cde';
-import Fgh from './Composants/Fgh';
+// import Tsdmt from './Pieces/Tsdmt/Tsdmt';
+import Tsdmt from './Pieces/Tsdmt/Tsdmt';
 
-export default function Analyse() {
+export function Transcription() {
 
-  const [liste_piece, setListePiece] = useState(['ABC', 'CDE', 'FGH', 'IJK', 'LMN'])
+  const [liste_piece, setListePiece] = useState(['SJE', 'BOD', 'BOV', 'TSDMT', 'BTD', 'BTR', 'BTT'])
   const [piece, setPiece] = useState("")
 
   const piece_a_analyser = (piece) => {
@@ -19,9 +18,9 @@ export default function Analyse() {
 
 
   return (
-    <section id='analyse' className='bg-green-200 h-full'>
+    <section id='analyse' className='h-full'>
 
-        <div className='bloc-type-doc bg-green-100 flex gap-6 justify-center items-center p-2'>
+        <div className='bloc-type-doc flex gap-6 justify-center items-center p-2 border-b border-gray-300'>
 
           <div className='container-ajout-nouveau-doc border-r gray-400 px-2'>
             <button className='bg-blue-400 py-2 px-4 rounded-lg cursor-pointer text-white duration-150 ease-in-out hover:bg-blue-500'>
@@ -40,14 +39,10 @@ export default function Analyse() {
 
         </div>
           
-        <div className='body-analyse'>
+        <div className='body-analyse w-312'>
           {
-            piece && piece == 'ABC' ?
-              <Abc />
-            : piece && piece == 'CDE' ?
-              <Cde />
-            : piece && piece === 'FGH' ?
-              <Fgh />
+            piece && piece == 'TSDMT' ?
+              <Tsdmt />
             : null
           }
         </div>

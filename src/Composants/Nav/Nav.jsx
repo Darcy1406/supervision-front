@@ -51,7 +51,7 @@ export default function Nav() {
                         </li>
                     </NavLink>
 
-                    <NavLink to='/main/analysis' onClick={show_or_close_navigation}>
+                    <NavLink to='/main/transcription' onClick={show_or_close_navigation}>
                         <li>
                             <div className={location.pathname == '/main/analysis' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
                                 <span className='icon'>

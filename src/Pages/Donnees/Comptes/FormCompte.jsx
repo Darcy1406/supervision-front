@@ -4,7 +4,7 @@ import Checkbox from '../../../Composants/Form/Checkbox';
 import { sendData } from '../../../functions/sendData';
 import { API_URL } from '../../../Config';
 
-export function FormCompte({isVisible, setIsVisible, comptes_regroupements = [], refresh, setRefresh}) {
+export function FormCompte({isVisible, setIsVisible, data=[], setData, comptes_regroupements = [], refresh, setRefresh}) {
 
     const form_compte = useRef(null);
 
@@ -26,6 +26,7 @@ export function FormCompte({isVisible, setIsVisible, comptes_regroupements = [],
         setLibelle("");
         setType("");
         setCompteRegroupement("");
+        setData([]);
     }
 
 
@@ -35,12 +36,23 @@ export function FormCompte({isVisible, setIsVisible, comptes_regroupements = [],
         close_form_modal();
     }
 
+    const get_data = () => {
+        setNumero(data[0].numero);
+        setLibelle(data[0].libelle);
+        setType(data[0].type);
+        setCompteRegroupement(data[0].compte_regroupement);
+    }
+
 
     useEffect(() => {
         if(isVisible){
             show_form_modal();
         }
-    }, [isVisible])
+        if(data.length > 0){
+            get_data();
+        }
+    }, [isVisible, data])
+
 
   return (
     <div id='form_compte' ref={form_compte}>
@@ -89,7 +101,7 @@ export function FormCompte({isVisible, setIsVisible, comptes_regroupements = [],
                             <div className='field' key={index}>
                                 <div className="control">
                                     <label htmlFor="compte_regroupement" className='label'>
-                                        <input type="radio" value={item['id']} name="compte_regroupement" id="compte_regroupement" onChange={(e) => setCompteRegroupement(e.target.value)}/>
+                                        <input type="radio" value={item['id']} name="compte_regroupement" id="compte_regroupement" checked={item['id'] == compte_regroupement ? true : false} onChange={(e) => setCompteRegroupement(e.target.value)}/>
                                     {item['numero']}
                                     </label>
                                 </div>
@@ -100,10 +112,10 @@ export function FormCompte({isVisible, setIsVisible, comptes_regroupements = [],
                 }
 
                 {/* Button d'envoi du formulaire */}
-                <button type="submit" className='bg-blue-500 text-white py-2 px-4 my-2 rounded-sm cursor-pointer duration:200 ease-in-out hover:bg-blue-600'>
+                <button type="submit" className={ data.length > 0 ? 'bg-black cursor-pointer px-4 py-2 text-white rounded-sm my-2' : 'bg-blue-500 cursor-pointer px-4 py-2 text-white rounded-sm my-2'}>
                     <span className='icone'>
-                        <i className='fas fa-plus'></i>
-                        Ajouter
+                        <i className={ data.length > 0 ? 'fas fa-check' : 'fas fa-plus'}></i>
+                        { data.length > 0 ? 'Valider' : 'Ajouter' }
                     </span>
                 </button>
 

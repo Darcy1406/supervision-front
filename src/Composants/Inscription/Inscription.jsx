@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Checkbox from '../Form/Checkbox';
+import { Checkbox } from '../Form/Checkbox';
 import '../../Assets/Css/output.css';
 
 export default function Inscription() {

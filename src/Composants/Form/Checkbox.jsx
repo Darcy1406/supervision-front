@@ -1,12 +1,11 @@
 import React from 'react'
 
-export default function Checkbox({label}) {
+export function Checkbox({label, isChecked, setIschecked}) {
   return (
-    <div>
-      <label htmlFor="">
-        <input type="checkbox" name="" id="" />
+    
+      <label htmlFor="" className='mx-4'>
+        <input type="checkbox" name="" id="" checked={isChecked} onChange={() => setIschecked(!isChecked) }/>
         {label}
       </label>
-    </div>
   )
 }

@@ -1,29 +1,61 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFetch } from '../../../hooks/useFetch';
 import { API_URL } from '../../../Config';
 import { FormCompte } from './FormCompte.jsx';
+import { Checkbox } from '../../../Composants/Form/Checkbox'
 
 export default function Comptes() {
 
   const [isVisible, setIsVisible] = useState(false);
   const [refresh, setRefresh] = useState(true);
 
+  const [isRegroupements, setIsRegroupements] = useState(true);
+  const [isOperations, setIsOperations] = useState(true);
+  const [isAnalyses, setIsAnalyses] = useState(true);
+
   const [data_update, setDataUpdate] = useState([]);
+  const [comptes, setComptes] = useState([]);
+
 
   const get_data_update = (data) => {
     setDataUpdate(data);
     setIsVisible(true);
   }
 
-  const {data: comptes} = useFetch(`${API_URL}/data/compte/get_comptes`, 'get', {}, refresh);
+  const { data } = useFetch(`${API_URL}/data/compte/get_comptes`, 'get', {}, refresh);
 
   const {data: compte_regroupements} = useFetch(`${API_URL}/data/compte/get_comptes_regroupements`, 'post', {'action': 'get_comptes_regroupements'}, refresh);
+
+
+  const data_filter_regroupements = () => {
+    if(comptes && data){
+      const filter = data.filter(item => {
+        if(item['fields']['type'] == 'Regroupements' && !isRegroupements){
+
+          return false;
+        }
+        if(item['fields']['type'] == 'Opérations' && !isOperations){
+          return false;
+        }
+        if(item['fields']['type'] == 'Analyses' && !isAnalyses){
+          return false;
+        }
+        return true;
+      });
+      setComptes(filter);
+    }
+  }
+
+
+  const put_data_in_comptes = (data) => {
+    setComptes(data)
+  }
 
 
 
   function CompteItem({item}){
     return(
-      <tr>
+      <tr className={ item['fields']['type'] == 'Regroupements' ? 'cursor-pointer' : null }>
         <td>{item['fields']['numero']}</td>
         <td>{item['fields']['libelle']}</td>
         <td>
@@ -35,7 +67,7 @@ export default function Comptes() {
         <td>{item['fields']['updated_at']}</td>
         <td>
           <div>
-            <button className="button is-success is-small">
+            <button className="button is-success is-small" onClick={() => get_data_update([{'id': item['pk'], 'numero': item['fields']['numero'], 'libelle': item['fields']['libelle'], 'type': item['fields']['type'], 'compte_regroupement': item['fields']['compte_regroupement']}])}>
               <span className='icon mx-1'>
                 <i className='fas fa-edit'></i>
               </span>
@@ -48,6 +80,15 @@ export default function Comptes() {
     )
   }
 
+  useEffect(()=> {
+    put_data_in_comptes(data);
+  }, [data])
+
+
+  useEffect(()=> {
+    data_filter_regroupements();
+  }, [isRegroupements, isOperations, isAnalyses])
+
 
   return (
     <div id='compte'>
@@ -55,12 +96,22 @@ export default function Comptes() {
 
       <div className="container-table w-3/4 mx-auto my-2">
 
-        <button className='bg-black px-4 py-2 text-white cursor-pointer rounded-lg my-2' onClick={() => setIsVisible(true)}>
-          <span className='icon'>
-            <i className='fas fa-plus'></i>
-          </span>
-            Ajouter un compte
-        </button>
+        <div className='flex items-center gap-10'>
+          <button className='bg-black px-4 py-2 text-white cursor-pointer rounded-lg my-2' onClick={() => setIsVisible(true)}>
+            <span className='icon'>
+              <i className='fas fa-plus'></i>
+            </span>
+              Ajouter un compte
+          </button>
+
+          <div className='container-show-item w-4/6 is-pulled-right'>
+            <div className='inline float-right'>
+              <Checkbox label='Regroupements' isChecked={isRegroupements} setIschecked={setIsRegroupements}/>
+              <Checkbox label='Opérations'  isChecked={isOperations} setIschecked={setIsOperations}/>
+              <Checkbox label='Analyses' isChecked={isAnalyses} setIschecked={setIsAnalyses}/>
+            </div>
+          </div>
+        </div>
 
         <table className='table is-fullwidth is-hoverable'>
 
@@ -87,7 +138,7 @@ export default function Comptes() {
 
       </div>
 
-      <FormCompte isVisible={isVisible} setIsVisible={setIsVisible} comptes_regroupements={compte_regroupements} refresh={refresh} setRefresh={setRefresh}/>
+      <FormCompte isVisible={isVisible} setIsVisible={setIsVisible} comptes_regroupements={compte_regroupements} refresh={refresh} setRefresh={setRefresh} data={data_update} setData={setDataUpdate}/>
 
     </div>
   )

@@ -1,0 +1,33 @@
+#recettes .table-1 tbody tr:nth-child(even){
+    background-color: #d3d3d351;
+}
+
+#recettes .table-2 tbody tr:nth-child(even){
+    background-color: #d3d3d351;
+}
+
+#depenses .table-1 tbody tr:nth-child(even){
+    background-color: #d3d3d351;
+}
+
+#depenses .table-2 tbody tr:nth-child(even){
+    background-color: #d3d3d351;
+}
+
+#choose-file{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s ease-out;
+}
+
+#choose-file.show{
+    opacity: 1;
+    pointer-events: initial;
+}
