@@ -1,9 +1,9 @@
-import { React, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import { useUserStore } from '../../store/useUserStore';
 import { useFetch } from '../../hooks/useFetch';
 import { API_URL } from '../../Config';
 
-export default function SaveFile({type_piece, setFichier}) {
+export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) {
     const user = useUserStore((state) => state.user);
     const [refresh, setRefresh] = useState(true);
 
@@ -12,7 +12,7 @@ export default function SaveFile({type_piece, setFichier}) {
         "poste_comptable": "",
         "periode": "",
         "exercice": "",
-        "mois": 0,
+        "mois": "",
         "decade": "",
         "date_arrivee": "",
         "fichier": "",
@@ -29,6 +29,15 @@ export default function SaveFile({type_piece, setFichier}) {
     }
 
 
+    const reset_file = () => {
+        Object.keys(file).forEach(item => {
+            if(item != "piece"){
+                handleChange(item, "");
+            }
+        })
+    }
+
+
     const selectedFile = () => {
         const file = document.querySelector('.file-input').files[0];
         handleChange("fichier", file);
@@ -40,12 +49,17 @@ export default function SaveFile({type_piece, setFichier}) {
     const handleSubmit = (e) => {
         e.preventDefault();
         setFichier(file);
-    } 
+    }
 
 
     const {data: postes_comptables} = useFetch(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur": user['id'], "piece": type_piece.toUpperCase()}, refresh)
-    
-    
+
+
+    useEffect(() => {
+        onRegisterResetFile(reset_file);
+    }, [onRegisterResetFile])
+
+
   return (
     <div id='save-file'>
 
@@ -73,7 +87,7 @@ export default function SaveFile({type_piece, setFichier}) {
                             <option value={item['nom_poste_comptable'] + " " + item["prenom_poste_comptable"]} key='index' />
                         ))
                     }
-                  
+
                 </datalist>
 
             </div>

@@ -102,76 +102,6 @@ export default function Recettes({ total, setTotal, setRecettes }) {
                     })
                   }
 
-                  {/* <tr>
-                    <td>1811112</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>181112</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>181118</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>45213</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>45218</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>4522</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>4528</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>4787</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>181311</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>181321</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr> */}
-
                 </tbody>
               </table>
 
@@ -213,56 +143,15 @@ export default function Recettes({ total, setTotal, setRecettes }) {
 
                   )}
 
-                  {/* <tr>
-                    <td>181341</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>181312</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>181322</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>181332</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>181341</td>
-                    <td>
-                      <input className='w-32 outline-none border-b-2 border-gray-300' type="text" name="" id="" value={value} onChange={(e) => setValue(formatNumber(e.target.value))}/>Ar
-                    </td>
-                  </tr> */}
-
                 </tbody>
               </table>
 
-              {/* <button className='button is-dark'>
-                  <span className='mx-1'>
-                    <i className='fas fa-check-circle'></i>
-                  </span>
-                  Valider
-              </button> */}
             </div>
-            
 
           </div>  
 
         </div>
+        
     </div>
   )
 }
