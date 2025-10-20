@@ -1,28 +1,30 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { formatNumber } from '../../../../../functions/Function';
+import { useFetch } from '../../../../../hooks/useFetch';
+import { API_URL } from '../../../../../Config';
 
 export default function Recettes({ total, setTotal, setRecettes }) {
 
+  const [refresh, setRefresh] = useState(true);
+
     // const [value, setValue] = useState("");
 
-    const [montants, setMontants] = useState({
-      4522: "",
-      4528: "",
-      4787: "",
-      45213: "",
-      45218: "",
-      181112: "", 
-      181118: "",
-      181311: "",
-      181312: "",
-      181321: "",
-      181322: "",
-      181331: "",
-      181332: "",
-      181341: "",
-      1811111: "",
-      1811112: "",
-    });
+    const { data: liaison_recettes } = useFetch(`${API_URL}/data/piece_compte/lister_comptes_recette`, 'post', {'nature': 'recette', 'action': 'filtrer_liaison'}, refresh)
+
+    const index_slice = useRef(0); 
+    const length_liaison_recettes = useRef(0);
+
+    const [montants, setMontants] = useState({});
+
+
+    const create_state_montants = () => {
+      const initialState = liaison_recettes.reduce((acc, item) => {
+        const numero = item['compte__numero'];
+        acc[numero] = ""
+        return acc;
+      }, {});
+      setMontants(initialState);
+    }
 
     const get_total_recettes = () => {
       let total = 0
@@ -36,12 +38,6 @@ export default function Recettes({ total, setTotal, setRecettes }) {
     const get_recettes = () => {
       setRecettes(montants);
     } 
-
-
-    useEffect(() => {
-      get_recettes();
-      get_total_recettes();
-    }, [montants]);
 
 
     const handleChange = (compte, value) => {
@@ -58,13 +54,32 @@ export default function Recettes({ total, setTotal, setRecettes }) {
     }
 
 
+    useEffect(() => {
+      get_recettes();
+      get_total_recettes();
+    }, [montants]);
+
+    useEffect(() => {
+      if(liaison_recettes){
+        create_state_montants();
+        index_slice.current = Math.floor(liaison_recettes.length / 2);
+        length_liaison_recettes.current = liaison_recettes.length;
+      }
+      // console.log('montants', montants);
+    }, [liaison_recettes]);
+
+
+    
+
+
   return (
     <div id='recettes'>
         <div>
           <p className='text-center bg-gray-300 p-4 font-semibold italic text-xl'>Recettes</p>
           <div className='container-recettes flex gap-2'>
-            <div className=''>
-              <table className='table table-1'>
+
+            <div className='w-1/2'>
+              <table className='table is-fullwidth table-1'>
 
                 <thead>
 
@@ -76,7 +91,7 @@ export default function Recettes({ total, setTotal, setRecettes }) {
 
                 <tbody>
                   {
-                    Object.keys(montants).slice(0,9).map(compte => {
+                    Object.keys(montants).slice(0, index_slice.current).map(compte => {
                       const rawValue = montants[compte]
                       const formattedValue = formatNumber(rawValue);
                       // console.log('toy', formattedValue);
@@ -87,7 +102,7 @@ export default function Recettes({ total, setTotal, setRecettes }) {
                           <td>{compte}</td>
                           <td>
                             <input 
-                              className='w-32 outline-none border-b-2 border-gray-300' 
+                              className='w-5/6 outline-none border-b-2 border-gray-300' 
                               type="text" 
                               inputMode='numeric'
                               name="" 
@@ -97,6 +112,7 @@ export default function Recettes({ total, setTotal, setRecettes }) {
                             />Ar
                           </td>
                         </tr>
+
                        
                       )
                     })
@@ -108,8 +124,8 @@ export default function Recettes({ total, setTotal, setRecettes }) {
             </div>
 
 
-            <div>
-              <table className='table table-2'>
+            <div className='w-1/2'>
+              <table className='table table-2 is-fullwidth'>
 
                 <thead>
 
@@ -121,25 +137,26 @@ export default function Recettes({ total, setTotal, setRecettes }) {
 
                 <tbody>
                   {
-                    Object.keys(montants).slice(9, 16).map(compte => {
-                      const rawValue = montants[compte];
-                      const formattedValue = formatNumber(rawValue);
-                      return (
-                        <tr key={compte}>
-                          <td>{compte}</td>
-                          <td>
-                            <input 
-                              className='w-32 outline-none border-b-2 border-gray-300'
-                              type="text" 
-                              name="" 
-                              id="" 
-                              value={formattedValue} 
-                              onChange={(e) =>  handleChange(compte, e.target.value.replace(/\s/g, "")) }
-                            />Ar
-                          </td>
-                        </tr>
-                      )
-                    }
+                    
+                      Object.keys(montants).slice(index_slice.current, length_liaison_recettes.current).map(compte => {
+                        const rawValue = montants[compte];
+                        const formattedValue = formatNumber(rawValue);
+                        return (
+                          <tr key={compte}>
+                            <td>{compte}</td>
+                            <td>
+                              <input 
+                                className='w-5/6 outline-none border-b-2 border-gray-300'
+                                type="text" 
+                                name="" 
+                                id="" 
+                                value={formattedValue} 
+                                onChange={(e) =>  handleChange(compte, e.target.value.replace(/\s/g, "")) }
+                              />Ar
+                            </td>
+                          </tr>
+                        )
+                      }
 
                   )}
 

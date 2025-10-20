@@ -8,8 +8,18 @@
 
 #main .container-main{
     /* margin-top: 40px; */
+    position: relative;
     height: 100%;
     /* background-color: salmon; */
+}
+
+#main .container-main .container-notification{
+    width: 225px;
+    transition: all 0.5s ease-in-out;
+}
+
+#main .container-main .container-notification.show{
+    width: 0;
 }
 
 #main .container-main .container-body{

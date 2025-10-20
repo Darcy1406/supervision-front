@@ -7,6 +7,10 @@ import { Transcription } from '../Pages/Transcription/Transcription'
 import Rapport from "../Pages/Rapport/Rapport";
 import Dashboard from "../Pages/Dashboard/Dashboard";
 import Data from "../Pages/Donnees/Data";
+import ComptePiece from "../Pages/ComptePiece/ComptePiece";
+import { Tsdmt } from "../Pages/Transcription/Pieces/Tsdmt/Tsdmt.jsx";
+import Liste from "../Pages/ComptePiece/Liste.jsx";
+// import { Liste as Liste_transcription } from "../Pages/Transcription/Liste.jsx";
 
 
 export const router = createBrowserRouter([
@@ -31,13 +35,25 @@ export const router = createBrowserRouter([
                 element: <Data />
             },
             {
-                path: 'transcription',
-                element: <Transcription />
-            },
-            {
                 path: 'reporting',
                 element: <Rapport />
             },
+            {
+                path: 'compte_piece',
+                element: <ComptePiece />
+            },
+            {
+                path: 'compte_piece_list',
+                element: <Liste />
+            },
+            {
+                path: 'transcription',
+                element: <Transcription />,
+            }, 
+            // {
+            //     path: 'liste_transcription',
+            //     element: <Liste_transcription />
+            // }
         ]
     }
 ])

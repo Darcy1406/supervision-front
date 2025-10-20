@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Recettes from './Form/Recettes';
 import Depenses from './Form/Depenses';
 import ChooseFile from './Form/ChooseFile';
@@ -32,9 +32,9 @@ export default function Tsdmt() {
   const [result, setResult] = useState("");
 
 
-  const handleResetFile = (fn) => {
+  const handleResetFile = useCallback((fn) => {
     setResetFile(() => fn);
-  }
+  }, [])
 
 
   const get_report_formatted = () => {
@@ -61,6 +61,7 @@ export default function Tsdmt() {
     formData.append("decade", doc['decade']);
     formData.append("mois", doc['mois']);
     formData.append("date_arrivee", doc['date_arrivee']);
+    formData.append("action", 'ajouter_un_document');
 
     const csrftoken = getCSRFToken();
     fetch(`${API_URL}/data/document/save`, {
@@ -90,7 +91,19 @@ export default function Tsdmt() {
   
 
   const send_tsdmt = (id_doc) => {
-    sendData(`${API_URL}/data/transcription/create`, 'POST', { "recettes": recettes, "depenses": depenses, "report": parseInt(report, 10), "solde": (parseInt(report, 10) + parseInt(total_recettes, 10) - parseInt(total_depenses, 10)), "natures": ['recettes', 'depenses', 'report', 'solde'], 'id_doc': id_doc}, setResult)
+
+    sendData(`${API_URL}/data/transcription/create`, 'POST', {
+      'action': 'ajouter_transcription', 
+      "recettes": recettes, 
+      "depenses": depenses, 
+      "report": parseInt(report, 10), 
+      "solde": (parseInt(report, 10) + parseInt(total_recettes, 10) - parseInt(total_depenses, 10)), 
+      'total recettes': total_recettes, 
+      'total depenses': total_depenses, 
+      "natures": ['recettes', 'depenses', 'report', 'solde', 'total recettes', 'total depenses'], 
+      'id_doc': id_doc
+    }, setResult)
+  
     setDoc(null);
     reset_file();
   }
@@ -117,22 +130,26 @@ export default function Tsdmt() {
   return (
 
     <section id='tsdmt'>
-      <div className='w-full h-150 flex gap-4 justify-center pt-2'>
+      <div className='h-150 flex gap-2 justify-center pt-2'>
 
         {/* Tableau des recettes */}
-        <Recettes total={total_recettes} setTotal={setTotalRecettes} setRecettes={setRecettes}/>
+        <div className='w-3/7'>
+          <Recettes total={total_recettes} setTotal={setTotalRecettes} setRecettes={setRecettes}/>
+        </div>
 
-        {/* Tabelau des depenses */}
-        <Depenses setTotal={setTotalDepenses} setDepenses={setDepenses}/>
+          {/* Tabelau des depenses */}
+        <div className='flex-1'>
+          <Depenses setTotal={setTotalDepenses} setDepenses={setDepenses}/>
+        </div>
 
-        <div className=''>
+        <div className='w-1/7'>
           
           <div className=''>
             <label className='label'>Report</label>
             <input 
               type="text" 
               inputMode='numeric'
-              className='w-40 bg-white p-2 border border-gray-200 rounded-lg shadow-sm outline-none'
+              className='w-5/6 bg-white p-2 border border-gray-200 rounded-lg shadow-sm outline-none'
               placeholder='Entrer le report'
               value={reportFormatted}
               onChange={(e) => setReport(e.target.value.replace(/\s/g, ""))}
@@ -165,9 +182,9 @@ export default function Tsdmt() {
                   <span> Fichier importé</span>
                 </div>
               :
-                <div className='dropdown mt-6' id='drop' onClick={show_button_menu}>
+                <div className='is-block mx-auto dropdown mt-6' id='drop' onClick={show_button_menu}>
                   <div className='dropdown-trigger'>
-                    <button className='button' aria-haspopup='true' aria-controls='dropdown-menu'>
+                    <button className='button is-fullwidth is-block mx-auto' aria-haspopup='true' aria-controls='dropdown-menu'>
                       Importer un fichier
                       <span className='mx-1 is-small'>
                         <i className="fas fa-angle-down" aria-hidden="true"></i>
@@ -176,7 +193,7 @@ export default function Tsdmt() {
                   </div>
 
                   <div className='dropdown-menu' id='dropdown-menu' role='menu'>
-                    <div className="dropdown-content">
+                    <div className="dropdown-content is-block">
                       <button className='dropdown-item' onClick={() => setIsvisible(true)}>
                         Locale
                       </button>
@@ -185,6 +202,7 @@ export default function Tsdmt() {
                       </button>
                     </div>
                   </div>
+
                 </div>
             }
 
@@ -193,7 +211,7 @@ export default function Tsdmt() {
 
 
           <div className='mt-4'>
-            <button className='button is-dark is-block mx-auto' onClick={send_document}>
+            <button className='button is-dark is-block mx-auto' onClick={send_document} disabled={doc == null || report == 0}>
               <span className='mx-1'>
                 <i className='fas fa-check-circle'></i>
               </span>

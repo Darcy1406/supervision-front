@@ -52,7 +52,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
     }
 
 
-    const {data: postes_comptables} = useFetch(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur": user['id'], "piece": type_piece.toUpperCase()}, refresh)
+    const {data: postes_comptables} = useFetch(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur": user['id'], "piece": type_piece.toUpperCase(), 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, refresh)
 
 
     useEffect(() => {
