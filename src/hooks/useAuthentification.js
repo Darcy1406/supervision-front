@@ -8,7 +8,7 @@ export const useAuthentification = () => {
     const navigate = useNavigate()
 
 
-    const login = async (e, identifiant, password, setIsSubmitting) => {
+    const login = async (e, identifiant, password, captchaToken, setIsSubmitting, setResult) => {
         e.preventDefault();
         setIsSubmitting(true);
     
@@ -17,10 +17,11 @@ export const useAuthentification = () => {
           credentials: "include"  // pour recevoir le cookie
         });
     
-        // if(!captchaToken){
-        //   alert("Veuillez valider le reCAPTCHA");
-        //   return
-        // }
+        if(!captchaToken){
+          setResult("Veuillez valider le reCAPTCHA");
+          setIsSubmitting(false)
+          return
+        }
     
         // const csrftoken = document.cookie.split("; ").find((row) => row.startsWith("csrftoken="))?.split("=")[1];
     
@@ -36,6 +37,7 @@ export const useAuthentification = () => {
           body: JSON.stringify({
             identifiant,
             password,
+            captchaToken
             // token: captchaToken
           }),
           credentials: "include", // important pour que le cookie soit envoyé
@@ -48,7 +50,7 @@ export const useAuthentification = () => {
           return response.json();
         })
         .then(data => {
-          console.log(data);
+          // console.log(data);
           // const response = fetch(`${API_URL}/users/get_user`, {
           //   method: 'GET',
           //   credentials: "include",
@@ -57,13 +59,19 @@ export const useAuthentification = () => {
     
           if(data.detail == 'Connecté'){
             navigate('./main/dashboard')
+            setIsSubmitting(false);
           }
           else{
-            alert('Mot de passe incorrecte')
+            // alert('Mot de passe incorrecte')
+            setResult(data['error']);
+          setIsSubmitting(false);  
           }
         })
         .catch(error => {
-          console.log('Erreur : ', error);
+          // alert(error)
+          // alert('erreur');
+
+          console.log('Erreur : ', error.toString());
         });
     }
 
@@ -80,14 +88,12 @@ export const useAuthentification = () => {
           return res.json();
         })
         .then(data => {
-          // console.log(data)
-          // useUserStore.getState().setUser(data);
           setUser(data);
         })
         .catch(error => {
           console.log(error)
           useUserStore.getState().clearUser();
-          navigate("../../")
+          navigate("/")
           
         })
     }

@@ -2,13 +2,18 @@ import React, { useRef } from 'react'
 import { NavLink, useLocation, BrowserRouter } from 'react-router-dom';
 import './Nav.css';
 import { useAuthentification } from '../../hooks/useAuthentification';
+import { useUserStore } from '../../store/useUserStore';
 
 export default function Nav() {
+
+    const user = useUserStore((state) => state.user);
+    const location = useLocation();
 
     const ref_btn_show_navigation = useRef(null);
     const ref_container_navigation = useRef(null);
     const ref_navigation = useRef(null);
     const ref_fond = useRef(null);
+
 
     const show_or_close_navigation = () =>{
         ref_container_navigation.current.classList.toggle("show");
@@ -17,7 +22,6 @@ export default function Nav() {
         ref_fond.current.classList.toggle('show');
     }
 
-    const location = useLocation();
 
     const { logout } = useAuthentification()
 
@@ -28,7 +32,7 @@ export default function Nav() {
 
             <nav className='navigation' ref={ref_navigation}>
                 <ul>
-                        <NavLink to='/main' onClick={show_or_close_navigation}>
+                        <NavLink to='/main/dashboard' onClick={show_or_close_navigation}>
                             <li>
                                 <div className={location.pathname == '/main/dashboard' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
                                     <span className='icon'>
@@ -50,16 +54,22 @@ export default function Nav() {
                             </li>
                         </NavLink>
 
-                        <NavLink to='/main/transcription' onClick={show_or_close_navigation}>
-                            <li>
-                                <div className={location.pathname == '/main/transcription' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
-                                    <span className='icon'>
-                                        <i className="fas fa-chart-line"></i>
-                                    </span>
-                                    <p>Transcription</p>
-                                </div>
-                            </li>
-                        </NavLink>
+                        {
+                            user ?
+                                user[0]['utilisateur__fonction'].toUpperCase() == 'auditeur'.toUpperCase() ?
+                                    <NavLink to='/main/transcription' onClick={show_or_close_navigation}>
+                                        <li>
+                                            <div className={location.pathname == '/main/transcription' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
+                                                <span className='icon'>
+                                                    <i className="fas fa-chart-line"></i>
+                                                </span>
+                                                <p>Transcription</p>
+                                            </div>
+                                        </li>
+                                    </NavLink>
+                                : null
+                            : null
+                        }
 
                         <NavLink to='/main/reporting' onClick={show_or_close_navigation} className='current'>
                             <li>

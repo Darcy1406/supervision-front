@@ -1,23 +1,37 @@
 import { React, useEffect, useRef, useState } from 'react'
-import { formatNumber } from '../../../../../functions/Function';
-import { useFetch } from '../../../../../hooks/useFetch';
+import { formatNombreAvecEspaces, formatNumber } from '../../../../../functions/Function';
+import { useFetch } from '../../../../../functions/fetchData';
 import { API_URL } from '../../../../../Config';
+import InputNumber from '../../../../../Composants/InputNumber/InputNumber';
 
-export default function Depenses({setTotal, setDepenses}) {
+export default function Depenses({setTotal, setDepenses, comptes}) {
   const [refresh, setRefresh] = useState(true);
 
-  const { data: liaison_recettes } = useFetch(`${API_URL}/data/piece_compte/lister_comptes_recette`, 'post', {'nature': 'dépense', 'action': 'filtrer_liaison'}, refresh)
-
   const index_slice = useRef(0); 
-  const length_liaison_recettes = useRef(0);
+  const length_comptes_recettes = useRef(0);
 
   const [montants, setMontants] = useState({});
 
 
+  const [comptes_depenses, setComptesDepenses] = useState([]);
+
+    const filtrer_recettes = () => {
+     
+    const filter = comptes.filter(item => {
+      if( !(item['nature'].toLowerCase().includes('dépense') || item['nature'].toLowerCase().includes('depense')) ){
+        return false 
+      }
+      return true;
+    })
+    setComptesDepenses(filter);
+      
+  }
+
+
   const create_state_montants = () => {
-    const initialState = liaison_recettes.reduce((acc, item) => {
+    const initialState = comptes_depenses.reduce((acc, item) => {
       const numero = item['compte__numero'];
-      acc[numero] = ""
+      acc[numero] = 0
       return acc;
     }, {});
     setMontants(initialState);
@@ -30,7 +44,7 @@ export default function Depenses({setTotal, setDepenses}) {
       const valeur = Number(String(v || "").replace(/\s/g, "")) || 0;
       total += valeur;
     })
-    setTotal(total);
+    setTotal(total.toFixed(2));
   }
 
 
@@ -42,15 +56,22 @@ export default function Depenses({setTotal, setDepenses}) {
   const handleChange = (compte, value) => {
 
     // Retirer les espaces pour le state
-    const rawValue = value.replace(/\s/g, "");
-    // Si ce n’est pas un nombre, on ignore
-    if (!/^\d*$/.test(rawValue)) return;
+    // const rawValue = value.replace(/\s/g, "");
+    // // Si ce n’est pas un nombre, on ignore
+    // if (!/^\d*$/.test(rawValue)) return;
 
     setMontants(prev => ({
       ...prev,
       [compte]: value,
     }));
   }
+
+
+  useEffect(() => {
+    if(comptes){
+      filtrer_recettes();
+    }
+  }, [comptes]);
 
 
   useEffect(() => {
@@ -61,12 +82,12 @@ export default function Depenses({setTotal, setDepenses}) {
 
 
   useEffect(() => {
-    if(liaison_recettes){
+    if(comptes_depenses){
       create_state_montants();
-      index_slice.current = Math.floor(liaison_recettes.length / 2);
-      length_liaison_recettes.current = liaison_recettes.length;
+      index_slice.current = Math.floor(comptes_depenses.length / 2);
+      length_comptes_recettes.current = comptes_depenses.length;
     }
-  }, [liaison_recettes]);
+  }, [comptes_depenses]);
 
 
   return (
@@ -91,19 +112,24 @@ export default function Depenses({setTotal, setDepenses}) {
                   {
                     Object.keys(montants).slice(0, index_slice.current).map(compte => {
                       const rawValue = montants[compte]
-                      const formattedValue = formatNumber(rawValue);
+                      const formattedValue = formatNombreAvecEspaces(rawValue);
                       return (
                         <tr key={compte}>
                           <td>{compte}</td>
                           <td>
-                            <input 
+                            {/* <input 
                               className='w-5/6 outline-none border-b-2 border-gray-300' 
                               type="text" 
                               name="" 
                               id="" 
                               value={formattedValue} 
                               onChange={(e) => handleChange(compte, e.target.value.replace(/\s/g, ""))}
+                            />Ar */}
+                            <InputNumber 
+                              value={formattedValue}
+                              handleChange={(e) => handleChange(compte, e.target.value.replace(/\s/g, "").replace(/,/g, ".")) }
                             />Ar
+
                           </td>
                         </tr>
                       )
@@ -130,21 +156,29 @@ export default function Depenses({setTotal, setDepenses}) {
 
                 <tbody>
                   {
-                    Object.keys(montants).slice(index_slice.current, length_liaison_recettes.current).map(compte => {
+                    Object.keys(montants).slice(index_slice.current, length_comptes_recettes.current).map(compte => {
                       const rawValue = montants[compte]
-                      const formattedValue = formatNumber(rawValue);
+                      const formattedValue = formatNombreAvecEspaces(rawValue);
                       return (
                         <tr key={compte}>
                           <td>{compte}</td>
+
                           <td>
-                            <input 
+
+                            {/* <input 
                               className='w-5/6 outline-none border-b-2 border-gray-300' 
                               type="text" 
                               name="" 
                               id="" 
                               value={formattedValue} 
-                              onChange={(e) => handleChange(compte, e.target.value.replace(/\s/g, ""))}/>Ar
+                              onChange={(e) => handleChange(compte, e.target.value.replace(/\s/g, ""))}/>Ar */}
+                              <InputNumber 
+                                value={formattedValue}
+                                handleChange={(e) =>  handleChange(compte, e.target.value.replace(/\s/g, "").replace(/,/g, ".")) }
+                              />Ar
+
                           </td>
+
                         </tr>
                       )
                     })

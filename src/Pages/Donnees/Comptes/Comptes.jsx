@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useFetch } from '../../../hooks/useFetch';
+import { fetchData } from '../../../functions/fetchData.js';
 import { API_URL } from '../../../Config';
 import { FormCompte } from './FormCompte.jsx';
 import { Checkbox } from '../../../Composants/Form/Checkbox'
@@ -22,16 +22,19 @@ export default function Comptes() {
     setIsVisible(true);
   }
 
-  const { data } = useFetch(`${API_URL}/data/compte/get_comptes`, 'get', {}, refresh);
+  // const { data } = useFetch(`${API_URL}/data/compte/get_comptes`, 'get', {}, refresh);
+  const data = ""
 
-  const {data: compte_regroupements} = useFetch(`${API_URL}/data/compte/get_comptes_regroupements`, 'post', {'action': 'get_comptes_regroupements'}, refresh);
+
+  // const {data: compte_regroupements, loading} = useFetch(`${API_URL}/data/compte/get_comptes_regroupements`, 'post', {'action': 'get_comptes_regroupements'}, refresh);
+  const compte_regroupements = "";
+  const loading = ""
 
 
   const data_filter_regroupements = () => {
     if(comptes && data){
       const filter = data.filter(item => {
         if(item['fields']['type'] == 'Regroupements' && !isRegroupements){
-
           return false;
         }
         if(item['fields']['type'] == 'Opérations' && !isOperations){
@@ -94,7 +97,7 @@ export default function Comptes() {
     <div id='compte'>
       <p className='text-2xl font-semibold bg-gray-100 px-6'>Liste des comptes</p>
 
-      <div className="container-table w-3/4 mx-auto my-2">
+      <div className="container-table w-6/7 mx-auto my-2">
 
         <div className='flex items-center gap-10'>
           <button className='bg-black px-4 py-2 text-white cursor-pointer rounded-lg my-2' onClick={() => setIsVisible(true)}>
@@ -128,9 +131,14 @@ export default function Comptes() {
 
           <tbody>
             {
-              comptes && comptes.map((item, index) => (
-                <CompteItem item={item} key={index}/>
-              ))
+              loading ?
+                <tr>
+                  <td className='text-center' colSpan={5}>Aucun donnee trouvee</td>
+                </tr>
+              :
+                comptes && comptes.map((item, index) => (
+                  <CompteItem item={item} key={index}/>
+                ))
             }
           </tbody>
 

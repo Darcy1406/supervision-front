@@ -1,5 +1,5 @@
 #recettes .table-1 tbody tr:nth-child(even){
-    background-color: #d3d3d351;
+    background-color: rgba(211, 211, 211, 0.5);
 }
 
 #recettes .table-2 tbody tr:nth-child(even){

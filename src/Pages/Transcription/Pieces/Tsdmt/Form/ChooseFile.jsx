@@ -1,6 +1,6 @@
 import { React, useEffect, useRef, useState } from 'react'
 import './Form.css';
-import { useFetch } from '../../../../../hooks/useFetch';
+import { fetchData } from '../../../../../functions/fetchData';
 import { API_URL } from "../../../../../Config"
 import { useUserStore } from '../../../../../store/useUserStore';
 import { sendData } from '../../../../../functions/sendData';
@@ -59,7 +59,8 @@ export default function ChooseFile({isVisible, setIsvisible, setDocuments}) {
     }
 
 
-    const {data: postes_comptables} = useFetch(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur": user['id'], "piece": "TSDMT"}, refresh)
+    // const {data: postes_comptables} = useFetch(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur": user['id'], "piece": "TSDMT"}, refresh)
+    const postes_comptables = ""
 
     // const send_info_tsdmt = () => {
     //     sendData(`${API_URL}/data/tsdmt/create`, 'POST',)

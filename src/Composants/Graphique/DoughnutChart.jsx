@@ -5,15 +5,15 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 // Enregistrer les modules nécessaires
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
 
-export const DoughnutChart = () => {
+export const DoughnutChart = ({info, tabColor}) => {
   const data = {
     labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"],
     datasets: [
       {
         label: "Ventes",
-        data: [12, 19, 10, 5, 22, 30],
+        data: info,
         borderColor: "rgba(75,192,192,1)",
-        backgroundColor: "rgba(75,192,192,0.2)",
+        backgroundColor: tabColor,
         tension: 0.4, // courbe lissée
       },
     ],

@@ -18,7 +18,7 @@ export function sendData(url, method, data, setResult){
       return response.json();
     })
     .then(data => {
-      console.log(data);
+      // console.log(data);
       setResult(data);
     })
     .catch(error => {

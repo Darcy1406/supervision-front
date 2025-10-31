@@ -2,16 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react'
 import Recettes from './Form/Recettes';
 import Depenses from './Form/Depenses';
 import ChooseFile from './Form/ChooseFile';
-import { formatNumber } from '../../../../functions/Function';
+import { formatNombreAvecEspaces, formatNumber } from '../../../../functions/Function';
 import { sendData } from '../../../../functions/sendData';
 import { API_URL } from '../../../../Config';
 import Modal from '../../../../Composants/Modal/Modal.jsx';
 import SaveFile from '../../../../Composants/Save-File/SaveFile.jsx';
 import { getCSRFToken } from '../../../../utils/csrf.js';
 import { Alert } from '../../../../Composants/Alert/Alert.jsx';
+import { fetchData } from '../../../../functions/fetchData.js';
 
 export default function Tsdmt() {
-
   const [doc, setDoc] = useState(null);
 
   const [total_recettes, setTotalRecettes] = useState(0);
@@ -23,13 +23,15 @@ export default function Tsdmt() {
   const [report, setReport] = useState(0);
   const [reportFormatted, setReportFormatted]= useState("");
 
-  // const [solde, setSolde] = useState(0);
+  const [solde, setSolde] = useState(0);
 
   const [isVisible, setIsvisible] = useState(false);
 
   const [reset_file, setResetFile] = useState(null);
 
   const [result, setResult] = useState("");
+
+  const [comptes, setComptes] = useState(null); // Va stocker tous les comptes liees au piece TSDMT
 
 
   const handleResetFile = useCallback((fn) => {
@@ -38,7 +40,13 @@ export default function Tsdmt() {
 
 
   const get_report_formatted = () => {
-    setReportFormatted(formatNumber(report));
+    setReportFormatted(formatNombreAvecEspaces(report));
+  }
+
+
+  const get_solde = () => {
+    const solde = parseFloat(report) + parseFloat(total_recettes) - parseFloat(total_depenses);
+    setSolde(solde.toFixed(2));
   }
 
   const show_button_menu = () => {
@@ -94,18 +102,20 @@ export default function Tsdmt() {
 
     sendData(`${API_URL}/data/transcription/create`, 'POST', {
       'action': 'ajouter_transcription', 
+      
+      "natures": ['recettes', 'depenses', 'report', 'solde', 'total recettes', 'total depenses'], 
       "recettes": recettes, 
       "depenses": depenses, 
-      "report": parseInt(report, 10), 
-      "solde": (parseInt(report, 10) + parseInt(total_recettes, 10) - parseInt(total_depenses, 10)), 
+      "report": report, 
+      "solde": solde, 
       'total recettes': total_recettes, 
       'total depenses': total_depenses, 
-      "natures": ['recettes', 'depenses', 'report', 'solde', 'total recettes', 'total depenses'], 
+      
       'id_doc': id_doc
     }, setResult)
   
     setDoc(null);
-    reset_file();
+    // reset_file();
   }
 
 
@@ -118,13 +128,21 @@ export default function Tsdmt() {
     get_report_formatted();
   }, [report])
 
+  useEffect(() => {
+    get_solde();
+  }, [report, total_recettes, total_depenses])
+
 
   useEffect(() => {
     if(doc != null){
       change_state_modal();
     }
-    // console.log('doc', doc);
   }, [doc])
+
+
+  useEffect(() => {
+    fetchData(`${API_URL}/data/piece_compte/liste_liaison_pour_une_piece`, 'post', {'piece': 'TSDMT', 'action': 'filtrer_liaison'}, setComptes)
+  }, []);
 
 
   return (
@@ -134,41 +152,57 @@ export default function Tsdmt() {
 
         {/* Tableau des recettes */}
         <div className='w-3/7'>
-          <Recettes total={total_recettes} setTotal={setTotalRecettes} setRecettes={setRecettes}/>
+          <Recettes comptes={comptes} total={total_recettes} setTotal={setTotalRecettes} setRecettes={setRecettes}/>
         </div>
 
           {/* Tabelau des depenses */}
         <div className='flex-1'>
-          <Depenses setTotal={setTotalDepenses} setDepenses={setDepenses}/>
+          <Depenses comptes={comptes} setTotal={setTotalDepenses} setDepenses={setDepenses}/>
         </div>
 
         <div className='w-1/7'>
           
           <div className=''>
             <label className='label'>Report</label>
+
             <input 
-              type="text" 
-              inputMode='numeric'
               className='w-5/6 bg-white p-2 border border-gray-200 rounded-lg shadow-sm outline-none'
+              type="text" 
               placeholder='Entrer le report'
               value={reportFormatted}
-              onChange={(e) => setReport(e.target.value.replace(/\s/g, ""))}
+              onChange={(e) => setReport(e.target.value.replace(/\s/g, "").replace(/,/g, "."))}
+              pattern='^[0-9,\s]+$'
             /> Ar
+
           </div>
 
           <div className='my-4 text-green-500'>
             <p className='font-semibold text-green-600'>Recettes :</p>
-            <p className='text-xl'>{ formatNumber(total_recettes) } Ar</p>
+            <p className='text-xl'>{ formatNombreAvecEspaces(total_recettes) } Ar</p>
           </div>
 
           <div className='my-4 text-red-500'>
             <p className='font-semibold text-red-600'>Dépenses :</p>
-            <p className='text-xl'>{formatNumber(total_depenses)} Ar</p>
+            <p className='text-xl'>{formatNombreAvecEspaces(total_depenses)} Ar</p>
           </div>
 
           <div className='my-4 text-blue-500'>
             <p className='font-semibold text-blue-600'>Solde :</p>
-            <p className='text-xl'>{ report != 0 && (parseInt(report, 10) + parseInt(total_recettes, 10) - parseInt(total_depenses, 10) > 0) ? formatNumber(parseInt(report, 10) + parseInt(total_recettes, 10) - parseInt(total_depenses, 10)) : report != 0 && (parseInt(report, 10) + parseInt(total_recettes, 10) - parseInt(total_depenses, 10) < 0)  ? parseInt(report, 10) + parseInt(total_recettes, 10) - parseInt(total_depenses, 10) : 0 } Ar</p>
+
+            <p className='text-xl'>
+              { report != 0 ?
+
+                  solde > 0 ? 
+                    formatNombreAvecEspaces(solde)
+
+                  : solde < 0  ? 
+                    solde
+
+                  : null
+
+                : "0,00"
+              } Ar
+            </p>
           </div>
 
           <div>
@@ -230,7 +264,9 @@ export default function Tsdmt() {
 
       {
         result ?
-          <Alert message={result['message']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300'/>
+            result['succes'] ?
+                <Alert message={result['succes']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300'/>
+            : null
         : null
       }
 

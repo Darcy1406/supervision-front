@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
-// import Tsdmt from './Pieces/Tsdmt/Tsdmt';
 import Tsdmt from './Pieces/Tsdmt/Tsdmt';
+import Sje from './Pieces/Sje/Sje'
 import { NavLink, useNavigate } from 'react-router-dom';
+import Btd from './Pieces/BTD/Btd';
+import Btr from './Pieces/BTR/Btr';
+import InputNumber from '../../Composants/InputNumber/InputNumber';
 
 export function Transcription() {
 
   const navigate = useNavigate();
 
   const [liste_piece, setListePiece] = useState(['SJE', 'BOD', 'BOV', 'TSDMT', 'BTD', 'BTR', 'BTT'])
-  const [piece, setPiece] = useState("")
+  const [piece, setPiece] = useState('SJE')
 
   const piece_a_analyser = (piece) => {
     setPiece(piece);
@@ -36,7 +39,7 @@ export function Transcription() {
 
           {
             liste_piece.map((item, index) => (
-              <ListePiece onChangeValue={piece_a_analyser} piece={item} key={index}/>
+              <ListePiece onChangeValue={piece_a_analyser} piece_label={item} key={index} piece={piece}/>
             ))
           }
 
@@ -46,6 +49,12 @@ export function Transcription() {
           {
             piece == 'TSDMT' ?
               <Tsdmt />
+            : piece == 'SJE' ?
+              <Sje />
+            : piece == 'BTD' ?
+              <Btd />
+            : piece == 'BTR' ?
+              <Btr />
             : null
           }
         </div>
@@ -54,12 +63,12 @@ export function Transcription() {
 }
 
 
-function ListePiece({onChangeValue, piece}){
+function ListePiece({onChangeValue, piece_label, piece}){
   return(
     <div className='liste-piece'>
-      <label htmlFor={piece} className='label'>
-        <input value={piece} type="radio" id={piece} name='piece' onChange={() => onChangeValue(piece)}/>
-        {piece}
+      <label htmlFor={piece_label} className='label'>
+        <input value={piece_label} type="radio" id={piece_label} name='piece' onChange={() => onChangeValue(piece_label)} checked={piece_label == piece}/>
+        {piece_label}
       </label>
     </div>
   )

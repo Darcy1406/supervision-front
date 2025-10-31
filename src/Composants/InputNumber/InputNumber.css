@@ -1,0 +1,3 @@
+.input-number:invalid{
+    border-bottom-color: red;
+}

@@ -15,3 +15,18 @@
     opacity: 1;
     pointer-events: initial;
 }
+
+#modal .content-modal{
+    position: relative;
+    max-height: 95%;
+    overflow-y: auto;
+}
+
+/* #modal .content-modal .container-btn-close{
+    position: fixed;
+    right: 10px;
+}
+
+#modal .content-modal .container-btn-close .icone{
+    color: blueviolet!important;
+} */

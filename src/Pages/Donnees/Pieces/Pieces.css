@@ -1,4 +1,6 @@
-#ajout_piece{
+/* FORMULAIRE PIECE */
+
+/* #ajout_piece{
     top: 0;
     left: 0;
     position: absolute;
@@ -14,4 +16,11 @@
 #ajout_piece.show{
     opacity: 1;
     pointer-events: initial;
+} */
+
+/* LISTE PIECE */
+
+#piece .container-table-pieces{
+    position: relative;
+    /* background-color: violet; */
 }

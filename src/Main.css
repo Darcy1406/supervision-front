@@ -28,3 +28,18 @@
     /* background: blue; */
     /* position: relative; */
 }
+
+
+/* Scrollbar stylée */
+::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #4f46e5, #3b82f6);
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }

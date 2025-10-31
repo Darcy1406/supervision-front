@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import './Dashboard.css'
 import Calendrier from '../../Composants/Calendrier/Calendrier';
-import { useFetch } from '../../hooks/useFetch';
+import { fetchData } from '../../functions/fetchData';
 import { API_URL } from '../../Config'; 
 import { sendData } from '../../functions/sendData';
 import { LineChart } from '../../Composants/Graphique/LineChart'
 import { PieChart } from '../../Composants/Graphique/PieChart';
 import { DoughnutChart } from '../../Composants/Graphique/DoughnutChart';
 import { useUserStore } from '../../store/useUserStore';
+import { getRandomColor } from '../../functions/Function';
 
 export default function Dashboard() {
 
@@ -27,7 +28,8 @@ export default function Dashboard() {
   }
 
   
-  const {data: evenements} = useFetch(`${API_URL}/agenda/get`, 'post', {"utilisateur_id": user["id"]});
+  // const {data: evenements} = useFetch(`${API_URL}/agenda/get`, 'post', {"utilisateur_id": user["id"]});
+  const evenements = ""
 
 
   // const {
@@ -41,6 +43,9 @@ export default function Dashboard() {
     // console.log('erreur : ', new Date(list_agenda[0].fields.date_evenement).getDate())
     document.title = 'Tableau de bord';
   }, [])
+
+  // const tabColor = getRandomColor(5);
+  // console.log(tabColor);
 
   return (
     <section id='dashboard' className='w-full h-full'>
@@ -73,19 +78,34 @@ export default function Dashboard() {
 
         {/* Les graphiques */}
         <div className='container-chart w-3/6 h-full flex items-center justify-center flex-wrap gap-2'>
+
           <div className='text-2xl w-full font-semibold text-2xl text-gray-400'>
-            <p className='italic tracking-widest'>Tableau de bord</p>
-          </div>
-          <div className='w-180 h-80 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
-            <LineChart />
+            <p className='italic tracking-widest'>
+              {
+                user ?
+                  user[0]['utilisateur__fonction'].toUpperCase() == 'chef_unite'.toUpperCase() ?
+                    `Tableau de bord zone ${user[0]['utilisateur__zone__nom_zone'].toLowerCase()}`
+                  : 'Tableau de bord'
+                : null
+              }
+              
+            </p>
           </div>
 
-          <div className='w-78 h-60 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
-            <PieChart />
+          <div className='flex-1 h-80 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
+            <LineChart info={[10,20, 15, 8, 15, 4]} tabColor={getRandomColor(6)}/>
           </div>
 
-          <div className='w-78 h-60 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
-            <DoughnutChart />
+        <div className='flex gap-2 w-full'>
+
+          <div className='w-1/2 h-58 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
+              <PieChart info={[12, 19, 10, 5, 22, 30]} tabColor={getRandomColor(6)}/>
+            </div>
+
+            <div className='w-1/2 h-58 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
+              <DoughnutChart info={[12, 19, 10, 5, 22, 30]} tabColor={getRandomColor(6)}/>
+
+            </div>
           </div>
         </div>
 
@@ -101,7 +121,15 @@ export default function Dashboard() {
 
             
             <div className=''>
-              <p className='font-semibold text-base italic'>{ user ? user['fonction'] + " : " + user['nom'] + " " + user['prenom'] : null} </p>
+              <p className='font-semibold text-base italic'>
+                { user ? 
+                    user[0]['utilisateur__fonction'].toUpperCase() == "chef_unite".toUpperCase() ?
+                      "Chef d'unité" + " : " + user[0]['utilisateur__nom'] + " " + user[0]['utilisateur__prenom']
+                    : 
+                      user[0]['utilisateur__fonction'] + " : " + user[0]['utilisateur__nom'] + " " + user[0]['utilisateur__prenom']
+                  : null
+                } 
+                </p>
 
             </div>
             

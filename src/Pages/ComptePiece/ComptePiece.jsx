@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useFetch } from '../../hooks/useFetch';
+import { fetchData } from '../../functions/fetchData';
 import { API_URL } from '../../Config';
 import { sendData } from '../../functions/sendData';
 import { Alert } from '../../Composants/Alert/Alert';
 import { useNavigate } from 'react-router-dom';
+import { useLinkStore } from '../../store/useLinkStore';
 
 export default function ComptePiece() {
   const navigate = useNavigate();
@@ -16,6 +17,17 @@ export default function ComptePiece() {
 
   const [piece, setPiece] = useState("");
   const [compte, setCompte] = useState("");
+
+  const link = useLinkStore((state) => state.link);
+  const clearLink = useLinkStore((state) => state.clearLink);
+
+
+  const get_data_update = () =>{
+    setPiece(link['piece']);
+    setCompte(link['compte']);
+    setNature(link['nature'])
+    setNbNature(link['nature'].length)
+  }
 
 
   const handleChange = (index, value) => {
@@ -45,9 +57,27 @@ export default function ComptePiece() {
   }
 
 
-  const {data: pieces} = useFetch(`${API_URL}/data/piece/get_pieces`, 'get', {}, refresh);
+  const save_data_update = (e) => {
+    e.preventDefault();
+    sendData(`${API_URL}/data/piece_compte/modifier`, 'put', {'id': link['id'], piece, compte, nature }, setResult);
+  }
 
-  const {data: num_comptes} = useFetch(`${API_URL}/data/compte/get_number`, 'get', {}, refresh);
+
+  // const {data: pieces} = useFetch(`${API_URL}/data/piece/get_pieces`, 'get', {}, refresh);
+  const [pieces, setPieces] = useState(null);
+
+  // const {data: num_comptes} = useFetch(`${API_URL}/data/compte/get_number`, 'get', {}, refresh);
+  // console.log(num_comptes);
+  const [num_comptes, setNumComptes] = useState(null);
+
+
+  useEffect(() => {
+
+    fetchData(`${API_URL}/data/piece/get_pieces`, 'get', {}, setPieces);
+
+    fetchData(`${API_URL}/data/compte/get_number`, 'get', {}, setNumComptes);
+
+  }, [pieces])
 
 
   useEffect(() => {
@@ -60,11 +90,28 @@ export default function ComptePiece() {
   }, [nb_nature]);
 
 
+  useEffect(() => {
+    if(link){
+      get_data_update();
+    }
+  }, [link])
+
+
+  useEffect(() => {
+    if(result){
+      if(result['succes']){
+        clear_champ();
+        clearLink();
+      }
+    }
+  }, [result])
+
+
   return (
     <div id='compte-piece' className='px-4 w-2/3 mx-auto'>
 
       <div className='container-btn-liste mt-5 text-white'>
-        <button className='bg-black px-4 py-2 rounded-sm shadow-sm cursor-pointer duration-150 ease-in-out hover:text-gray-500' onClick={() => navigate('/main/compte_piece_list') }>
+        <button className='bg-black px-4 py-2 rounded-sm shadow-sm cursor-pointer duration-150 ease-in-out hover:text-gray-500' onClick={() => navigate('/main/data/liaison_compte_piece') }>
           <span className='icon'>
             <i className='fas fa-book'></i>
           </span>
@@ -77,7 +124,7 @@ export default function ComptePiece() {
         <h2 className='title is-4 my-5'>Lier un compte à une piece</h2>
         <p className='subtitle is-6'>Veuillez remplir le formulaire pour ajouter un compte a une piece comptable en remplissant le formulaire ci-dessous.</p>
 
-        <form onSubmit={(e) => handleSubmit(e)} className='px-4'>
+        <form onSubmit={(e) => link ? save_data_update(e) : handleSubmit(e) } className='px-4'>
 
           {/* Piece */}
           <div className="field">
@@ -122,7 +169,7 @@ export default function ComptePiece() {
                 </button>
                 {
                     Array.from({length: nb_nature}, (_, i) => (
-                      <input key={i} type="text" className='border-b-2 border-gray-400 w-1/2 block outline-none' placeholder='Entrer la nature' value={nature[i] ?? ""} onChange={(e) => handleChange(i, e.target.value)}/>
+                      <input key={i} type="text" className='border-b-2 border-gray-400 w-full block outline-none' placeholder='Entrer la nature' value={nature[i] ?? ""} onChange={(e) => handleChange(i, e.target.value)}/>
                     ))
                 }
               </div>
@@ -131,7 +178,7 @@ export default function ComptePiece() {
 
           <div className="container-btn my-6">
             <button type='submit' className='bg-orange-400 px-6 py-2 rounded-sm cursor-pointer text-white durtion-200 ease-in-out hover:bg-orange-500'>
-              Creer
+             { link ? 'Valider' : ' Creer' }
             </button>
           </div>
 
@@ -141,8 +188,11 @@ export default function ComptePiece() {
 
       {
         result ? 
-          <Alert message={result['message']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300' />
+            result['succes'] ?
+            <Alert message={result['succes']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300' />
+            : null
         : null
+          
       }
 
     </div>

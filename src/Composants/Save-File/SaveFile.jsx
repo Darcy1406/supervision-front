@@ -1,11 +1,10 @@
 import { React, useEffect, useState } from 'react'
 import { useUserStore } from '../../store/useUserStore';
-import { useFetch } from '../../hooks/useFetch';
+import { fetchData } from '../../functions/fetchData';
 import { API_URL } from '../../Config';
 
 export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) {
     const user = useUserStore((state) => state.user);
-    const [refresh, setRefresh] = useState(true);
 
     const [file, setFile] = useState({
         "piece": type_piece,
@@ -19,6 +18,8 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
         "nom_fichier": "",
         "type_fichier": "",
     })
+
+    const [postes_comptables, setPostesComptables] = useState(null); // Va stoker tous les postes comptables liees aux auditeurs
 
 
     const handleChange = (item, value) => {
@@ -49,15 +50,18 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
     const handleSubmit = (e) => {
         e.preventDefault();
         setFichier(file);
+        reset_file();
     }
 
 
-    const {data: postes_comptables} = useFetch(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur": user['id'], "piece": type_piece.toUpperCase(), 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, refresh)
-
-
     useEffect(() => {
-        onRegisterResetFile(reset_file);
-    }, [onRegisterResetFile])
+        fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['id'], "piece": type_piece.toUpperCase(), 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
+    }, [])
+
+
+    // useEffect(() => {
+    //     onRegisterResetFile(reset_file);
+    // }, [onRegisterResetFile])
 
 
   return (
@@ -71,7 +75,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
         <div className="field">
             <div className="control">
                 <label className="label">Pièce</label>
-                <input type="text" className='input' placeholder='Entrer le type du pièce' value={file['piece']} onChange={(e) => handleChange('piece', e.target.value)}/>
+                <input type="text" className='input' placeholder='Entrer le type du pièce' value={file['piece']}/>
             </div>
         </div>
 
@@ -84,7 +88,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
                     {
                         postes_comptables && postes_comptables.map((item, index) => (
                             // <option value={item["id"]} key={index}>{ item['nom_poste_comptable'] + " " + item["prenom_poste_comptable"] }</option>
-                            <option value={item['nom_poste_comptable'] + " " + item["prenom_poste_comptable"]} key='index' />
+                            <option value={item['nom_poste']} key={index} />
                         ))
                     }
 

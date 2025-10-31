@@ -1,26 +1,38 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { formatNumber } from '../../../../../functions/Function';
-import { useFetch } from '../../../../../hooks/useFetch';
+import { formatNombreAvecEspaces, formatNumber } from '../../../../../functions/Function';
+import { useFetch } from '../../../../../functions/fetchData';
 import { API_URL } from '../../../../../Config';
+import InputNumber from '../../../../../Composants/InputNumber/InputNumber';
 
-export default function Recettes({ total, setTotal, setRecettes }) {
+export default function Recettes({ total, setTotal, setRecettes, comptes }) {
 
-  const [refresh, setRefresh] = useState(true);
+    const [refresh, setRefresh] = useState(true);
 
-    // const [value, setValue] = useState("");
+    const [comptes_recettes, setComptesRecettes] = useState([]);
 
-    const { data: liaison_recettes } = useFetch(`${API_URL}/data/piece_compte/lister_comptes_recette`, 'post', {'nature': 'recette', 'action': 'filtrer_liaison'}, refresh)
+    const filtrer_recettes = () => {
+     
+      const filter = comptes.filter(item => {
+        if(!item['nature'].toLowerCase().includes('recette')){
+          return false 
+        }
+        return true;
+      })
+      setComptesRecettes(filter);
+      
+    }
+
 
     const index_slice = useRef(0); 
-    const length_liaison_recettes = useRef(0);
+    const length_comptes_recettes = useRef(0);
 
     const [montants, setMontants] = useState({});
 
 
     const create_state_montants = () => {
-      const initialState = liaison_recettes.reduce((acc, item) => {
+      const initialState = comptes_recettes.reduce((acc, item) => {
         const numero = item['compte__numero'];
-        acc[numero] = ""
+        acc[numero] = 0
         return acc;
       }, {});
       setMontants(initialState);
@@ -32,7 +44,7 @@ export default function Recettes({ total, setTotal, setRecettes }) {
         const valeur = Number(String(v || "").replace(/\s/g, "")) || 0;
         total += valeur;
       })
-      setTotal(total);
+      setTotal(total.toFixed(2));
     }
 
     const get_recettes = () => {
@@ -43,9 +55,9 @@ export default function Recettes({ total, setTotal, setRecettes }) {
     const handleChange = (compte, value) => {
 
       // Retirer les espaces pour le state
-      const rawValue = value.replace(/\s/g, "");
-      // Si ce n’est pas un nombre, on ignore
-      if (!/^\d*$/.test(rawValue)) return;
+      // const rawValue = value.replace(/\s/g, "");
+      // // Si ce n’est pas un nombre, on ignore
+      // if (!/^\d*$/.test(rawValue)) return;
 
       setMontants(prev => ({
         ...prev,
@@ -60,13 +72,19 @@ export default function Recettes({ total, setTotal, setRecettes }) {
     }, [montants]);
 
     useEffect(() => {
-      if(liaison_recettes){
+      if(comptes){
+        filtrer_recettes();
+      }
+    }, [comptes]);
+
+    useEffect(() => {
+      if(comptes_recettes){
         create_state_montants();
-        index_slice.current = Math.floor(liaison_recettes.length / 2);
-        length_liaison_recettes.current = liaison_recettes.length;
+        index_slice.current = Math.floor(comptes_recettes.length / 2);
+        length_comptes_recettes.current = comptes_recettes.length;
       }
       // console.log('montants', montants);
-    }, [liaison_recettes]);
+    }, [comptes_recettes]);
 
 
     
@@ -93,7 +111,7 @@ export default function Recettes({ total, setTotal, setRecettes }) {
                   {
                     Object.keys(montants).slice(0, index_slice.current).map(compte => {
                       const rawValue = montants[compte]
-                      const formattedValue = formatNumber(rawValue);
+                      const formattedValue = formatNombreAvecEspaces(rawValue);
                       // console.log('toy', formattedValue);
                       
                       return (
@@ -101,7 +119,8 @@ export default function Recettes({ total, setTotal, setRecettes }) {
                         <tr key={compte}>
                           <td>{compte}</td>
                           <td>
-                            <input 
+
+                            {/* <input 
                               className='w-5/6 outline-none border-b-2 border-gray-300' 
                               type="text" 
                               inputMode='numeric'
@@ -109,7 +128,14 @@ export default function Recettes({ total, setTotal, setRecettes }) {
                               id="" 
                               value={formattedValue}
                               onChange={(e) => handleChange(compte, e.target.value.replace(/\s/g, "")) }
+                            />Ar */}
+                            <InputNumber 
+                              value={formattedValue}
+                              handleChange={ (e) => handleChange(compte, e.target.value.replace(/\s/g, "").replace(/,/g, ".")) }
                             />Ar
+
+
+
                           </td>
                         </tr>
 
@@ -138,21 +164,30 @@ export default function Recettes({ total, setTotal, setRecettes }) {
                 <tbody>
                   {
                     
-                      Object.keys(montants).slice(index_slice.current, length_liaison_recettes.current).map(compte => {
+                      Object.keys(montants).slice(index_slice.current, length_comptes_recettes.current).map(compte => {
                         const rawValue = montants[compte];
-                        const formattedValue = formatNumber(rawValue);
+                        const formattedValue = formatNombreAvecEspaces(rawValue);
                         return (
                           <tr key={compte}>
+
                             <td>{compte}</td>
+
                             <td>
-                              <input 
+
+                              {/* <input 
                                 className='w-5/6 outline-none border-b-2 border-gray-300'
                                 type="text" 
                                 name="" 
                                 id="" 
                                 value={formattedValue} 
                                 onChange={(e) =>  handleChange(compte, e.target.value.replace(/\s/g, "")) }
+                              />Ar */}
+
+                              <InputNumber 
+                                value={formattedValue}
+                                handleChange={ (e) => handleChange(compte, e.target.value.replace(/\s/g, "").replace(/,/g, ".")) }
                               />Ar
+
                             </td>
                           </tr>
                         )

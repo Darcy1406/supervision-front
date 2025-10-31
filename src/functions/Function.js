@@ -62,3 +62,34 @@ export const month_int_to_string = (month) => {
 
   return month_string;
 }
+
+
+export const getRandomColor = (nbColor) =>{
+    let tabColor = [];
+    for (let i = 0; i < nbColor; i++) {
+      const r = Math.floor(Math.random() * 256);
+      const g = Math.floor(Math.random() * 256);
+      const b = Math.floor(Math.random() * 256);
+      tabColor.push(`rgb(${r}, ${g}, ${b})`)
+    }
+
+    return tabColor;
+}
+
+
+export function formatNombreAvecEspaces(valeur) {
+  if (!valeur) return "";
+
+  // const value_formated = valeur.replace(/./g, ",");
+
+  // Séparer la partie entière et la partie décimale
+  const [entier, decimal] = valeur.toString().split(".");
+
+  // Supprimer les espaces de la partie entière, puis reformater
+  const entierFormate = entier.replace(/\s/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+  // Si partie décimale existe → la rajouter après la virgule
+  return decimal !== undefined ? `${entierFormate},${decimal}` : entierFormate;
+}
+
+

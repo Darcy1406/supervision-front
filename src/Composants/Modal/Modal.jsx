@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import './Modal.css';
 
-export default function Modal({children, isVisible, setIsvisible}) {
+export default function Modal({children, isVisible, setIsvisible, width_children='w-1/2'}) {
   const modal = useRef(null);
 
   const show_modal = () => {
@@ -25,10 +25,12 @@ export default function Modal({children, isVisible, setIsvisible}) {
   
   return (
     <div id='modal' ref={modal}>
-      <div className='modal-content w-1/2 bg-white rounded-lg my-4 px-2 pb-4'>
-        <span className='is-pulled-right text-red-500 text-xl cursor-pointer duration-150 ease-out hover:text-red-600' onClick={close_modal}>
+      <div className={`content-modal ${width_children} bg-white rounded-lg my-4 mx-auto px-2 pb-4`}>
+        <div className='container-btn-close'>
+          <span className='icone is-pulled-right text-red-500 text-xl cursor-pointer duration-150 ease-out hover:text-red-600' onClick={close_modal}>
           <i className='fas fa-times-circle'></i>
-        </span>
+          </span>
+        </div>
         {children}
       </div>
     </div>

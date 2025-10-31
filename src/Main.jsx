@@ -23,6 +23,8 @@ export default function Main() {
     'Une analyse sur une piece ABC a ete lancee par Auditeur 1 le jour du 20/09/2025',
   ])
 
+  // const boxRef = useRef(null);
+
   const { user, setUser } = useUserStore()
 
   const container_notification = useRef(null);
@@ -63,6 +65,13 @@ export default function Main() {
     getUser(setUser)
   }, [location.pathname])
 
+  // useEffect(() => {
+  //   container_notification.current.scrollTo({
+  //     top: container_notification.current.scrollHeight,
+  //     behavior: "smooth",
+  //   });
+  // }, [notification]);
+
   return (
     <>
     {
@@ -75,7 +84,7 @@ export default function Main() {
 
             <div 
               className='container-notification border-r border-gray-400 w-1/7 h-full' 
-              style={{overflowY: 'auto'}}
+              style={{overflowY: 'auto', }}
               ref={container_notification}
             >
                 <Notification notification={notification}/>
