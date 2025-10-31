@@ -132,6 +132,7 @@ export default function Btr() {
             'action': 'ajouter_transcription',
 
             'natures': ['anterieur', 'en_cours', 'cumule', 'total_anterieur', 'total_en_cours', 'total_cumule'],
+            
             'anterieur': anterieur,
             'en_cours': en_cours,
             'cumule': cumule,
