@@ -1,0 +1,13 @@
+.container-logout{
+    /* background-color: red; */
+    position: absolute;
+    right: 10px;
+    top: -43px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.container-logout.show{
+    opacity: 1;
+    pointer-events: initial;
+}

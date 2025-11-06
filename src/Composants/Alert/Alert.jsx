@@ -15,7 +15,7 @@ export function Alert({message="", icon="", setMessage, bgColor, borderColor}) {
 
 
   return (
-    <div className={`alert show ${bgColor} border ${borderColor} w-110 h-18 rounded-3xl shadow-lg flex justify-center items-center gap-2`} ref={alert}>
+    <div className={`alert show ${bgColor} border ${borderColor} w-110 h-18 rounded-3xl shadow-lg flex justify-center items-center gap-2 z-30`} ref={alert}>
 
       <div className='container-icon w-10'>
         <span className='icon text-2xl ml-2'>

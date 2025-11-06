@@ -54,7 +54,7 @@ export function ListeTranscription() {
     const recuperer_les_postes_comptables_liees_a_un_auditeur = (value) => {
         const id = value.split(" ")[0];
         if(id){
-            get_data(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'fonction': user[0]['utilisateurfonction'], 'user_id': id}, setPosteComptables)
+            get_data(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'], 'user_id': id}, setPosteComptables)
         }
         console.log('auditeur', id);
     }
@@ -119,16 +119,21 @@ export function ListeTranscription() {
 
     const checker_detail_transcription = (piece, nom_fichier, poste_comptable, date, exercice, mois, index) => {
 
-        const decade = nom_fichier.split(", ")[1];
         let texte = '';
      
         setSelected(index);
         setIsvisible(true);
         setPiece(piece);
 
-        if(decade){
+        if(piece.toUpperCase() != 'SJE'){
+            const decade = nom_fichier.split(", ")[1];
             texte += `${piece}, ${month_int_to_string(mois)} - ${decade}\n${poste_comptable}\n`
         }
+
+        else if(piece.toUpperCase() == 'SJE'){
+            texte += `${piece} du ${nom_fichier.split(', ')[1]}\n${poste_comptable}`
+        }
+
         else{
             texte += `${piece}\n${poste_comptable}`
         }
@@ -210,6 +215,7 @@ export function ListeTranscription() {
 
 
     // DIRECTEUR
+
     useEffect(() => {
         if(user){
 
@@ -235,6 +241,7 @@ export function ListeTranscription() {
             fetchData(`${API_URL}/users/get_auditeurs_zone`, 'post', {'action': 'recuperer_auditeurs_zone', 'zone': user[0]['utilisateur__zone__nom_zone']}, setAuditeurs)
         }
     }, [zone_selected])
+
     // *** *** ***
 
 
@@ -248,7 +255,7 @@ export function ListeTranscription() {
 
                 fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables_zone', 'zone': user[0]['utilisateur__zone__nom_zone']}, setPosteComptables)
 
-                fetchData(`${API_URL}/users/get_auditeurs_zone`, 'post', {'action': 'recuperer_auditeurs'}, setAuditeurs)
+                fetchData(`${API_URL}/users/get_auditeurs_zone`, 'post', {'action': 'recuperer_auditeurs_zone', 'zone': user[0]['utilisateur__zone__nom_zone']}, setAuditeurs)
             }
         }
     }, [user])
@@ -268,6 +275,11 @@ export function ListeTranscription() {
         }
     }, [user]);
     // *** *** ***
+
+
+    useEffect(() => {
+        fetchData(`${API_URL}/data/piece/get_pieces`, 'get', {}, setListePieces)
+    }, [])
 
     // Executer la fonction get_liste_document
     // useEffect(() => {
@@ -311,7 +323,7 @@ export function ListeTranscription() {
                                     {
                                         user[0]['utilisateur__fonction'].toUpperCase() == 'Directeur'.toUpperCase() ?
                                             <div className='w-1/2 flex items-center gap-4 container-zone'>
-                                                <label className="lable">Zone: </label>
+                                                <label className="label">Zone: </label>
                                                 <select className='bg-white p-2 w-full rounded-lg border border-gray-300' value={zone_selected} onChange={(e) => setZoneSelected(e.target.value)}>
                                                     <option value="">Choisissez une zone</option>
                                                     {
@@ -370,7 +382,7 @@ export function ListeTranscription() {
                             <option value="" disabled>Poste comptable</option>
                             {
                                 poste_comptables && poste_comptables.map((item, index) => (
-                                    <option key={index} value={item['nom_poste']} />
+                                       <option key={index} value={item['nom_poste']} />
                                 ))
                             }
                         </datalist>

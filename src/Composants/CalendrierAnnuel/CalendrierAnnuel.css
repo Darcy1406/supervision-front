@@ -1,0 +1,50 @@
+.month-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 6px;
+    background: linear-gradient(to bottom right, #f9fafb, #eef2ff);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    font-size: 0.75rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .month-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  }
+  
+  .month-title {
+    text-align: center;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: #4338ca;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+  }
+  
+  .rbc-calendar {
+    font-size: 0.7rem;
+  }
+  
+  .rbc-month-view {
+    height: 220px !important; /* plus petit calendrier */
+  }
+  
+  .rbc-header {
+    padding: 1px;
+    font-weight: 500;
+    color: #6366f1;
+    background-color: #eef2ff;
+  }
+  
+  .rbc-date-cell {
+    padding: 1px 0;
+  }
+  
+  .rbc-event {
+    font-size: 0.65rem !important;
+    border-radius: 6px !important;
+    line-height: 1;
+    padding: 1px 2px !important;
+  }
+  

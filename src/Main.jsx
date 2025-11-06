@@ -9,6 +9,7 @@ import { useUserStore } from './store/useUserStore.js';
 import { useAuthentification } from './hooks/useAuthentification.js';
 import { Alert } from './Composants/Alert/Alert';
 import { router } from './Router/Router.jsx';
+import { fetchData } from './functions/fetchData.js';
 
 
 export default function Main() {
@@ -26,8 +27,10 @@ export default function Main() {
   // const boxRef = useRef(null);
 
   const { user, setUser } = useUserStore()
+  const [traces, setTraces] = useState(null);
 
   const container_notification = useRef(null);
+  const bloc_main = useRef(null);
   // const navigate = useNavigate()
 
   // const getUser = async () => {
@@ -59,10 +62,16 @@ export default function Main() {
 
   const toggle_notification = () => {
     container_notification.current.classList.toggle('show');
+    bloc_main.current.classList.toggle('show');
   }
 
   useEffect( () => {
     getUser(setUser)
+  }, [location.pathname])
+
+
+  useEffect(() => {
+    fetchData(`${API_URL}/data/trace/get`, 'get', {}, setTraces);
   }, [location.pathname])
 
   // useEffect(() => {
@@ -78,30 +87,34 @@ export default function Main() {
       user ?
         <section id='main' className='bg-gray-50'>
 
-          <div className='container-main flex justify-center'>
+          <div className='container-main'>
 
-            <Nav />
 
             <div 
-              className='container-notification border-r border-gray-400 w-1/7 h-full' 
-              style={{overflowY: 'auto', }}
+              className='container-notification border-r border-gray-400 w-1/7 h-full'
               ref={container_notification}
             >
-                <Notification notification={notification}/>
+                <Notification notification={traces}/>
             </div>
 
-            <div className='px-2 py-2 cursor-pointer'>
-              <span className='icon text-2xl' onClick={toggle_notification}>
-                <i className="fas fa-columns"></i>
-              </span>
+            <div className="bloc-main" ref={bloc_main}>
+              <Nav />
+
+
+              <div className='px-2 py-2 cursor-pointer'>
+                <span className='icon text-2xl' onClick={toggle_notification}>
+                  <i className="fas fa-columns"></i>
+                </span>
+              </div>
+
+              <div className='container-body py-2 px-4'>
+                  <Outlet />
+                  
+
+                  {/* <Alert /> */}
+              </div>
             </div>
 
-            <div className='container-body border-l border-gray-400 flex-1 py-2  px-4'>
-                <Outlet />
-                
-
-                {/* <Alert /> */}
-            </div>
 
           </div>
         </section>

@@ -5,12 +5,13 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import Btd from './Pieces/BTD/Btd';
 import Btr from './Pieces/BTR/Btr';
 import InputNumber from '../../Composants/InputNumber/InputNumber';
+import Balance from './Pieces/Balance/Balance';
 
 export function Transcription() {
 
   const navigate = useNavigate();
 
-  const [liste_piece, setListePiece] = useState(['SJE', 'BOD', 'BOV', 'TSDMT', 'BTD', 'BTR', 'BTT'])
+  const [liste_piece, setListePiece] = useState(['SJE', 'Balance', 'TSDMT', 'BTD', 'BTR'])
   const [piece, setPiece] = useState('SJE')
 
   const piece_a_analyser = (piece) => {
@@ -55,6 +56,8 @@ export function Transcription() {
               <Btd />
             : piece == 'BTR' ?
               <Btr />
+            : piece == 'Balance' ?
+              <Balance />
             : null
           }
         </div>

@@ -24,5 +24,5 @@ export function sendData(url, method, data, setResult){
     .catch(error => {
       console.log('Erreur : ', error);
     });
-  }
+}
   

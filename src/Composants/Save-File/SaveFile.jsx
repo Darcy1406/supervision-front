@@ -40,7 +40,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
 
 
     const selectedFile = () => {
-        const file = document.querySelector('.file-input').files[0];
+        const file = document.querySelector('.file-input-doc').files[0];
         handleChange("fichier", file);
         handleChange("type_fichier", file.name.split(".")[file.name.split(".").length - 1]);
         handleChange("nom_fichier", file.name)
@@ -55,8 +55,11 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
 
 
     useEffect(() => {
-        fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['id'], "piece": type_piece.toUpperCase(), 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
-    }, [])
+        if(type_piece != ""){
+            fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['id'], "piece": type_piece.toUpperCase(), 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
+            handleChange('piece', type_piece)
+        }
+    }, [type_piece])
 
 
     // useEffect(() => {
@@ -189,7 +192,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
                 <div className="flex items-center gap-4">
                     <div className="file">
                         <label className="file-label">
-                            <input type="file" className="file-input" onChange={selectedFile}/>
+                            <input type="file" className="file-input file-input-doc" onChange={selectedFile}/>
                             <span className="file-cta">
                                 <span className="file-icon">
                                     <i className="fas fa-upload"></i>

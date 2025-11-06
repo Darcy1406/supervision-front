@@ -8,8 +8,10 @@ import InputNumber from '../../../../Composants/InputNumber/InputNumber';
 import { formatNombreAvecEspaces } from '../../../../functions/Function';
 import { sendDocument } from '../../../../functions/sendDocument';
 import { Alert } from '../../../../Composants/Alert/Alert';
+import { useUserStore } from '../../../../store/useUserStore';
 
 export default function Sje() {
+  const user = useUserStore((state) => state.user);
 
   const [isVisible, setIsVisible] = useState(false); // State pour afficher/former la fenetre modale
 
@@ -87,7 +89,7 @@ export default function Sje() {
 
 
   const calcule_solde = () => {
-    let solde = (parseFloat(info_supp['report']) + parseFloat(total['recettes']) - parseFloat(total['depenses'])) || 0;
+    let solde = (parseFloat(Number(info_supp['report']).toFixed(2)) + parseFloat(total['recettes']) - parseFloat(total['depenses'])) || 0;
     handleChange('solde_calcule', Number(solde.toFixed(2)), setInfoSupp);
   }
 
@@ -104,7 +106,7 @@ export default function Sje() {
     formData.append("poste_comptable", doc['poste_comptable']);
     formData.append("exercice", date.getFullYear());
     formData.append("periode", doc['periode']);
-    formData.append("info_supp", (doc['decade'] + ", " + info_supp['date_sje']));
+    formData.append("info_supp", info_supp['date_sje']);
     formData.append("mois", (date.getMonth() + 1));
     formData.append("date_arrivee", doc['date_arrivee']);
     formData.append("action", 'ajouter_un_document');
@@ -122,15 +124,18 @@ export default function Sje() {
         natures: ["Recettes propres", "Approvisionnement de fonds", "Degagement de fonds effectuees par la RAF", "Degagements de fonds",  "Depenses", "total_recettes", "total_depenses", "report", "solde"],
 
         "Recettes propres": {"5310": recettes['Recettes propres']},
-        "Approvisionnement de fonds": recettes['Approvisionnement de fonds'],
-        "Degagement de fonds effectuees par la RAF": recettes['Degagement de fonds effectuees par la RAF'],
-        "Degagements de fonds": depenses['Degagements de fonds'],
-        "Depenses": depenses['Depenses'],
+        "Approvisionnement de fonds": {"5310": recettes['Approvisionnement de fonds']},
+        "Degagement de fonds effectuees par la RAF": {"5310": recettes['Degagement de fonds effectuees par la RAF']},
+        "Degagements de fonds": {"5310": depenses['Degagements de fonds']},
+        "Depenses": {"5310": depenses['Depenses']},
         "total_recettes": total['recettes'],
         "total_depenses": total['depenses'],
         "report": info_supp['report'],
         "solde": info_supp['solde_calcule'],
         'id_doc': id_doc,
+
+        'utilisateur': user[0]['id'],
+        'piece': doc['piece'],
 
       }, setResult)
     }
@@ -160,7 +165,7 @@ export default function Sje() {
     if(info_supp['report'] != 0){
       calcule_solde();
     }
-  }, [info_supp['report']])
+  }, [info_supp['report'], total['recettes'], total['depenses']])
 
   useEffect(() => {
     if(doc != null){
@@ -285,7 +290,7 @@ export default function Sje() {
               {/* Degagement de fonds effectuees par la RAF */}
               <div className="field">
                 <div className="control">
-                  <label className="label">Degagement de fonds effectuees par la RAF</label>
+                  <label className="label">Dégagement de fonds effectuees par la RAF</label>
 
                   <input 
                     type='text'
@@ -302,12 +307,12 @@ export default function Sje() {
             </fieldset>
 
             <fieldset className="flex-1 border border-gray-300 p-4 rounded-xl">
-              <legend className='mx-6'>Depenses</legend>
+              <legend className='mx-6'>Dépenses</legend>
 
               {/* Degagements de fonds */}
               <div className="field">
                 <div className="control">
-                  <label className="label">Degagements de fonds</label>
+                  <label className="label">Dégagements de fonds</label>
                   <input 
                     type='text'
                     className='input input-sje'
@@ -322,7 +327,7 @@ export default function Sje() {
               {/* Depenses */}
               <div className="field">
                 <div className="control">
-                  <label className="label">Depenses</label>
+                  <label className="label">Dépenses</label>
                   <input 
                     type='text'
                     className='input input-sje'
@@ -340,7 +345,7 @@ export default function Sje() {
 
           <div className="field">
             <div className="control">
-              <label className='label'>Encaisse fin de journee</label>
+              <label className='label'>Encaisse fin de journée</label>
               <input 
                     type='text'
                     className='input input-sje'
@@ -388,7 +393,7 @@ export default function Sje() {
                         <span className='icon mx-2'>
                           <i className="fas fa-thumbs-up"></i>
                         </span>
-                        Le solde calcule et solde saisie coincide
+                        Le solde calculé et solde saisie coincide
                     </p>
 
                   :
@@ -423,7 +428,7 @@ export default function Sje() {
 
 
           <div className="container-btn-validation my-4">
-            <button className='button is-dark is-block mx-auto' onClick={save_file} disabled={ !doc || info_supp['solde'] == 0 || info_supp['report'] == 0 ? true : false}>
+            <button className='button is-dark is-block mx-auto' onClick={save_file} disabled={ !doc || info_supp['date_sje'] == "" || info_supp['solde'] == 0 || info_supp['report'] == 0 ? true : false}>
               <span className="icon mx-1">
                 <i className="fas fa-check-circle"></i>
               </span>

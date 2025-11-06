@@ -12,8 +12,10 @@ import Pagination from '../../../../Composants/Pagination/Pagination';
 import '../../Transcription.css';
 import { useBtdSore } from '../../../../store/useTranscriptionStore';
 import InputNumber from '../../../../Composants/InputNumber/InputNumber';
+import { useUserStore } from '../../../../store/useUserStore';
 
 export default function Btd() {
+    const user = useUserStore((state) => state.user);
     // const currentPage = useRef(1);
     // const itemsPerPage = useRef(9)
     // const [reload_data, setReloadData] = useState(true);
@@ -150,7 +152,7 @@ export default function Btd() {
         formData.append("poste_comptable", doc['poste_comptable']);
         formData.append("exercice", doc['exercice']);
         formData.append("periode", doc['periode']);
-        formData.append("decade", doc['decade']);
+        formData.append("info_supp", doc['decade']);
         formData.append("mois", doc['mois']);
         formData.append("date_arrivee", doc['date_arrivee']);
         formData.append("action", 'ajouter_un_document');
@@ -174,12 +176,11 @@ export default function Btd() {
             'total_cumule': total['cumule'],
 
             'id_doc': id_doc,
+
+            'utilisateur': user[0]['id'],
+            'piece': doc['piece'],
         }, setResult)
 
-        reset_all_montant(anterieur, setAnterieur);
-        reset_all_montant(en_cours, setEnCours);
-        reset_all_montant(cumule, setCumule);
-        setDoc(null);
     }
 
     useEffect(() => {
@@ -236,10 +237,20 @@ export default function Btd() {
 
     useEffect(() => {
         if(id_doc != null){
-            console.log('id_doc non null', id_doc);
+            // console.log('id_doc non null', id_doc);
             send_btd();
         }
-      }, [id_doc])
+    }, [id_doc])
+
+
+    useEffect(() => {
+    if(result && result['succes']){
+        reset_all_montant(anterieur, setAnterieur);
+        reset_all_montant(en_cours, setEnCours);
+        reset_all_montant(cumule, setCumule);
+        setDoc(null);
+    }
+    }, [result])
 
 
   return (
