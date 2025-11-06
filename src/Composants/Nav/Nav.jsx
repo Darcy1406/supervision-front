@@ -71,31 +71,31 @@ export default function Nav() {
                             : null
                         }
 
-                        <NavLink to='/main/reporting' onClick={show_or_close_navigation} className='current'>
+                        <NavLink to='/main/analysis' onClick={show_or_close_navigation} className='current'>
                             <li>
                                 <div className={location.pathname == '/main/reporting' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
                                     <span className='icon'>
-                                        <i className="fas fa-keyboard"></i>
+                                        <i className="fas fa-chart-pie"></i>
                                     </span>
                                     {/* <NavLink style={{display: 'block'}} to='/main/rapport'>Rapports</NavLink> */}
-                                    <p>Rapport</p>
+                                    <p>Analyse</p>
                                 </div>
                             </li>
                         </NavLink>
 
 
                     
-                    <button onClick={() => { logout(); show_or_close_navigation() }} className='current'>
+                    <NavLink to='/main/anomalie' onClick={show_or_close_navigation} className='current'>
                         <li>
                             <div className='bloc-item-nav'>
                                 <span className='icon'>
-                                    <i className="fas fa-sign-out-alt"></i>
+                                    <i className="fas fa-bug"></i>
                                 </span>
                                 {/* <NavLink style={{display: 'block'}} to='/main/rapport'>Rapports</NavLink> */}
-                                <p>Deconnexion</p>
+                                <p>Anomalie</p>
                             </div>
                         </li>
-                    </button>
+                    </NavLink>
 
 
                     {/* <li>

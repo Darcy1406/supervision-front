@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function BtnChoice({setIsvisible}) {
+export default function BtnChoice({setIsvisible, isDisabled=false}) {
 
     const show_button_menu = () => {
         const drop = document.getElementById('drop');
@@ -22,7 +22,7 @@ export default function BtnChoice({setIsvisible}) {
 
             <div className='dropdown-trigger'>
 
-                <button className='button is-fullwidth' aria-haspopup='true' aria-controls='dropdown-menu'>
+                <button type='button' className='button is-fullwidth' aria-haspopup='true' aria-controls='dropdown-menu' disabled={isDisabled}>
                     Importer un fichier
                     <span className='mx-1 is-small'>
                         <i className="fas fa-angle-down" aria-hidden="true"></i>
@@ -33,10 +33,10 @@ export default function BtnChoice({setIsvisible}) {
 
             <div className='dropdown-menu' id='dropdown-menu' role='menu'>
                 <div className="dropdown-content is-block">
-                    <button className='dropdown-item' onClick={() => setIsvisible(true)}>
+                    <button type='button' className='dropdown-item' onClick={() => setIsvisible(true)}>
                         Locale
                     </button>
-                    <button className='dropdown-item'>
+                    <button type='button' className='dropdown-item'>
                         G.E.D
                     </button>
                 </div>

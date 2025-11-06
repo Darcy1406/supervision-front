@@ -4,7 +4,7 @@ import Login from "../Composants/Login/Login";
 import Inscription from "../Composants/Inscription/Inscription";
 import Main from '../Main';
 import { Transcription } from '../Pages/Transcription/Transcription'
-import Rapport from "../Pages/Rapport/Rapport";
+import Analyse from "../Pages/Analyse/Analyse";
 import Dashboard from "../Pages/Dashboard/Dashboard";
 import Data from "../Pages/Donnees/Data";
 import ComptePiece from "../Pages/ComptePiece/ComptePiece";
@@ -15,6 +15,10 @@ import { ListeTranscription } from "../Pages/Donnees/Transcription/ListeTranscri
 import Liste from "../Pages/ComptePiece/Liste.jsx";
 import Unauthorized from "../Composants/Unauthorized/Unauthorized.jsx";
 import PrivateRoute from "../Composants/PrivateRoute/PrivateRoute.jsx";
+import SjeAnalyse from "../Pages/Analyse/Type/SjeAnalyse.jsx";
+import Anomalie from "../Pages/Anomalie/Anomalie.jsx";
+import BalanceAnalyse from "../Pages/Analyse/Type/BalanceAnalyse.jsx";
+import SoldeCaisse from "../Pages/Analyse/Type/SoldeCaisse.jsx";
 // import { Liste as Liste_transcription } from "../Pages/Transcription/Liste.jsx";
 
 
@@ -88,9 +92,27 @@ export const router = createBrowserRouter([
                 ]
             },
             {
-                path: 'reporting',
-                element: <Rapport />
+                path: 'analysis',
+                element: <Analyse />,
+                children: [
+                    {
+                        index: true,
+                        element: <SjeAnalyse />
+                    },
+                    {
+                        path: 'equilibre_balance',
+                        element: <BalanceAnalyse />
+                    },
+                    {
+                        path: 'solde_caisse',
+                        element: <SoldeCaisse />
+                    }
+                ]
             },
+            {
+                path: 'anomalie',
+                element: <Anomalie />
+            },  
             {
                 path: 'compte_piece',
                 element: <ComptePiece />

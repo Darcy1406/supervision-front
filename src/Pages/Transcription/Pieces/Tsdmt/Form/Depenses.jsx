@@ -4,7 +4,7 @@ import { useFetch } from '../../../../../functions/fetchData';
 import { API_URL } from '../../../../../Config';
 import InputNumber from '../../../../../Composants/InputNumber/InputNumber';
 
-export default function Depenses({setTotal, setDepenses, comptes}) {
+export default function Depenses({setTotal, setDepenses, comptes, reset_all_montant}) {
   const [refresh, setRefresh] = useState(true);
 
   const index_slice = useRef(0); 
@@ -67,6 +67,13 @@ export default function Depenses({setTotal, setDepenses, comptes}) {
   }
 
 
+  const reset_data = () => {
+    Object.keys(montants).forEach(key => {
+      handleChange(key, 0);
+    })
+  }
+
+
   useEffect(() => {
     if(comptes){
       filtrer_recettes();
@@ -88,6 +95,14 @@ export default function Depenses({setTotal, setDepenses, comptes}) {
       length_comptes_recettes.current = comptes_depenses.length;
     }
   }, [comptes_depenses]);
+
+
+  // Pour reset les montants de depenses a zero
+  useEffect(() => {
+    if(reset_all_montant){
+      reset_data()
+    }
+  }, [reset_all_montant])    
 
 
   return (

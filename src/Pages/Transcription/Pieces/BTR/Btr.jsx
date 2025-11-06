@@ -10,11 +10,11 @@ import SaveFile from '../../../../Composants/Save-File/SaveFile';
 import { Alert } from '../../../../Composants/Alert/Alert';
 import { useBtdSore } from '../../../../store/useTranscriptionStore';
 import InputNumber from '../../../../Composants/InputNumber/InputNumber';
+import { useUserStore } from '../../../../store/useUserStore';
 
 export default function Btr() {
+    const user = useUserStore((state) => state.user);
 
-    const currentPage = useRef(1);
-    const itemsPerPage = useRef(9)
     // const [reload_data, setReloadData] = useState(true);
     // const [data_paginate, setDataPaginate] = useState(null);
 
@@ -55,6 +55,7 @@ export default function Btr() {
     }
 
 
+    // Calcul des total cumule pour chaque compte
     const calcul_total_cumule = () => {
         Object.keys(cumule).forEach(compte => {
             const total = (parseFloat(anterieur[compte]) + parseFloat(en_cours[compte]) || 0)
@@ -71,6 +72,7 @@ export default function Btr() {
     }
 
 
+    // Fonction qui calcule les totals (anterieur, en cours, cumule)
     const total_data_calculate = (name, nature) => {
         let total = 0
         Object.values(nature).forEach(v => {
@@ -116,7 +118,7 @@ export default function Btr() {
         formData.append("poste_comptable", doc['poste_comptable']);
         formData.append("exercice", doc['exercice']);
         formData.append("periode", doc['periode']);
-        formData.append("decade", doc['decade']);
+        formData.append("info_supp", doc['decade']);
         formData.append("mois", doc['mois']);
         formData.append("date_arrivee", doc['date_arrivee']);
         formData.append("action", 'ajouter_un_document');
@@ -141,13 +143,23 @@ export default function Btr() {
             'total_cumule': total['cumule'],
 
             'id_doc': id_doc,
+
+            'utilisateur': user[0]['id'],
+            'piece': doc['piece'],
         }, setResult)
 
-        reset_all_montant(anterieur, setAnterieur);
-        reset_all_montant(en_cours, setEnCours);
-        reset_all_montant(cumule, setCumule);
-        setDoc(null);
+        
     }
+
+
+    useEffect(() => {
+        if(result && result['succes']){
+            reset_all_montant(anterieur, setAnterieur);
+            reset_all_montant(en_cours, setEnCours);
+            reset_all_montant(cumule, setCumule);
+            setDoc(null);
+        }
+      }, [result])
 
     
     // console.log('comptes', comptes);
@@ -155,6 +167,7 @@ export default function Btr() {
     useEffect(() => {
         fetchData(`${API_URL}/data/piece_compte/liste_liaison_pour_une_piece`, 'post', {piece: 'BTR', 'action': 'filtrer_liaison'}, setComptes)
     }, [])
+
 
 
     useEffect(() => {

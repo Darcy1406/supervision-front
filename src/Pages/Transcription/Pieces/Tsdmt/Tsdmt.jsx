@@ -3,15 +3,18 @@ import Recettes from './Form/Recettes';
 import Depenses from './Form/Depenses';
 import ChooseFile from './Form/ChooseFile';
 import { formatNombreAvecEspaces, formatNumber } from '../../../../functions/Function';
-import { sendData } from '../../../../functions/sendData';
+import { sendData } from '../../../../functions/sendData.js';
 import { API_URL } from '../../../../Config';
 import Modal from '../../../../Composants/Modal/Modal.jsx';
 import SaveFile from '../../../../Composants/Save-File/SaveFile.jsx';
 import { getCSRFToken } from '../../../../utils/csrf.js';
 import { Alert } from '../../../../Composants/Alert/Alert.jsx';
 import { fetchData } from '../../../../functions/fetchData.js';
+import { useUserStore } from '../../../../store/useUserStore.js';
 
 export default function Tsdmt() {
+  const user = useUserStore((state) => state.user);
+
   const [doc, setDoc] = useState(null);
 
   const [total_recettes, setTotalRecettes] = useState(0);
@@ -27,16 +30,16 @@ export default function Tsdmt() {
 
   const [isVisible, setIsvisible] = useState(false);
 
-  const [reset_file, setResetFile] = useState(null);
+  const [reset_all_montant, setResetAllMontant] = useState(false);
 
   const [result, setResult] = useState("");
 
   const [comptes, setComptes] = useState(null); // Va stocker tous les comptes liees au piece TSDMT
 
 
-  const handleResetFile = useCallback((fn) => {
-    setResetFile(() => fn);
-  }, [])
+  // const handleResetFile = useCallback((fn) => {
+  //   setResetFile(() => fn);
+  // }, [])
 
 
   const get_report_formatted = () => {
@@ -48,6 +51,7 @@ export default function Tsdmt() {
     const solde = parseFloat(report) + parseFloat(total_recettes) - parseFloat(total_depenses);
     setSolde(solde.toFixed(2));
   }
+
 
   const show_button_menu = () => {
     const drop = document.getElementById('drop');
@@ -66,7 +70,7 @@ export default function Tsdmt() {
     formData.append("poste_comptable", doc['poste_comptable']);
     formData.append("exercice", doc['exercice']);
     formData.append("periode", doc['periode']);
-    formData.append("decade", doc['decade']);
+    formData.append("info_supp", doc['decade']);
     formData.append("mois", doc['mois']);
     formData.append("date_arrivee", doc['date_arrivee']);
     formData.append("action", 'ajouter_un_document');
@@ -111,10 +115,12 @@ export default function Tsdmt() {
       'total recettes': total_recettes, 
       'total depenses': total_depenses, 
       
-      'id_doc': id_doc
+      'id_doc': id_doc,
+
+      'utilisateur': user[0]['id'],
+      'piece': doc['piece'],
     }, setResult)
   
-    setDoc(null);
     // reset_file();
   }
 
@@ -145,6 +151,16 @@ export default function Tsdmt() {
   }, []);
 
 
+
+  useEffect(() => {
+    if(result && result['succes']){
+      setDoc(null);
+      setReport(0);
+      setResetAllMontant(true);
+    }
+  }, [result])
+
+
   return (
 
     <section id='tsdmt'>
@@ -152,12 +168,12 @@ export default function Tsdmt() {
 
         {/* Tableau des recettes */}
         <div className='w-3/7'>
-          <Recettes comptes={comptes} total={total_recettes} setTotal={setTotalRecettes} setRecettes={setRecettes}/>
+          <Recettes comptes={comptes} total={total_recettes} setTotal={setTotalRecettes} setRecettes={setRecettes} reset_all_montant={reset_all_montant}/>
         </div>
 
           {/* Tabelau des depenses */}
         <div className='flex-1'>
-          <Depenses comptes={comptes} setTotal={setTotalDepenses} setDepenses={setDepenses}/>
+          <Depenses comptes={comptes} setTotal={setTotalDepenses} setDepenses={setDepenses} reset_all_montant={reset_all_montant}/>
         </div>
 
         <div className='w-1/7'>
@@ -259,7 +275,7 @@ export default function Tsdmt() {
       </div>
 
       <Modal isVisible={isVisible} setIsvisible={setIsvisible}>
-        <SaveFile type_piece="TSDMT" setFichier={setDoc} onRegisterResetFile={handleResetFile}/>
+        <SaveFile type_piece="TSDMT" setFichier={setDoc} />
       </Modal>
 
       {

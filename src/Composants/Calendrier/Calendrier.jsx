@@ -43,7 +43,7 @@ export default function Calendrier({evenements = []}) {
 
 
   return (
-    <div id='calendrier' className='w-80 h-57 mx-auto'>
+    <div id='calendrier' className='w-70 h-54 mx-auto'>
         <Calendar 
             localizer={localizer}
             events={events}

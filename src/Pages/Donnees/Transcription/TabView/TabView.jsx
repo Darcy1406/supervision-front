@@ -4,6 +4,9 @@ import './TabView.css';
 import TsdmtView from './View/TsdmtView';
 import BtdView from './View/BtdView';
 import BtrView from './View/BtrView';
+import SjeView from './View/SjeView';
+import BalanceView from './View/BalanceView';
+
 
 export default function TabView({data, titre, piece}){
 
@@ -47,7 +50,9 @@ export default function TabView({data, titre, piece}){
                     <BtdView data={data}/>
                 : piece.toUpperCase() == 'BTR' ?
                     <BtrView data={data}/>
-                : null
+                : piece.toUpperCase() == "SJE" ?
+                    <SjeView data={data}/>
+                : <BalanceView data={data}/>
             : null
         }
 

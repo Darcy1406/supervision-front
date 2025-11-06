@@ -1,10 +1,10 @@
 import { API_URL } from "../Config";
 import { getCSRFToken } from "../utils/csrf";
 
-export const sendDocument = (formData, setIdDoc) => {
+export const sendBalance = (formData, setResult) => {
 
     const csrftoken = getCSRFToken();
-    fetch(`${API_URL}/data/document/save`, {
+    fetch(`${API_URL}/data/transcription/create`, {
       method: 'post',
       headers: {
         // "Content-Type": "application/json",
@@ -20,9 +20,7 @@ export const sendDocument = (formData, setIdDoc) => {
       return response.json();
     })
     .then(data => {
-        console.log('id fichier :', data['id_fichier']);
-        setIdDoc(data['id_fichier']);
-
+        setResult(data);
     })
     .catch(error => {
       console.log('Erreur : ', error);

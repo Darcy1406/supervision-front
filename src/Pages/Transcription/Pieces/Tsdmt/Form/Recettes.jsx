@@ -4,7 +4,7 @@ import { useFetch } from '../../../../../functions/fetchData';
 import { API_URL } from '../../../../../Config';
 import InputNumber from '../../../../../Composants/InputNumber/InputNumber';
 
-export default function Recettes({ total, setTotal, setRecettes, comptes }) {
+export default function Recettes({ total, setTotal, setRecettes, comptes, reset_all_montant }) {
 
     const [refresh, setRefresh] = useState(true);
 
@@ -38,6 +38,7 @@ export default function Recettes({ total, setTotal, setRecettes, comptes }) {
       setMontants(initialState);
     }
 
+
     const get_total_recettes = () => {
       let total = 0
       Object.values(montants).forEach(v => {
@@ -46,6 +47,7 @@ export default function Recettes({ total, setTotal, setRecettes, comptes }) {
       })
       setTotal(total.toFixed(2));
     }
+
 
     const get_recettes = () => {
       setRecettes(montants);
@@ -63,6 +65,13 @@ export default function Recettes({ total, setTotal, setRecettes, comptes }) {
         ...prev,
         [compte]: value,
       }));
+    }
+
+
+    const reset_data = () => {
+      Object.keys(montants).forEach(key => {
+        handleChange(key, 0);
+      })
     }
 
 
@@ -87,7 +96,12 @@ export default function Recettes({ total, setTotal, setRecettes, comptes }) {
     }, [comptes_recettes]);
 
 
-    
+    // Pour reset les montants de depenses a zero
+    useEffect(() => {
+      if(reset_all_montant){
+        reset_data()
+      }
+    }, [reset_all_montant])    
 
 
   return (
