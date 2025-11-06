@@ -75,7 +75,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
         <div className="field">
             <div className="control">
                 <label className="label">Pièce</label>
-                <input type="text" className='input' placeholder='Entrer le type du pièce' value={file['piece']}/>
+                <input type="text" className='input' placeholder='Entrer le type du pièce' value={file['piece']} onChange={() => {}}/>
             </div>
         </div>
 
@@ -100,7 +100,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
         <div className="flex gap-4">
 
             {/* Periode */}
-            <div className="field w-1/3">
+            <div className="field flex-1">
                 <div className="control">
                     <label className="label">Période</label>
                     <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['periode']} onChange={(e) => handleChange('periode', e.target.value)}>
@@ -113,37 +113,48 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
             </div>
 
             {/* Exercice */}
-            <div className="field w-1/3">
-                <div className="control">
-                    <label className="label">Exercice</label>
-                    <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['exercice']} onChange={(e) => handleChange('exercice', e.target.value)}>
-                        <option value="" disabled></option>
-                        <option value="2025">2025</option>
-                        <option value="2026">2026</option>
-                    </select>
-                </div>
-            </div>
+            {
+                file['periode'] != 'Journalière' && (
+                    <div className="field w-1/3">
+                        <div className="control">
+                            <label className="label">Exercice</label>
+                            <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['exercice']} onChange={(e) => handleChange('exercice', e.target.value)}>
+                                <option value="" disabled></option>
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                            </select>
+                        </div>
+                    </div>
+                )
+            }
 
-            <div className="field w-1/3">
-                <div className="control">
-                    <label className="label">Mois</label>
-                    <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['mois']} onChange={(e) => handleChange('mois', e.target.value)}>
-                        <option value="" disabled></option>
-                        <option value="1">Janvier</option>
-                        <option value="2">Février</option>
-                        <option value="3">Mars</option>
-                        <option value="4">Avril</option>
-                        <option value="5">Mai</option>
-                        <option value="6">Juin</option>
-                        <option value="7">Juillet</option>
-                        <option value="8">Aout</option>
-                        <option value="9">Septembre</option>
-                        <option value="10">Octobre</option>
-                        <option value="11">Novembre</option>
-                        <option value="12">Décembre</option>
-                    </select>
-                </div>
-            </div>
+            {
+                file['periode'] != 'Journalière' && (
+
+                    <div className="field w-1/3">
+                        <div className="control">
+                            <label className="label">Mois</label>
+                            <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['mois']} onChange={(e) => handleChange('mois', e.target.value)}>
+                                <option value="" disabled></option>
+                                <option value="1">Janvier</option>
+                                <option value="2">Février</option>
+                                <option value="3">Mars</option>
+                                <option value="4">Avril</option>
+                                <option value="5">Mai</option>
+                                <option value="6">Juin</option>
+                                <option value="7">Juillet</option>
+                                <option value="8">Aout</option>
+                                <option value="9">Septembre</option>
+                                <option value="10">Octobre</option>
+                                <option value="11">Novembre</option>
+                                <option value="12">Décembre</option>
+                            </select>
+                        </div>
+                    </div>
+
+                )
+            }   
+
         </div>
 
         {/* Decade */}

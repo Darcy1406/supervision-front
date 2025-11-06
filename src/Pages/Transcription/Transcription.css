@@ -1,3 +1,7 @@
 .form-tab tbody tr:nth-child(even){
     background-color: #d3d3d351;
 }
+
+.input-sje:invalid{
+    border-color: red!important;
+}
