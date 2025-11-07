@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { fetchData } from '../../../functions/fetchData';
 import { API_URL } from '../../../Config';
+import { useUserStore } from '../../../store/useUserStore';
 
 export default function SoldeCaisse() {
+    const user = useUserStore((state) => state.user);
 
     const [postes_comptables, setPostesComptables] = useState(null);
     const [poste_choisi, setPosteChoisi] = useState("");
@@ -15,15 +17,22 @@ export default function SoldeCaisse() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetchData(`${API_URL}/data/analyse/equilibre_balance`, 'post', {'action': 'analyse_equilibre_balance', 'poste_comptable': poste_choisi, 'piece': piece, 'exercice': exercice, 'mois': mois}, setData)
+        fetchData(`${API_URL}/data/analyse/solde_caisse`, 'post', {'action': 'verfication_solde_caisse', 'poste_comptable': poste_choisi, 'exercice': exercice, 'mois': mois}, setData)
     }
+
+
+    useEffect(() => {
+        fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['id'], "piece": 'SJE', 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
+    }, [])
+
 
   return (
     <div id='solde_caisse'>
+        <p className='text-center my-4 text-2xl'>Verification du solde de caisse</p>
 
         <div className="bloc-form">
             <form onSubmit={handleSubmit}>
-                <div className='flex gap-6 my-2'>
+                <div className='flex gap-6 my-2 px-6'>
 
                     <div className='w-3/6 flex items-center justify-center gap-2'>
                         <div className='w-1/3'>
@@ -41,7 +50,7 @@ export default function SoldeCaisse() {
                         </div>
                     </div>
 
-                    <div className='w-1/6 flex items-center justify-center gap-2'>
+                    {/* <div className='w-1/6 flex items-center justify-center gap-2'>
                         <div className=''>
                             <label className="label">Piece : </label>
                         </div>
@@ -52,7 +61,7 @@ export default function SoldeCaisse() {
                                 <option value="BOV">BOV</option>
                             </select>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className='w-1/6 flex items-center justify-center gap-2'>
                         <div className='w-1/3'>
@@ -99,6 +108,60 @@ export default function SoldeCaisse() {
                 </div>
             </form>
         </div>
+
+
+        <div className='container-verification mt-4 px-6 py-4'>
+
+            <div className='p-4 bg-gray-300 mt-4 rounded-lg border border-gray-400'>
+                <p className='underline'>Situation Journaliere d'Encaisse : Encaisse du fin du mois</p>
+                <p className='my-2'>
+                    Montant : 
+                    <strong className='mx-1 text-xl'>
+                        {(data?.sje[0]['total'] || 0).toLocaleString('fr-FR') } Ar
+                    </strong>
+                </p>
+            </div>
+            
+            <div className='p-4 bg-gray-300 mt-4 rounded-lg border border-gray-400'>
+                <p className='underline'>Solde compte 5310 du mois</p>
+                <p className='my-2'>
+                    Montant : 
+                    <strong className='mx-1 text-xl'>
+                        {(data?.balance[0]['total'] || 0).toLocaleString('fr-FR') } Ar
+                    </strong>
+                </p>
+            </div>
+        </div>
+
+        {
+            data ?
+                <div className='w-1/2 mx-auto p-4'>
+                    <fieldset className={ Number(data?.balance[0]['total']) == Number(data?.sje[0]['total']) ?  'border border-green-400 rounded-sm px-6 py-4' : 'border border-red-400 rounded-sm px-6 py-4'}>
+                        <legend>
+                            {
+                                Number(data?.balance[0]['total']) == Number(data?.sje[0]['total']) ?
+                                    <span className='is-size-2 text-green-400'>
+                                        <i className="far fa-thumbs-up mx-auto"></i>
+                                    </span>
+                                :
+                                    <span className='is-size-2 text-red-400'>
+                                        <i className='fas fa-times'></i>
+                                    </span>
+                            }
+                        </legend>
+                        {
+                            Number(data?.balance[0]['total']) == Number(data?.sje[0]['total']) ?
+                                <>
+                                    <p className='text-center text-lg text-green-400'>Le solde est authentique</p>
+                                </>
+                            : 
+                                <p className='text-center text-lg text-red-400'>Le solde n'est pas authentique</p>
+                        }
+                    </fieldset>
+                </div>
+            : null
+        }
+
 
     </div>
   )
