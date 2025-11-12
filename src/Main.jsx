@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './Main.css'
 import { Outlet, RouterProvider, useLocation } from 'react-router-dom'
 
@@ -8,7 +8,7 @@ import { API_URL } from './Config.js';
 import { useUserStore } from './store/useUserStore.js';
 import { useAuthentification } from './hooks/useAuthentification.js';
 import { Alert } from './Composants/Alert/Alert';
-import { router } from './Router/Router.jsx';
+import { router } from './Router/Router.js';
 import { fetchData } from './functions/fetchData.js';
 
 

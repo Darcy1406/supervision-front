@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { fetchData } from '../../functions/fetchData';
 import { API_URL } from '../../Config';
 import { useUserStore } from '../../store/useUserStore';
@@ -16,10 +16,13 @@ export default function Anomalie() {
 
     const [postes_comptables, setPostesComptables] = useState(null);
 
+    // Status
     const [isNouveau, setIsNouveau] = useState(true);
     const [isEnCours, setIsEncours] = useState(true);
     const [isResolu, setIsResolu] = useState(true);
 
+
+    //  Autres filtres
     const [poste_choisi, setPosteChoisi] = useState("");
     const [type_analyse, setTypeAnalyse] = useState("");
     const [exercice, setExercice] = useState("");
@@ -28,7 +31,11 @@ export default function Anomalie() {
 
     const [result, setResult] = useState(null);
 
+    const [resolution, setResolution] = useState(null); // Va stocker la description d'un resolution
+
     const [commentaire, setCommentaire] = useState(""); // State qui va contenir le commentaire concernant pour la resolution d'une anomalie
+
+    const [ligneActive, setLigneActive] = useState(null);
 
 
     const recuperer_id_anomalie = (value, checked) => {
@@ -61,10 +68,14 @@ export default function Anomalie() {
 
 
 
-    // Filter les donnees en fonction des status
-    const data_filter_by_statut = () => {
-        if(anomalies_filtered ){
+    // Filter les donnees en fonction
+    const data_filter = () => {
+
+        if(anomalies_filtered){
+
             const filter = anomalies_filtered.filter(item => {
+
+                // Filtre pour les status
                 if(item['statut'].toLowerCase() == 'nouveau' && !isNouveau){
                     return false;
                 }
@@ -74,11 +85,24 @@ export default function Anomalie() {
                 if(item['statut'].toLowerCase() == 'en cours' && !isEnCours ){
                     return false;
                 }
-                if(item['statut'].toLowerCase() == ('resolu' || 'résolu') && !isResolu){
+                if(['resolu', 'résolu'].includes(item['statut'].toLowerCase())  && !isResolu){
                     return false;
                 }
+
+                // Filtre par poste comptable, analyse, exercice
+                if( item['document__exercice'] != exercice && exercice != "" ){
+                    return false;
+                }
+                if( item['document__poste_comptable__nom_poste'] != poste_choisi && poste_choisi != "" ){
+                    return false;
+                }
+                if( item['type_analyse'] != type_analyse && type_analyse != "" ){
+                    return false;
+                }
+
                 return true;
             })
+
             setAnomalies(filter);
         }
     }
@@ -88,9 +112,15 @@ export default function Anomalie() {
     
 
 
+    const voir_resolution = (id) => {
+        fetchData(`${API_URL}/data/correction/voir_detail`, 'post', {'action': 'voir_detail_resolution_anomalie', 'anomalie': id}, setResolution)
+    }
+
+
     useEffect(() => {
-        data_filter_by_statut();
-    }, [isNouveau, isEnCours, isResolu, exercice])
+        data_filter();
+    }, [isNouveau, isEnCours, isResolu, exercice, poste_choisi, type_analyse])
+
 
     useEffect(() => {
         fetchData(`${API_URL}/data/anomalie/get`, 'get', {}, setAnomalies);
@@ -101,11 +131,15 @@ export default function Anomalie() {
 
     const AnomalieItem = ({item}) => {
         const selected = selected_anomalie.includes(item['id'].toString())
+        const estActive = ligneActive === item.id;
         return(
-            <tr>
+            <tr 
+                className={` ${['résolu', 'resolu'].includes(item['statut'].toLowerCase()) ? 'cursor-pointer' : ''} ${estActive ? 'bg-blue-200' : ''} `} 
+                onClick={['résolu', 'resolu'].includes(item['statut'].toLowerCase()) ? () => { setLigneActive(item.id); voir_resolution(item['id']) } : () => {} }
+            >
                 <td>
                     {
-                        item['statut'].toLowerCase() != 'résolu' && item['statut'].toLowerCase() != 'resolu' ?
+                        !( ['résolu', 'resolu'].includes(item['statut'].toLowerCase()) ) ? 
                             <input type="checkbox" value={item['id']} onChange={(e) => recuperer_id_anomalie(e.target.value, e.target.checked) } checked={selected}/>
                         : null
                     }
@@ -136,10 +170,22 @@ export default function Anomalie() {
                 setIsVisible(false);
                 fetchData(`${API_URL}/data/anomalie/get`, 'get', {}, setAnomalies);
                 fetchData(`${API_URL}/data/anomalie/get`, 'get', {}, setAnomaliesFiltered);
-                data_filter_by_statut();
+                data_filter();
             }
         }
     }, [result])
+
+
+    useEffect(() => {
+    
+        const original_title = document.title;
+        document.title = 'Gestion des anomalies';
+    
+        return () => {
+          document.title = original_title
+        }
+    
+      }, [])
 
 
   return (
@@ -150,29 +196,56 @@ export default function Anomalie() {
             {/* Filtre */}
             <div className="recherche flex justify-center items-center my-2 py-2 px-4 gap-4">
 
-                <div className='flex items-center w-1/3'>
-                    <label htmlFor="" className="w-2/3 label">Poste comptable : </label>
-                    <input list='poste_comptable' className=' w-1/2 input' placeholder='Choisissez un poste comptable'/>
-                    <datalist id='poste_comptable'>
-                        {
-                            postes_comptables && postes_comptables.map((item, index) => (
-                                <option key={index} value={item['nom_poste']} />
-                            ))
-                        }
-                    </datalist>
+                <div className='flex gap-2 items-center w-1/3'>
+
+                    <div className='w-35'>
+                        <label htmlFor="" className="label">Poste comptable : </label>
+                    </div>
+
+                    <div className="flex-1">
+                        <input list='poste_comptable' className=' w-1/2 input' placeholder='Choisissez un poste comptable' value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value) }/>
+                        <datalist id='poste_comptable'>
+                            {
+                                postes_comptables && postes_comptables.map((item, index) => (
+                                    <option key={index} value={item['nom_poste']} />
+                                ))
+                            }
+                        </datalist>
+                    </div>
                 </div>
 
-                <div className='flex w-1/3 items-center'>
-                    <label htmlFor="" className="w-1/3 label">Type d'anomalie : </label>
-                    <select name="" id="" className='w-2/3 bg-white p-2 border border-gray-300 rounded-lg'>
-                        <option value="SJE">Report SJE</option>
-                        <option value="Balance">Equilibre Balance</option>
-                    </select>
+                <div className='flex gap-2 w-1/3 items-center'>
+
+                    <div className='w-35'>
+                        <label htmlFor="" className="label">Type d'anomalie : </label>
+                    </div>
+
+                    <div className='flex-1'>
+                        <select name="" id="" className='bg-white w-full p-2 border border-gray-300 rounded-lg' value={type_analyse} onChange={ (e) => setTypeAnalyse(e.target.value) }>
+                            <option value="" disabled>------</option>
+                            <option value="report_sje">Report SJE</option>
+                            <option value="equilibre_balance">Equilibre Balance</option>
+                            <option value="solde_caisse">Verification Solde caisse</option>
+                            <option value="solde_anormale">Verification Solde anormale</option>
+                        </select>
+                    </div>
+
                 </div>
 
-                <div className='flex items-center w-1/3'>
-                    <label htmlFor="" className="w-1/3 label">Exercice : </label>
-                    <input type="number" className='input' placeholder='Exercice du document' value={exercice} onChange={(e) => setExercice(e.target.value)}/>
+                <div className='flex w-1/3 gap-2 items-center'>
+
+                    <div className='w-20'>
+                        <label htmlFor="" className="label">Exercice : </label>
+                    </div>
+                    
+                    <div className='flex-1'>
+                        <select name="" id="" className='bg-white w-full p-2 rounded-lg border border-gray-300' value={exercice} onChange={(e) => {setExercice(e.target.value)}}>
+                            <option value="" disabled>------</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                        </select>
+                    </div>
                 </div>
 
             </div>
@@ -200,6 +273,28 @@ export default function Anomalie() {
                 : null
             }
 
+
+            {/* Description de la resolution de l'anomalie */}
+            {
+                resolution ?
+                    resolution.length > 0 ?
+                        <fieldset className='border-2 border-green-300 px-6 py-4 mx-2 w-1/2 rounded-lg'>
+                            <legend>
+                                <span className='mx-1 icon text-red-500 cursor-pointer duration-150 ease-in-out hover:text-red-600' onClick={() => { setResolution(null); setLigneActive(null) } }>
+                                    <i className='fas fa-times-circle'></i>
+                                </span>
+                                Resoltion de l'anomalie
+                            </legend>
+
+                            <p>
+                                {resolution[0].commentaire}
+                            </p>
+                        </fieldset>
+                    : null
+                : null
+            }
+
+
             {/* Va contenir les checkboxs de filtre sur les status */}
             <div className='container-filtre is-pulled-right mx-4 my-2'>
 
@@ -220,7 +315,7 @@ export default function Anomalie() {
 
             </div>
 
-            <table className='table is-fullwidth is-hoverable'>
+            <table className='table is-fullwidth'>
 
                 <thead>
                     <tr>

@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useUserStore } from '../../store/useUserStore';
 import { fetchData } from '../../functions/fetchData';
 import { API_URL } from '../../Config';
@@ -20,6 +20,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
     })
 
     const [postes_comptables, setPostesComptables] = useState(null); // Va stoker tous les postes comptables liees aux auditeurs
+    const [periode, setPeriode] = useState("");
 
 
     const handleChange = (item, value) => {
@@ -54,12 +55,28 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
     }
 
 
+    const obtenir_periode_piece = () => {
+        fetchData(`${API_URL}/data/piece/periode`, 'post', {'action': 'recuperer_periode_piece', 'piece': type_piece}, setPeriode)
+    }
+
+
     useEffect(() => {
         if(type_piece != ""){
+
             fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['id'], "piece": type_piece.toUpperCase(), 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
             handleChange('piece', type_piece)
+
+            obtenir_periode_piece();
         }
+
     }, [type_piece])
+
+
+    useEffect(() => {
+        if(periode != ""){
+            handleChange('periode', periode[0])
+        }
+    }, [periode])
 
 
     // useEffect(() => {
@@ -78,7 +95,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
         <div className="field">
             <div className="control">
                 <label className="label">Pièce</label>
-                <input type="text" className='input' placeholder='Entrer le type du pièce' value={file['piece']} onChange={() => {}}/>
+                <input type="text" className='input' placeholder='Entrer le type du pièce' value={file['piece']} onChange={() => {}} required/>
             </div>
         </div>
 
@@ -106,7 +123,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
             <div className="field flex-1">
                 <div className="control">
                     <label className="label">Période</label>
-                    <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['periode']} onChange={(e) => handleChange('periode', e.target.value)}>
+                    <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['periode']} onChange={(e) => handleChange('periode', e.target.value)} required>
                         <option value="" disabled></option>
                         <option value="Journalière">Journalière</option>
                         <option value="Décadaire">Décadaire</option>
@@ -181,7 +198,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
         <div className="field">
             <div className="control">
                 <label className="label">Date d'arrivée</label>
-                <input type="date" className='input' value={file['date_arrivee']} onChange={(e) => handleChange('date_arrivee', e.target.value)}/>
+                <input type="date" className='input' value={file['date_arrivee']} onChange={(e) => handleChange('date_arrivee', e.target.value)} required/>
             </div>
         </div>
 
@@ -192,7 +209,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
                 <div className="flex items-center gap-4">
                     <div className="file">
                         <label className="file-label">
-                            <input type="file" className="file-input file-input-doc" onChange={selectedFile}/>
+                            <input type="file" className="file-input file-input-doc" onChange={selectedFile} required/>
                             <span className="file-cta">
                                 <span className="file-icon">
                                     <i className="fas fa-upload"></i>

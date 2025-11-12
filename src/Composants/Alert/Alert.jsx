@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import './Alert.css';
 
 export function Alert({message="", icon="", setMessage, bgColor, borderColor}) {

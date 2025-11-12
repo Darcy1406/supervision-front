@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import fr from "date-fns/locale/fr";
@@ -53,7 +53,8 @@ export default function CalendrierAnnuel({ data = [], setYear, year, setAnomalie
           anomaliesTemp.push({
             date: dateCourante,
             description: `L'encaisse fin de journée du ${datePrecedente} (${precedent.solde.montant.toLocaleString('fr-FR')}) ne correspond pas au report de la journée du ${dateCourante} (${courant.report.montant.toLocaleString('fr-FR')}) dans le fichier "${courant.report.fichier}"`,
-            fichier: courant.report.fichier
+            fichier: [courant.report.fichier],
+            analyse: 'report_sje'
           });
           // anomaliesTemp.push({
           //   date: dateCourante,

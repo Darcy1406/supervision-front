@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { formatNombreAvecEspaces, formatNumber } from '../../../../../functions/Function';
 import { useFetch } from '../../../../../functions/fetchData';
 import { API_URL } from '../../../../../Config';
@@ -51,7 +51,7 @@ export default function Recettes({ total, setTotal, setRecettes, comptes, reset_
 
     const get_recettes = () => {
       setRecettes(montants);
-    } 
+    }
 
 
     const handleChange = (compte, value) => {
@@ -108,6 +108,7 @@ export default function Recettes({ total, setTotal, setRecettes, comptes, reset_
     <div id='recettes'>
         <div>
           <p className='text-center bg-gray-300 p-4 font-semibold italic text-xl'>Recettes</p>
+
           <div className='container-recettes flex gap-2'>
 
             <div className='w-1/2'>

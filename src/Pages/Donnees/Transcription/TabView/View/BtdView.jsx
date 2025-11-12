@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formatNombreAvecEspaces, formatNumber } from '../../../../../functions/Function';
 
 export default function BtdView({data}) {

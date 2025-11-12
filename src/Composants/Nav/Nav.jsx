@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { NavLink, useLocation, BrowserRouter } from 'react-router-dom';
 import './Nav.css';
 import { useAuthentification } from '../../hooks/useAuthentification';
@@ -73,7 +73,7 @@ export default function Nav() {
 
                         <NavLink to='/main/analysis' onClick={show_or_close_navigation} className='current'>
                             <li>
-                                <div className={location.pathname == '/main/reporting' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
+                                <div className={location.pathname == '/main/analysis' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
                                     <span className='icon'>
                                         <i className="fas fa-chart-pie"></i>
                                     </span>
@@ -87,7 +87,7 @@ export default function Nav() {
                     
                     <NavLink to='/main/anomalie' onClick={show_or_close_navigation} className='current'>
                         <li>
-                            <div className='bloc-item-nav'>
+                            <div className={ location.pathname == '/main/anomalie' ?'bloc-item-nav current' : 'bloc-item-nav'}>
                                 <span className='icon'>
                                     <i className="fas fa-bug"></i>
                                 </span>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formatNombreAvecEspaces } from '../../../../../functions/Function'
 
 export default function SjeView({data}) {
@@ -84,7 +84,7 @@ export default function SjeView({data}) {
                     : <td colSpan={2}>{item['nature']}</td>
                 }
 
-                <td className='w-35'>{ item['montant'] == 0 ? "0" : formatNombreAvecEspaces(item['montant'].toFixed(2))} Ar</td>
+                <td className='w-35 font-bold text-lg'>{ item['montant'] == 0 ? "0" : formatNombreAvecEspaces(item['montant'].toFixed(2))} Ar</td>
             </tr>
         )
     }
@@ -106,45 +106,49 @@ export default function SjeView({data}) {
                 
                 <tr>
                     <td>Encaisse de la decade precedente</td>
-                    <td>{formatNombreAvecEspaces((Number(info_supp['report']).toFixed(2)))} Ar</td>
+                    <td className='font-bold text-lg'>{formatNombreAvecEspaces((Number(info_supp['report']).toFixed(2)))} Ar</td>
                 </tr>
 
                 <tr>
                     <td>Recettes propres</td>
-                    <td>{formatNombreAvecEspaces((Number(recettes['Recettes propres']).toFixed(2)))} Ar</td>
+                    <td className='font-bold text-lg'>{formatNombreAvecEspaces((Number(recettes['Recettes propres']).toFixed(2)))} Ar</td>
                 </tr>
 
                 <tr>
                     <td>Approvisionnement de fonds</td>
-                    <td>{formatNombreAvecEspaces((Number(recettes['Approvisionnement de fonds']).toFixed(2)))} Ar</td>
+                    <td className='font-bold text-lg'>{formatNombreAvecEspaces((Number(recettes['Approvisionnement de fonds']).toFixed(2)))} Ar</td>
                 </tr>
 
                 <tr>
                     <td>Degagement de fonds effectuees par la RAF</td>
-                    <td>{formatNombreAvecEspaces((Number(recettes['Degagement de fonds effectuees par la RAF']).toFixed(2)))} Ar</td>
+                    <td className='font-bold text-lg'>{formatNombreAvecEspaces((Number(recettes['Degagement de fonds effectuees par la RAF']).toFixed(2)))} Ar</td>
                 </tr>
 
                 <tr>
                     <td>Total recettes</td>
-                    <td>{formatNombreAvecEspaces((Number(total['recettes']).toFixed(2)))} Ar</td>
+                    <td className='font-bold text-lg'>{formatNombreAvecEspaces((Number(total['recettes']).toFixed(2)))} Ar</td>
                 </tr>
 
                 <tr>
                     <td>Degagements de fonds</td>
-                    <td>{formatNombreAvecEspaces((Number(depenses['Degagements de fonds']).toFixed(2)))} Ar</td>
+                    <td className='font-bold text-lg'>{formatNombreAvecEspaces((Number(depenses['Degagements de fonds']).toFixed(2)))} Ar</td>
                 </tr>
+
                 <tr>
                     <td>Depenses</td>
-                    <td>{formatNombreAvecEspaces((Number(depenses['Depenses']).toFixed(2)))} Ar</td>
+                    <td className='font-bold text-lg'>{formatNombreAvecEspaces((Number(depenses['Depenses']).toFixed(2)))} Ar</td>
                 </tr>
+
                 <tr>
                     <td>Total depenses</td>
-                    <td>{formatNombreAvecEspaces((Number(total['depenses']).toFixed(2)))} Ar</td>
+                    <td className='font-bold text-lg'>{formatNombreAvecEspaces((Number(total['depenses']).toFixed(2)))} Ar</td>
                 </tr>
+
                 <tr>
                     <td>Encaisse fin de la decade</td>
-                    <td>{formatNombreAvecEspaces((Number(info_supp['solde']).toFixed(2)))} Ar</td>
+                    <td className='font-bold text-lg'>{formatNombreAvecEspaces((Number(info_supp['solde']).toFixed(2)))} Ar</td>
                 </tr>
+
             </tbody>
         </table>
     </div>

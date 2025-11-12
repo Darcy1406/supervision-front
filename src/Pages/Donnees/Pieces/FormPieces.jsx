@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './Pieces.css';
 import { sendData } from '../../../functions/sendData';
 import { API_URL } from '../../../Config';
@@ -74,7 +74,7 @@ export function FormPieces({setIsVisible, data=[], setData, refresh, setRefresh,
     const handlesbumit = (e) => {
         e.preventDefault();
         if(btn_form.current.textContent == 'Ajouter'){
-            sendData(`${API_URL}/data/piece/create`, 'POST', {nom_piece, periode, "poste_comptable": type_poste_comptable}, setResult);
+            sendData(`${API_URL}/data/piece/create`, 'POST', {'action': 'ajouter_piece', nom_piece, periode, "poste_comptable": type_poste_comptable}, setResult);
             // setRefresh(!refresh)
         }
         else{

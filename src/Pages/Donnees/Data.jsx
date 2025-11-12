@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Pieces from './Pieces/Pieces'
 import Comptes from './Comptes/Comptes';
 import { ListeTranscription } from './Transcription/ListeTranscription'
@@ -18,6 +18,18 @@ export default function Data() {
   useEffect(() => {
     setViewData(location.pathname.split('/')[3]);
   }, [location.pathname])
+
+
+  useEffect(() => {
+    
+    const original_title = document.title;
+    document.title = 'Gestion des données';
+
+    return () => {
+      document.title = original_title
+    }
+
+  }, [])
 
 
   return (

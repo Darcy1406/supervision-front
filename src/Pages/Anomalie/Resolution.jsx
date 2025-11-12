@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function Resolution({handleSubmit, commentaire, setCommentaire}) {
   return (
     <div id='resolution'>

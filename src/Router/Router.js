@@ -1,13 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import Login from "../Composants/Login/Login";
-import Inscription from "../Composants/Inscription/Inscription";
-import Main from '../Main';
-import { Transcription } from '../Pages/Transcription/Transcription'
-import Analyse from "../Pages/Analyse/Analyse";
-import Dashboard from "../Pages/Dashboard/Dashboard";
-import Data from "../Pages/Donnees/Data";
-import ComptePiece from "../Pages/ComptePiece/ComptePiece";
+import Login from "../Composants/Login/Login.jsx";
+import Inscription from "../Composants/Inscription/Inscription.jsx";
+import Main from '../Main.jsx';
+import { Transcription } from '../Pages/Transcription/Transcription.jsx'
+import Analyse from "../Pages/Analyse/Analyse.jsx";
+import Dashboard from "../Pages/Dashboard/Dashboard.jsx";
+import Data from "../Pages/Donnees/Data.jsx";
+import ComptePiece from "../Pages/ComptePiece/ComptePiece.jsx";
 import { Tsdmt } from "../Pages/Transcription/Pieces/Tsdmt/Tsdmt.jsx";
 import Pieces from "../Pages/Donnees/Pieces/Pieces.jsx";
 import Comptes from "../Pages/Donnees/Comptes/Comptes.jsx";
@@ -19,6 +19,7 @@ import SjeAnalyse from "../Pages/Analyse/Type/SjeAnalyse.jsx";
 import Anomalie from "../Pages/Anomalie/Anomalie.jsx";
 import BalanceAnalyse from "../Pages/Analyse/Type/BalanceAnalyse.jsx";
 import SoldeCaisse from "../Pages/Analyse/Type/SoldeCaisse.jsx";
+import SoldeAnormale from "../Pages/Analyse/Type/SoldeAnormale.jsx";
 // import { Liste as Liste_transcription } from "../Pages/Transcription/Liste.jsx";
 
 
@@ -106,6 +107,10 @@ export const router = createBrowserRouter([
                     {
                         path: 'solde_caisse',
                         element: <SoldeCaisse />
+                    },
+                    {
+                        path: 'solde_anormale',
+                        element: <SoldeAnormale />
                     }
                 ]
             },

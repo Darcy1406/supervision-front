@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import BtnChoice from '../../../../Composants/BtnChoice/BtnChoice'
 import Modal from '../../../../Composants/Modal/Modal';
 import SaveFile from '../../../../Composants/Save-File/SaveFile';

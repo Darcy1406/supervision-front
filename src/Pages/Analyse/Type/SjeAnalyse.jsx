@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import CalendrierAnnuel from '../../../Composants/CalendrierAnnuel/CalendrierAnnuel'
 import { useUserStore } from '../../../store/useUserStore';
 import { fetchData } from '../../../functions/fetchData';
@@ -22,13 +22,13 @@ export default function SjeAnalyse() {
 
     const lancer_analyse = (e) => {
         e.preventDefault();
-        fetchData(`${API_URL}/data/transcription/analyse`, 'POST', {'action': 'analyser_transcription_sje', 'piece': 'SJE', 'poste_comptable': poste_choisi, 'exercice': year}, setTranscription)
+        fetchData(`${API_URL}/data/transcription/data_analyse`, 'POST', {'action': 'analyser_transcription_sje', 'piece': 'SJE', 'poste_comptable': poste_choisi, 'exercice': year}, setTranscription)
     }
     
 
     useEffect(() => {
         if(anomalies.length > 0){
-            fetchData(`${API_URL}/data/anomalie/insert`, 'post', {'action': 'ajouter__anomalie', 'data': anomalies}, setResult);
+            fetchData(`${API_URL}/data/anomalie/insert`, 'post', {'action': 'ajouter_anomalie', 'data': anomalies}, setResult);
         }
     }, [anomalies])
 

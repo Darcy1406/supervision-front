@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { fetchData } from '../../../functions/fetchData.js'
 import { API_URL } from '../../../Config'
 import { useUserStore } from '../../../store/useUserStore';
@@ -119,23 +119,30 @@ export function ListeTranscription() {
 
     const checker_detail_transcription = (piece, nom_fichier, poste_comptable, date, exercice, mois, index) => {
 
+        setTranscription(null);
         let texte = '';
      
         setSelected(index);
         setIsvisible(true);
         setPiece(piece);
 
-        if(piece.toUpperCase() != 'SJE'){
-            const decade = nom_fichier.split(", ")[1];
-            texte += `${piece}, ${month_int_to_string(mois)} - ${decade}\n${poste_comptable}\n`
+        if(piece.toUpperCase() == 'SJE'){
+            texte += `${piece} du ${nom_fichier.split(', ')[1]} ${poste_comptable}`
         }
 
-        else if(piece.toUpperCase() == 'SJE'){
-            texte += `${piece} du ${nom_fichier.split(', ')[1]}\n${poste_comptable}`
+        if(piece.toUpperCase() == 'BAR'){
+            const decade = nom_fichier.split(", ")[1];
+            texte += `${piece}, ${month_int_to_string(mois)} - ${decade} ${poste_comptable}; ${nom_fichier.split(', ')[2]}`
         }
+
+        else if(piece.toUpperCase() != 'SJE'){
+            const decade = nom_fichier.split(", ")[1];
+            texte += `${piece}, ${month_int_to_string(mois)} - ${decade} ${poste_comptable}`
+        }
+
 
         else{
-            texte += `${piece}\n${poste_comptable}`
+            texte += `${piece} ${poste_comptable}`
         }
 
         setDetailTitre(texte);
@@ -156,7 +163,7 @@ export function ListeTranscription() {
                 >
                     <td>{item['piece__nom_piece']}</td>
                     <td>{item['poste_comptable__nom_poste']}</td>
-                    <td>{item['nom_fichier']}</td>
+                    <td>{item['nom_fichier'].split(", ")[0] + ", " + item['nom_fichier'].split(", ")[1]}</td>
                     <td>{item['date_arrivee']}</td>
                     <td>{month_int_to_string(item['mois'])}</td>
                     <td>{item['exercice']}</td>
@@ -172,7 +179,7 @@ export function ListeTranscription() {
 
 
     const currentPage = useRef(1);
-    const itemsPerPage = useRef(3);
+    const itemsPerPage = useRef(10);
 
 
     useEffect(() => {
@@ -311,7 +318,7 @@ export function ListeTranscription() {
         <div className='w-full h-full flex justify-center gap-2'>
             
 
-            <div className='w-5/6 relative h-115'>
+            <div className='w-full relative h-115'>
 
 
                 {/* Liste des auditeurs (afficher si l'utilisateur connecte n'est pas un auditeur) */}

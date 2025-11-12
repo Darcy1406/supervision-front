@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { fetchData } from '../../../functions/fetchData';
 import { API_URL } from '../../../Config';
 import { useUserStore } from '../../../store/useUserStore';
@@ -10,6 +10,7 @@ export default function BalanceAnalyse() {
     const [postes_comptables, setPostesComptables] = useState(null);
     const [poste_choisi, setPosteChoisi] = useState("");
     const [piece, setPiece] = useState("");
+    const [proprietaire, setProprietaire] = useState("");
     const [mois, setMois] = useState("");
     const [exercice, setExercice] = useState("");
 
@@ -82,7 +83,8 @@ export default function BalanceAnalyse() {
             const anomalies = [{
                 date: data[0]?.date_arrivee,
                 description: texte,
-                fichier: data[0].nom_fichier
+                fichier: [data[0].nom_fichier],
+                analyse: 'equilibre_balance'
             }]
 
             setAnomalies(anomalies)
@@ -101,11 +103,12 @@ export default function BalanceAnalyse() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetchData(`${API_URL}/data/analyse/equilibre_balance`, 'post', {'action': 'analyse_equilibre_balance', 'poste_comptable': poste_choisi, 'piece': piece, 'exercice': exercice, 'mois': mois}, setData)
+        setDescription("Aucune description pour l'instant");
+        fetchData(`${API_URL}/data/analyse/equilibre_balance`, 'post', {'action': 'analyse_equilibre_balance', 'poste_comptable': poste_choisi, 'piece': piece, 'proprietaire': proprietaire , 'exercice': exercice, 'mois': mois}, setData)
     }
 
     useEffect(() => {
-        fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['id'], "piece": 'SJE', 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
+        fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['id'], "piece": ['BOD', 'BOV'], 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
     }, [])
 
 
@@ -130,8 +133,9 @@ export default function BalanceAnalyse() {
             <form onSubmit={handleSubmit}>
                 <div className='flex gap-6 my-2'>
 
-                    <div className='w-3/6 flex items-center justify-center gap-2'>
-                        <div className='w-1/3'>
+                    {/* Poste comptable */}
+                    <div className='w-2/6 justify-center gap-2'>
+                        <div className='w-35'>
                             <label className='label'>Poste comptable : </label>
                         </div>
                         <div className='flex-1'>
@@ -146,10 +150,14 @@ export default function BalanceAnalyse() {
                         </div>
                     </div>
 
-                    <div className='w-1/6 flex items-center justify-center gap-2'>
-                        <div className=''>
+
+                    {/* Piece */}
+                    <div className='w-1/6 gap-2'>
+
+                        <div className='w-14'>
                             <label className="label">Piece : </label>
                         </div>
+
                         <div className='flex-1'>
                             <select value={piece} onChange={(e) => setPiece(e.target.value)} className='bg-white w-full p-2 rounded-sm border border-gray-300' required>
                                 <option value="">-----</option>
@@ -157,12 +165,33 @@ export default function BalanceAnalyse() {
                                 <option value="BOV">BOV</option>
                             </select>
                         </div>
+
+                        
+
                     </div>
 
-                    <div className='w-1/6 flex items-center justify-center gap-2'>
-                        <div className='w-1/3'>
+                    {/* Proprietaire */}
+                    <div className="w-1/6">
+                        <div>
+                            <label className='label'>Propriétaire : </label>
+                        </div>
+                        <div>
+                            <select className='w-full bg-white rounded-sm border border-gray-300 p-2' value={proprietaire} onChange={(e) => setProprietaire(e.target.value)} required>
+                                <option value="">------</option>
+                                <option value="ETAT">ETAT</option>
+                                <option value="REGION">REGION</option>
+                                <option value="COMMUNE">COMMUNE</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Mois */}
+                    <div className='w-1/6'>
+
+                        <div className=''>
                             <label className='label'>Mois : </label>
                         </div>
+
                         <div className='flex-1'>
                             <select className='bg-white w-full p-2 border border-gray-300 rounded-sm' value={mois} onChange={(e) => setMois(e.target.value)} required>
                                 <option value="">-----</option>
@@ -182,21 +211,35 @@ export default function BalanceAnalyse() {
                         </div>
                     </div>
 
-                    <div className='w-2/6 flex items-center justify-center gap-2'>
-                        <div className='w-1/3'>
+                    {/* Exercice */}
+                    <div className='w-1/6'>
+
+                        <div className=''>
                             <label className='label'>Exercice : </label>
                         </div>
-                        <div className='flex-1'>
-                            <input type='number' className='input' placeholder='Année' value={exercice} onChange={(e) => setExercice(e.target.value)} required/>
+
+                        <div className=''>
+
+                            <select className='bg-white w-full p-2 rounded-sm shadow border border-gray-300' value={exercice} onChange={(e) => setExercice(e.target.value)}>
+                                <option value="">------</option>
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                                <option value="2027">2027</option>
+                            </select>
+ 
                         </div>
                     </div>
 
+
+                    {/* Bouton */}
                     <div className='flex-1 flex items-center justify-center gap-2'>
+
                         <div className="">
                             <button className="button is-dark">
                                 Lancer
                             </button>
                         </div>
+
                     </div>
 
 
@@ -369,10 +412,10 @@ export default function BalanceAnalyse() {
                         : 
 
                             <p className='text-center text-2xl font-bold'>
-                                <span className='icon mx-2'>
+                                <span className='mx-2 text-3xl'>
                                     <i className="fas fa-times-circle text-yellow-400"></i>
                                 </span>
-                                Aucune donnee
+                                Aucune donnée à analyser
                             </p>
                     :   
                     <>

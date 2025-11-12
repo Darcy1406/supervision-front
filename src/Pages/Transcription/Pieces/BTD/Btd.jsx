@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { fetchData } from '../../../../functions/fetchData'
 import { API_URL } from '../../../../Config'
 import { formatNombreAvecEspaces, formatNumber, paginateData } from '../../../../functions/Function';

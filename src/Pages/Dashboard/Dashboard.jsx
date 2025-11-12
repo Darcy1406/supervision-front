@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './Dashboard.css'
 import Calendrier from '../../Composants/Calendrier/Calendrier';
 import { fetchData } from '../../functions/fetchData';
 import { API_URL } from '../../Config'; 
 import { sendData } from '../../functions/sendData';
 import { BarChart } from '../../Composants/Graphique/BarChart'
-import { PieChart } from '../../Composants/Graphique/PieChart';
+import { LineChart } from '../../Composants/Graphique/LineChart';
 import { DoughnutChart } from '../../Composants/Graphique/DoughnutChart';
 import { useUserStore } from '../../store/useUserStore';
 import { getRandomColor } from '../../functions/Function';
@@ -30,6 +30,10 @@ export default function Dashboard() {
   const [nb_corrige, setNbCorrige] = useState(0);
 
   const [data_anomalies, setDataAnomalies] = useState(null);
+  const [data_anomalie_resolues, setDataAnomalieResolues] = useState(null);
+
+  const [poste_comptables, setPosteComptables] = useState(null);
+  const [poste_choisi, setPosteChoisi] = useState("");
 
 
   const handleChange = (name, value, setState) => {
@@ -70,14 +74,39 @@ export default function Dashboard() {
   //   errors: errors
   // } = useFetch(`${API_URL}/agenda`)
 
+  const voir_statistique_poste_comptable = () => {
+    if(poste_choisi != ""){
+
+      fetchData(`${API_URL}/data/document/count`, 'post', {'action': 'compter_nombre_documents_par_poste_comptable', 'poste_comptable': poste_choisi}, setNbDoc)
+
+      fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombres_anomalies_par_poste_comptable', 'poste_comptable': poste_choisi}, setNbAnomalie)
+
+      fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombres_anomalies_resolu_par_poste_comptables', 'poste_comptable': poste_choisi}, setNbCorrige)
+
+      fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombre_anomalies_par_mois_par_comptable', 'poste_comptable': poste_choisi}, setDataAnomalies)
+
+      fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombres_anomalies_resolues_par_mois_par_poste_comptable', 'poste_comptable': poste_choisi}, setDataAnomalieResolues)
+
+    }
+  }
+
+
   
   useEffect(() => {
-    // console.log('erreur : ', new Date(list_agenda[0].fields.date_evenement).getDate())
+    
+    const original_title = document.title;
     document.title = 'Tableau de bord';
+
+    return () => {
+      document.title = original_title
+    }
+
   }, [])
 
 
+  // Donnees generales
   useEffect(() => {
+
     fetchData(`${API_URL}/data/document/count`, 'post', {'action': 'compter_nombre_documents_generale'}, setNbDoc)
 
     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombre_anomalies_generale'}, setNbAnomalie)
@@ -85,6 +114,41 @@ export default function Dashboard() {
     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombre_anomalies_resolu'}, setNbCorrige)
 
     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombre_anomalies_par_mois'}, setDataAnomalies)
+
+    fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombres_anomalies_resolues_par_mois'}, setDataAnomalieResolues)
+
+  }, [])
+
+
+  // useEffect(() => {
+  //   if(poste_choisi != ""){
+
+  //     fetchData(`${API_URL}/data/document/count`, 'post', {'action': 'compter_nombre_documents_par_poste_comptable', 'poste_comptable': poste_choisi}, setNbDoc)
+
+  //     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombres_anomalies_par_poste_comptable', 'poste_comptable': poste_choisi}, setNbAnomalie)
+
+  //     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombres_anomalies_resolu_par_poste_comptables', 'poste_comptable': poste_choisi}, setNbCorrige)
+
+  //     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombre_anomalies_par_mois_par_comptable', 'poste_comptable': poste_choisi}, setDataAnomalies)
+
+  //     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombres_anomalies_resolues_par_mois_par_poste_comptable', 'poste_comptable': poste_choisi}, setDataAnomalieResolues)
+
+  //   }
+  // }, [poste_choisi])
+
+
+  // Affichage des postes comptables par fonction de l'utilisateur
+  useEffect(() => {
+
+    if( user[0]['utilisateur__fonction'].toUpperCase() == 'auditeur'.toUpperCase() ){
+      fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'user_id': user[0]['id']}, setPosteComptables)
+    }
+    else if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase()){
+      fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_tous_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'],'user_id': user[0]['id']}, setPosteComptables)
+    }
+    else{
+      fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables_zone', 'zone': user[0]['utilisateur__zone__nom_zone']}, setPosteComptables)
+    }
 
   }, [])
 
@@ -94,6 +158,7 @@ export default function Dashboard() {
 
       <div className='w-full flex items-center justify-center gap-2'>
 
+        {/* Count */}
         <div className='container-count w-1/6 h-full flex flex-wrap justify-center items-center gap-6'>
 
           <div className='bg-white h-35 w-5/6 rounded-xl shadow-lg'>
@@ -119,46 +184,82 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Les graphiques */}
-        <div className='container-chart w-3/6 h-full flex items-center justify-center flex-wrap gap-2'>
+        <div className='container-chart w-3/6 h-full flex justify-center flex-wrap gap-1'>
 
-          <div className='text-2xl w-full font-semibold text-2xl text-gray-400'>
+          {/* Filtrer le tableau de bord par poste comptable */}
+          <div className='flex items-center gap-4 p-2'>
+            <div>
+              <label className='label'>Poste comptable : </label>
+
+            </div>
+
+            <div>
+              <input list='poste_comptable' className='input' placeholder='Poste comptable' value={poste_choisi} onChange={(e) => {setPosteChoisi(e.target.value)} }/>
+              <datalist id='poste_comptable'>
+                {
+                  poste_comptables && poste_comptables.map((item, index) => (
+                    <option key={index} value={item['nom_poste']} />
+                  ))
+                }
+              </datalist>
+            </div>
+
+            <div>
+                <button className='button is-dark' disabled={poste_choisi == ""} onClick={voir_statistique_poste_comptable}>
+                  Voir
+                </button>
+            </div>
+
+          </div>
+
+          {/* Titre */}
+          <div className='w-6/7 text-xl font-semibold text-gray-400'>
+
             <p className='italic tracking-widest'>
               {
                 user ?
                   user[0]['utilisateur__fonction'].toUpperCase() == 'chef_unite'.toUpperCase() ?
                     `Tableau de bord zone ${user[0]['utilisateur__zone__nom_zone'].toLowerCase()}`
-                  : 'Tableau de bord'
+                  : `Tableau de bord ${poste_choisi}`
                 : null
               }
               
             </p>
           </div>
 
-          <div className='flex-1 h-80 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
-
+          {/* Les graphiques */}
+          <div className='w-6/7 h-65 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
+            
             <BarChart 
               info={data_anomalies} 
-              tabColor={getRandomColor(6)}
+              tabColor={getRandomColor(1)}
               labels={['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']}
               object='Anomlies'
               title='Anomalies detectées par mois'
             />
+     
 
           </div>
 
-        <div className='flex gap-2 w-full'>
+        {/* <div className='flex gap-2 w-full'> */}
 
-          <div className='w-1/2 h-58 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
-              <PieChart info={[12, 19, 10, 5, 22, 30]} tabColor={getRandomColor(6)}/>
+          <div className='w-6/7 h-65 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
+              <LineChart 
+                info={data_anomalie_resolues} 
+                tabColor={getRandomColor(1)}
+                labels={['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']}
+                object='Anomalies resolues'
+                title='Anomalies resolues par mois'
+              />
             </div>
 
-            <div className='w-1/2 h-58 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
+            {/* <div className='w-1/2 h-58 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
               <DoughnutChart info={[12, 19, 10, 5, 22, 30]} tabColor={getRandomColor(6)}/>
 
-            </div>
+            </div> */}
           </div>
-        </div>
+
+        {/* </div> */}
 
         <div className='relative mr-4 w-2/6 h-full p-2'>
 

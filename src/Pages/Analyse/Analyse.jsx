@@ -1,18 +1,29 @@
-import React, { useEffect, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Analyse({salutation}) {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    document.title = "Rapport d'anomalie";
-  }, [])
+  const location = useLocation();
 
   const [url_children, setUrlChildren] = useState("");
 
-  const change_type_analyse = (value) => {
 
-  }
+  useEffect(() => {
+    setUrlChildren(location.pathname.split('/')[3]);
+  }, [location.pathname])
+
+
+  useEffect(() => {
+    
+    const original_title = document.title;
+    document.title = 'Analyse des données';
+
+    return () => {
+      document.title = original_title
+    }
+
+  }, [])
+
 
   return (
     <div id='analyse' className='w-full h-full'>
@@ -21,7 +32,7 @@ export default function Analyse({salutation}) {
         <option value="">Report SJE</option>
         <option value="equilibre_balance">Equilibre balance</option>
         <option value="solde_caisse">Verification Solde caisse</option>
-        <option value="">Verification Solde anormale</option>
+        <option value="solde_anormale">Verification Solde anormale</option>
       </select>
 
       <div className='container-type-analyse w-full'>

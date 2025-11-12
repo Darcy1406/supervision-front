@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Tsdmt from './Pieces/Tsdmt/Tsdmt';
 import Sje from './Pieces/Sje/Sje'
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -6,12 +6,14 @@ import Btd from './Pieces/BTD/Btd';
 import Btr from './Pieces/BTR/Btr';
 import InputNumber from '../../Composants/InputNumber/InputNumber';
 import Balance from './Pieces/Balance/Balance';
+import Btt from './Pieces/BTT/Btt';
+import Bar from './Pieces/BAR/Bar';
 
 export function Transcription() {
 
   const navigate = useNavigate();
 
-  const [liste_piece, setListePiece] = useState(['SJE', 'Balance', 'TSDMT', 'BTD', 'BTR'])
+  const [liste_piece, setListePiece] = useState(['SJE', 'Balance', 'TSDMT', 'BTD', 'BTR', 'BTT', 'BAR'])
   const [piece, setPiece] = useState('SJE')
 
   const piece_a_analyser = (piece) => {
@@ -20,7 +22,14 @@ export function Transcription() {
 
 
   useEffect(() => {
-    document.title = "Analyse des donnees";
+    
+    const original_title = document.title;
+    document.title = 'Transcrire des données';
+
+    return () => {
+      document.title = original_title
+    }
+
   }, [])
 
 
@@ -29,14 +38,14 @@ export function Transcription() {
 
         <div className='bloc-type-doc flex gap-6 justify-center items-center p-2 border-b border-gray-300'>
 
-          <div className='container-ajout-nouveau-doc border-r gray-400 px-2'>
+          {/* <div className='container-ajout-nouveau-doc border-r gray-400 px-2'>
             <button to='../compte_piece' className='bg-blue-400 py-2 px-4 rounded-lg cursor-pointer text-white duration-150 ease-in-out hover:bg-blue-500' onClick={() => navigate('../compte_piece')}>
               <span>
                 <i className='fas fa-plus'></i>
               </span>
                 Ajouter
             </button>
-          </div>
+          </div> */}
 
           {
             liste_piece.map((item, index) => (
@@ -58,6 +67,10 @@ export function Transcription() {
               <Btr />
             : piece == 'Balance' ?
               <Balance />
+            : piece == 'BTT' ?
+              <Btt />
+            : piece == 'BAR' ?
+              <Bar />
             : null
           }
         </div>

@@ -1,4 +1,4 @@
-import { React, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { formatNombreAvecEspaces, formatNumber } from '../../../../../functions/Function';
 import { useFetch } from '../../../../../functions/fetchData';
 import { API_URL } from '../../../../../Config';

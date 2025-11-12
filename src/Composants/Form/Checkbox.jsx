@@ -1,5 +1,3 @@
-import React from 'react'
-
 export function Checkbox({label, isChecked, setIschecked}) {
   return (
     

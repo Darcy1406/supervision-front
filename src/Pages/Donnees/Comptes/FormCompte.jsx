@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './FormCompte.css';
 import Checkbox from '../../../Composants/Form/Checkbox';
 import { sendData } from '../../../functions/sendData';

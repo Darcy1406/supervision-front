@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { fetchData } from '../../../functions/fetchData.js';
 import { API_URL } from '../../../Config';
 import { FormCompte } from './FormCompte.jsx';

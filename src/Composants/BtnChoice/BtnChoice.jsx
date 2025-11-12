@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function BtnChoice({setIsvisible, isDisabled=false}) {
 
     const show_button_menu = () => {

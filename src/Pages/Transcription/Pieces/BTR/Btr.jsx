@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { formatNombreAvecEspaces, formatNumber, paginateData } from '../../../../functions/Function'
 import BtnChoice from '../../../../Composants/BtnChoice/BtnChoice';
 import { sendDocument } from '../../../../functions/sendDocument';

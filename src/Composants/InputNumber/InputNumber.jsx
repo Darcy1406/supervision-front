@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react'
 import './InputNumber.css';
 import { formatNombreAvecEspaces } from '../../functions/Function';
 

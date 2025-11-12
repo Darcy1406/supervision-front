@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { fetchData } from '../../functions/fetchData';
 import { API_URL } from '../../Config';
 import { sendData } from '../../functions/sendData';
