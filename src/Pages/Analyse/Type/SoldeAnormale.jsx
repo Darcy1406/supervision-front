@@ -3,6 +3,7 @@ import { API_URL } from '../../../Config';
 import { fetchData } from '../../../functions/fetchData';
 import { useUserStore } from '../../../store/useUserStore';
 import { Alert } from '../../../Composants/Alert/Alert';
+import { formatNombreAvecEspaces } from '../../../functions/Function';
 
 export default function SoldeAnormale() {
     const user = useUserStore((state) => state.user);
@@ -17,6 +18,7 @@ export default function SoldeAnormale() {
 
     const [data, setData] = useState(null);
     const [anomalies, setAnomalies] = useState(null);
+    const [anomalies_description, setAnomaliesDescription] = useState(null)
 
     const [result, setResult] = useState(null); // Va stocker un message en cas d'anomalie detectee et inseree
 
@@ -27,6 +29,7 @@ export default function SoldeAnormale() {
 
 
     const lancer_analyse = () => {
+
         const anomalies = data.filter(item => {
             const solde = item.compte__solde_en_cours_exo?.toUpperCase();
             const nature = item.nature?.toUpperCase();
@@ -42,10 +45,11 @@ export default function SoldeAnormale() {
             }
           
             return false;
-          });
 
-        
-        setAnomalies(anomalies)
+        });
+
+        setAnomaliesDescription(anomalies)
+
         let description = '';
 
         if(anomalies.length > 0){
@@ -61,13 +65,40 @@ export default function SoldeAnormale() {
                 analyse: 'solde_anormale'
             }]
 
-            
-            fetchData(`${API_URL}/data/anomalie/insert`, 'post', {'action': 'ajouter_anomalie', 'data': anomalie}, setResult)
+            setAnomalies(anomalie)
 
         }
-          
-        console.log("Anomalies détectées :", anomalies);
+        else{
+            setAnomalies([]);
+        }
+        
     }
+
+
+    const envoyer_anomalie = () => {
+        fetchData(
+            `${API_URL}/data/anomalie/insert`, 
+            'post', 
+            {
+                'action': 'ajouter_anomalie', 
+                'data': anomalies, 
+                'type_analyse': 'solde_anormale', 
+                'poste_comptable': poste_choisi, 
+                'exercice': exercice, 
+                'mois': mois, 
+                'proprietaire': proprietaire, 
+                'piece': piece
+            }, 
+            setResult
+        )
+    }
+
+
+    useEffect(() => {
+        if(anomalies){
+            envoyer_anomalie()
+        }
+    }, [anomalies])
 
 
 
@@ -96,7 +127,7 @@ export default function SoldeAnormale() {
 
             <form onSubmit={handleSubmit}>
 
-                <div className='flex gap-6 my-2'>
+                <div className='flex gap-6 my-2 px-6'>
 
                     {/* Poste comptable */}
                     <div className='w-3/6 gap-2'>
@@ -220,12 +251,12 @@ export default function SoldeAnormale() {
 
                 data.length > 0 ?
 
-                    anomalies ?
-                        anomalies.length > 0 ?
+                    anomalies_description ?
+                        anomalies_description.length > 0 ?
                             <ul className='text-center my-4 text-lg font-semibold'>
-                                {anomalies.map((a, index) => (
-                                    <li className='my-4 bg-yellow-200 p-4' key={index}>
-                                        ⚠️ {a.document__nom_fichier} — {a.compte__numero} : il s'agit d'un compte {a.compte__solde_en_cours_exo} mais a une {a.nature} de {a.montant.toLocaleString('fr-FR')} Ar
+                                {anomalies_description.map((a, index) => (
+                                    <li className='my-4 mx-auto bg-yellow-200 p-4 w-6/7' key={index}>
+                                        ⚠️ {a.document__nom_fichier} — {a.compte__numero} : il s'agit d'un compte {a.compte__solde_en_cours_exo} mais a une {a.nature} de {formatNombreAvecEspaces(a.montant) || 0} Ar
                                     </li>
                                 ))}
                         </ul> 

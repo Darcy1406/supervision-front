@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import InputNumber from '../../../../../Composants/InputNumber/InputNumber';
 import { formatNombreAvecEspaces } from '../../../../../functions/Function';
 
-export default function Credit({comptes, total, setTotal, setCredit}) {
+export default function Credit({comptes, total, setTotal, setCredit, reset_all_montant}) {
 
     const [comptes_credit, setComptesCredit] = useState([]);
 
@@ -23,16 +23,19 @@ export default function Credit({comptes, total, setTotal, setCredit}) {
 
 
     const handleChange = (compte, value) => {
-
-        // Retirer les espaces pour le state
-        // const rawValue = value.replace(/\s/g, "");
-        // // Si ce n’est pas un nombre, on ignore
-        // if (!/^\d*$/.test(rawValue)) return;
   
         setMontants(prev => ({
           ...prev,
           [compte]: value,
         }));
+
+    }
+
+
+    const reset_data = () => {
+        Object.keys(montants).forEach(key => {
+          handleChange(key, 0);
+        })
     }
 
 
@@ -86,6 +89,13 @@ export default function Credit({comptes, total, setTotal, setCredit}) {
         }
         // console.log('montants', montants);
     }, [comptes_credit]);
+
+    // Ecouter le state reset_all_montant pour effacer les donnees
+    useEffect(() => {
+        if(reset_all_montant){
+            reset_data();
+        }
+    }, [reset_all_montant])
 
 
   return (

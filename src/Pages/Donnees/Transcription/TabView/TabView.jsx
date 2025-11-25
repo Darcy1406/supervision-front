@@ -10,6 +10,7 @@ import { fetchData } from '../../../../functions/fetchData';
 import { API_URL } from '../../../../Config';
 import BarView from './View/BarView';
 import BttView from './View/BttView';
+import { getCSRFToken } from '../../../../utils/csrf';
 
 
 export default function TabView({data, titre, piece}){
@@ -36,15 +37,71 @@ export default function TabView({data, titre, piece}){
     //     )
     // }
 
+    // const telecharger_fichier = () => {
+    //     setLoading(true)
+    //     fetchData(`${API_URL}/data/document/telecharger`, 'post', {'action': 'telecharger_document', 'id_document': id_doc}, setResult)
+    // }
+
+
     const telecharger_fichier = () => {
-        setLoading(true)
-        fetchData(`${API_URL}/data/document/telecharger`, 'post', {'action': 'telecharger_document', 'id_document': id_doc}, setResult)
-    }
+        const csrftoken = getCSRFToken();
+    
+        fetch(`${API_URL}/data/document/telecharger`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken, 
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                action: "telecharger_document",
+                id_document: id_doc
+            })
+        })
+        .then(async res => {
+            if (!res.ok) throw new Error("Erreur lors du téléchargement");
+    
+            // Récupérer le nom du fichier depuis l'en-tête
+            const disposition = res.headers.get('Content-Disposition');
+            let fileName = "";
+            if (disposition) {
+                const match = disposition.match(/filename\*?=UTF-8''(.+)/i);
+                if (match && match.length > 1) {
+                    fileName = decodeURIComponent(match[1]);
+                }
+            }
+            if (!fileName) fileName = "download"; // fallback minimal
+
+    
+            if (!fileName) {
+                throw new Error("Impossible de récupérer le nom du fichier depuis le serveur");
+            }
+    
+            const blob = await res.blob();
+            return { blob, fileName };
+        })
+        .then(({ blob, fileName }) => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = fileName; // nom exact envoyé par le serveur
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(err => {
+            console.error(err);
+            alert(err.message);
+        });
+    };
+    
+    
+    
 
 
     useEffect(() => {
         if(data){
-            // arranger_les_donnees()
             setIdDoc(data[0].document_id)
         }
     }, [data])

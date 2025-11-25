@@ -23,6 +23,6 @@ export const sendBalance = (formData, setResult) => {
         setResult(data);
     })
     .catch(error => {
-      console.log('Erreur : ', error);
+      setResult({'error': error.toString()});
     });
 }

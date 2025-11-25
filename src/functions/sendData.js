@@ -1,3 +1,5 @@
+import { set } from "date-fns";
+
 export function sendData(url, method, data, setResult){
 
     const csrftoken = document.cookie.split("; ").find((row) => row.startsWith("csrftoken="))?.split("=")[1];
@@ -18,11 +20,10 @@ export function sendData(url, method, data, setResult){
       return response.json();
     })
     .then(data => {
-      // console.log(data);
       setResult(data);
     })
     .catch(error => {
-      console.log('Erreur : ', error);
+      setResult({'error': error.toString});
     });
 }
   

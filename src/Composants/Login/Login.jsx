@@ -38,7 +38,7 @@ export default function Login() {
             <p className='text-3xl text-center font-bold'>Connexion</p>
             <span className='block text-center mb-6'>Connectez-vous a votre compte</ span>
 
-            <div className='w-125 h-125 py-4 px-6 rounded-xl bg-white shadow-md'>
+            <div className='w-125 py-6 px-6 rounded-xl bg-white shadow-md'>
 
               <p className='font-bold text-2xl mb-2'>Se connecter</p>
               <span>Entrez vos identifiants pour acceder a votre compte</span>
@@ -47,12 +47,12 @@ export default function Login() {
 
                 {/* Email */}
                 <div className='my-4'>
-                  <label htmlFor="" className='block mb-2 font-semibold'>Email</label>
+                  <label htmlFor="" className='block mb-2 font-semibold'>Identifiant</label>
                   <div className='border border-gray-200 p-2 rounded-lg'>
                     <span className='icon mr-2'>
                       <i className='fas fa-user'></i>
                     </span>
-                    <input className='inline-block w-88 outline-none' type="text" placeholder='votre@gmail.com' value={identifiant} onChange={(e) => setIdentifiant(e.target.value)} required/>
+                    <input className='inline-block w-88 outline-none' type="text" placeholder='Entrer votre identifiant' value={identifiant} onChange={(e) => setIdentifiant(e.target.value)} required/>
                   </div>
                 </div>
               
@@ -82,9 +82,9 @@ export default function Login() {
                   onChange={setCaptchaToken}
                 />
 
-                <NavLink to='/inscription' style={{ textDecoration: 'underline' }} className='block my-4 float-right'>S'inscrire</NavLink>
+                {/* <NavLink to='/inscription' style={{ textDecoration: 'underline' }} className='block my-4 float-right'>S'inscrire</NavLink> */}
 
-                <button className='bg-black w-full text-white py-2 rounded-xl cursor-pointer duration-150 hover:text-lg'>
+                <button className='bg-black w-full text-white my-4 py-2 rounded-xl cursor-pointer duration-150 hover:text-lg'>
                   { isSubmitting ? "Connexion..." : "Se connecter" }
                 </button>
 

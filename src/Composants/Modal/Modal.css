@@ -1,8 +1,8 @@
 #modal{
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.7);
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 50;
@@ -22,7 +22,7 @@
     left: 50%;
     transform: translateX(-50%);
     max-height: 95%;
-    min-width: 1050px;
+    /* min-width: 1050px; */
     overflow-y: auto;
     overflow-x: auto;
 }

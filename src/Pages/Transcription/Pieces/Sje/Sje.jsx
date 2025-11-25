@@ -97,6 +97,7 @@ export default function Sje() {
   // Enregistrer vers la BD le document (fichier)
   const save_file = () => {
     const formData = new FormData();
+    
     const date = new Date(info_supp['date_sje'])
 
     formData.append("fichier", doc['fichier']);
@@ -118,6 +119,7 @@ export default function Sje() {
 
   useEffect(() => {
     if(id_doc){
+      
       fetchData(`${API_URL}/data/transcription/create`, 'POST', {
         'action': 'ajouter_transcription',
 
@@ -217,17 +219,9 @@ export default function Sje() {
             {/* Date du sje */}
             <div className="w-1/2">
                 <label className="label">Date du SJE</label>
-                <input type="date" className="input" value={info_supp['date_sje']} onChange={(e) => handleChange('date_sje', e.target.value, setInfoSupp)}/>
+                <input type="date" className="input input-sje" value={info_supp['date_sje']} onChange={(e) => handleChange('date_sje', e.target.value, setInfoSupp)} required/>
             </div>
-
-              {/* Poste comptable */}
-            {/* <div className="flex-1">
-                <label className="label">Poste Comptable</label>
-                <input list='poste_comptable' className="input" placeholder='Choisissez le poste comptable' value={info_supp['poste_comptable']} onChange={(e) => handleChange('poste_comptable', e.target.value, setInfoSupp)}/>
-                <datalist id='poste_comptable'>
-                  <option value="Essai" />
-                </datalist>
-            </div> */}
+            
 
           </div>
 
@@ -243,6 +237,7 @@ export default function Sje() {
                     onChange={(e) => handleChange('report', e.target.value.replace(/\s/g, "").replace(/,/g, "."), setInfoSupp) }
                     placeholder="Entrer le montant"
                     pattern='^[0-9,\s]+$'
+                    required
                   />
 
                 </div>
@@ -347,13 +342,14 @@ export default function Sje() {
             <div className="control">
               <label className='label'>Encaisse fin de journée</label>
               <input 
-                    type='text'
-                    className='input input-sje'
-                    value={formatNombreAvecEspaces(info_supp['solde'])}
-                    onChange={(e) => handleChange('solde', e.target.value.replace(/\s/g, "").replace(/,/g, "."), setInfoSupp) }
-                    placeholder="Entrer le montant"
-                    pattern='^[0-9,\s]+$'
-                  />
+                type='text'
+                className='input input-sje'
+                value={formatNombreAvecEspaces(info_supp['solde'])}
+                onChange={(e) => handleChange('solde', e.target.value.replace(/\s/g, "").replace(/,/g, "."), setInfoSupp) }
+                placeholder="Entrer le montant"
+                pattern='^[0-9,\s]+$'
+                required
+              />
             </div>
           </div>
 

@@ -20,22 +20,33 @@ import Anomalie from "../Pages/Anomalie/Anomalie.jsx";
 import BalanceAnalyse from "../Pages/Analyse/Type/BalanceAnalyse.jsx";
 import SoldeCaisse from "../Pages/Analyse/Type/SoldeCaisse.jsx";
 import SoldeAnormale from "../Pages/Analyse/Type/SoldeAnormale.jsx";
+import MainAdmin from "../MainAdmin.jsx";
+import AuditLog from "../Pages/Admin/AuditLog/AuditLog.jsx";
+import Form from "../Pages/Admin/Utilisateur/Form.jsx";
+import Calendrier from "../Composants/Calendrier/Calendrier.jsx";
+import PosteComptable from "../Pages/Admin/Poste_comptable/PosteComptable.jsx";
+import Formulaire from "../Pages/Admin/Poste_comptable/Formulaire.jsx";
+import Utilisateur from "../Pages/Admin/Utilisateur/Utilisateur.jsx";
 // import { Liste as Liste_transcription } from "../Pages/Transcription/Liste.jsx";
 
 
 export const router = createBrowserRouter([
+
     {
         path: '/',
         element: <Login />
     },
+
     {
         path: '/unauthorized',
         element: <Unauthorized />
     },
+
     {
         path: '/inscription',
         element: <Inscription />
     },
+
     {
         path: '/main',
         element: <Main />,
@@ -86,10 +97,6 @@ export const router = createBrowserRouter([
                         path: 'liaison_compte_piece',
                         element: <Liste />
                     },
-                    // {
-                    //     path: 'ajouter_liaison_compte_piece',
-                    //     element: <ComptePiece />
-                    // },
                 ]
             },
             {
@@ -132,5 +139,44 @@ export const router = createBrowserRouter([
             //     element: <Liste_transcription />
             // }
         ]
+    },
+
+    {
+        path: '/admin',
+        element: <MainAdmin />,
+        children: [
+            {
+                element: <PrivateRoute />,
+                children: [
+
+                    {
+                        path: '',
+                        element: <AuditLog />
+                    },
+                    {
+                        path: 'utilisateur',
+                        element: <Utilisateur />
+                    },
+                    {
+                        path: 'utilisateur/form',
+                        element: <Form />
+                    },
+                    {
+                        path: 'poste_comptable',
+                        element: <PosteComptable />
+                    },
+                    {
+                        path: 'poste_comptable/form',
+                        element: <Formulaire />
+                    }
+
+                ]
+
+            }
+        ]
+    },
+    {
+        path: '/cal',
+        element: <Calendrier/>
     }
 ])

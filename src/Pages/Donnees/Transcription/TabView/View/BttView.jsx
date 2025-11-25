@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import { formatNombreAvecEspaces } from "../../../../../functions/Function";
 
 export default function BttView({data}) {
 
@@ -22,8 +23,8 @@ export default function BttView({data}) {
                             <td className="w-40 text-lg font-semibold">
                                 <p className="text-right">
                                     {
-                                        item['nature'] == 'credit' ?
-                                            item['montant']
+                                        item['nature'] == 'Credit' ?
+                                            formatNombreAvecEspaces(item['montant'])
                                         : 0
                                     } Ar
                                 </p>
@@ -33,8 +34,8 @@ export default function BttView({data}) {
                             <td className="w-40 text-lg font-semibold">
                                 <p className="text-right">
                                     {
-                                        item['nature'] == 'debit' ?
-                                            item['montant']
+                                        item['nature'] == 'Debit' ?
+                                            formatNombreAvecEspaces(item['montant'])
                                         : 0
                                     } Ar
                                 </p>
@@ -46,7 +47,7 @@ export default function BttView({data}) {
                             <td colSpan={3}>{item['nature']}</td>
                             <td className="w-40 text-lg font-semibold">
                                 <p className="text-right">
-                                    {item['montant']} Ar
+                                    {formatNombreAvecEspaces(item['montant']) || 0} Ar
                                 </p>
                             </td>
                         </>

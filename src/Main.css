@@ -1,22 +1,16 @@
 #main{
-    /* background-color: salmon; */
     position: relative;
     width: 100vw;
-    height: 100vh;
 }
 
 #main .container-main{
-    /* margin-top: 40px; */
     position: relative;
-    right: 0;
-    height: 100%;
 }
 
 #main .container-main .container-notification{
     position: fixed;
     left: 0;
     width: 225px;
-    height: 100vh;
     overflow-y: auto;
     scrollbar-width: thin;
     transition: all 0.5s ease-in-out;
@@ -29,9 +23,7 @@
 #main .container-main .bloc-main{
     position: absolute;
     right: 0;
-    width: 85vw;
-    height: 100%;
-    /* background-color: blueviolet; */
+    width: calc(100% - 225px);
     transition: all 0.5s ease-in-out;
 }
 
@@ -39,28 +31,24 @@
     width: 100vw;
 }
 
-/* #main .container-main .container-body{
-    position: absolute;
-    right: 0;
-    width: 90vw;
-    height: 94%;
-    margin-top: 40px;
-    background: blue;
-    position: relative;
-} */
 
 
-/* Scrollbar stylée */
-/* ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+/* Faire disparaitre le conteneur des evenements (agenda) a 1320px */
+@media screen and (max-width: 1320px) {
+    /* Conteneur de l'agenda */
+    #main .container-main .container-notification{
+        width: 0;
+    }
+
+    /* Conteneur des elements (remplir l'ecran) */
+    #main .container-main .bloc-main{
+        width: 100vw;
+    }
+
+
+    /* Bouton pour toggle le conteneur l'agenda */
+    #main .container-main .bloc-main .container-btn-toggle-notification .icon{
+        opacity: 0;
+        pointer-events: none;
+    }
 }
-  
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #4f46e5, #3b82f6);
-    border-radius: 10px;
-}
-  
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-} */

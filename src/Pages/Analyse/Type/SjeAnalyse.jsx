@@ -15,9 +15,9 @@ export default function SjeAnalyse() {
 
     const [transcription, setTranscription] = useState(null);
 
-    const [anomalies, setAnomalies] = useState([]);
-
     const [result, setResult] = useState(null);
+
+    const [anomalies, setAnomalies] = useState(null);
 
 
     const lancer_analyse = (e) => {
@@ -27,8 +27,9 @@ export default function SjeAnalyse() {
     
 
     useEffect(() => {
-        if(anomalies.length > 0){
-            fetchData(`${API_URL}/data/anomalie/insert`, 'post', {'action': 'ajouter_anomalie', 'data': anomalies}, setResult);
+        if(anomalies){
+            console.log('anomalies', anomalies);
+            fetchData(`${API_URL}/data/anomalie/insert`, 'post', {'action': 'ajouter_anomalie', 'data': anomalies, 'type_analyse': 'report_sje', 'poste_comptable': poste_choisi, 'exercice': year}, setResult);
         }
     }, [anomalies])
 

@@ -1,0 +1,9 @@
+#navigation-admin{
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: calc(100% - 200px);
+    height: 40px;
+    background: lightblue;
+    z-index: 2;
+}

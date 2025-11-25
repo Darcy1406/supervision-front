@@ -15,11 +15,17 @@ export default function Comptes() {
 
   const [data_update, setDataUpdate] = useState([]);
   const [comptes, setComptes] = useState([]);
+  const [comptes_copie, setComptesCopie] = useState([]);
 
 
   const get_data_update = (data) => {
     setDataUpdate(data);
     setIsVisible(true);
+  }
+
+
+  const recuperer_tous_les_comptes = (setState) => {
+    fetchData(`${API_URL}/data/compte/get_comptes`, 'post', {'action': 'lister_tous_les_comptes'}, setState)
   }
 
   // const { data } = useFetch(`${API_URL}/data/compte/get_comptes`, 'get', {}, refresh);
@@ -58,19 +64,20 @@ export default function Comptes() {
 
   function CompteItem({item}){
     return(
-      <tr className={ item['fields']['type'] == 'Regroupements' ? 'cursor-pointer' : null }>
-        <td>{item['fields']['numero']}</td>
-        <td>{item['fields']['libelle']}</td>
+      <tr className={ item['type'] == 'Regroupements' ? 'cursor-pointer' : null }>
+        <td>{item['numero']}</td>
+        <td>{item['libelle']}</td>
         <td>
-          <span className={ item['fields']['type'] == 'Regroupements' ? 'bg-gray-300 px-2 rounded-xl text-blue-600 border border-gray-400' : item['fields']['type'] == 'Opérations' ? 'bg-gray-300 px-2 rounded-xl text-yellow-600 border border-gray-400' : 'bg-gray-300 px-2 rounded-xl text-pink-600 border border-gray-400' }>
-            {item['fields']['type']}
+          <span className={ item['type'] == 'Regroupements' ? 'bg-gray-300 px-2 rounded-xl text-blue-600 border border-gray-400' : item['type'] == 'Opérations' ? 'bg-gray-300 px-2 rounded-xl text-yellow-600 border border-gray-400' : 'bg-gray-300 px-2 rounded-xl text-pink-600 border border-gray-400' }>
+            {item['type']}
           </span>
         </td>
-        <td>{item['fields']['created_at']}</td>
-        <td>{item['fields']['updated_at']}</td>
+        <td>{item['created_at']}</td>
+        {/* <td>{item['updated_at']}</td> */}
+        <td>{item['proprietaire__nom_proprietaire']}</td>
         <td>
           <div>
-            <button className="button is-success is-small" onClick={() => get_data_update([{'id': item['pk'], 'numero': item['fields']['numero'], 'libelle': item['fields']['libelle'], 'type': item['fields']['type'], 'compte_regroupement': item['fields']['compte_regroupement']}])}>
+            <button className="button is-success is-small" onClick={() => get_data_update([{'id': item['pk'], 'numero': ['numero'], 'libelle': item['libelle'], 'type': item['type'], 'compte_regroupement': item['compte_regroupement']}])}>
               <span className='icon mx-1'>
                 <i className='fas fa-edit'></i>
               </span>
@@ -83,9 +90,12 @@ export default function Comptes() {
     )
   }
 
-  useEffect(()=> {
-    put_data_in_comptes(data);
-  }, [data])
+
+  useEffect(() => {
+    recuperer_tous_les_comptes(setComptes)
+    recuperer_tous_les_comptes(setComptesCopie)
+  }, [])
+
 
 
   useEffect(()=> {
@@ -120,11 +130,12 @@ export default function Comptes() {
 
           <thead>
             <tr>
-              <th>Numéro de compte</th>
+              <th>Compte</th>
               <th>Libellé</th>
               <th>Type</th>
               <th>Date de création</th>
-              <th>Date de modification</th>
+              <th>Propriétaire</th>
+              {/* <th>Date de modification</th> */}
               <th>Action</th>
             </tr>
           </thead>

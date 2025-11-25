@@ -2,14 +2,11 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    /* margin: 0 auto; */
-    width: 75%;
-    min-width: 800px;
+    min-width: 970px;
     height: 40px;
     padding: 1px;
     border-radius: 0 0 12px 12px;
     background-color: white;
-    /* background-color: blue; */
     box-shadow: 0 0 5px #eee;
     transition: all 0.5s ease-in-out;
     z-index: 3;
@@ -113,8 +110,9 @@
 }
 
 .fond{
-    position: absolute;
+    position: fixed;
     top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.589);

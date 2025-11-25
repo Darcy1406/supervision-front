@@ -5,12 +5,14 @@ export default function PrivateRoute() {
     const user = useUserStore((state) => state.user);
     const location = useLocation();
 
+    // if(location.pathname.includes('/main/admin') && user[0]['identifiant'].toLowerCase() != 'admin') return <Navigate to='/unauthorized' />
+
     if(location.pathname == '/main/transcription'){
       if(user[0]['utilisateur__fonction'] != 'Auditeur') return <Navigate to='/unauthorized'/>
     }
-    else{
-      if(user[0]['utilisateur__fonction'] == 'Auditeur') return <Navigate to='/unauthorized'/>
-    }
+    // else{
+    //   if(user[0]['utilisateur__fonction'] == 'Auditeur') return <Navigate to='/unauthorized'/>
+    // }
 
 
   return (

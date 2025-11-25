@@ -9,10 +9,15 @@ import { LineChart } from '../../Composants/Graphique/LineChart';
 import { DoughnutChart } from '../../Composants/Graphique/DoughnutChart';
 import { useUserStore } from '../../store/useUserStore';
 import { getRandomColor } from '../../functions/Function';
+import { useOutletContext } from "react-router-dom";
+import { Alert } from '../../Composants/Alert/Alert';
+import { useAuthentification } from '../../hooks/useAuthentification';
 
 export default function Dashboard() {
 
   const user = useUserStore((state) => state.user);
+
+  // const { handleReceiveFromDashboard } = useOutletContext();
 
   // Agenda
   const [date_agenda, setDateAgenda] = useState("")
@@ -35,6 +40,7 @@ export default function Dashboard() {
   const [poste_comptables, setPosteComptables] = useState(null);
   const [poste_choisi, setPosteChoisi] = useState("");
 
+  const [evenements, setEvenements] = useState([])
 
   const handleChange = (name, value, setState) => {
     setState(prev => ({
@@ -44,12 +50,18 @@ export default function Dashboard() {
   }
 
 
+  const recuperer_evenements_utilisateurs = () => {
+    fetchData(`${API_URL}/agenda/get`, 'post', {"utilisateur_id": user[0]["id"]}, setEvenements);
+  }
+
   
   const Save_agenda = (e) => {
     e.preventDefault(e);
     if(user){
-      sendData(`${API_URL}/agenda/create`, 'post', {date_agenda, heure_agenda, description, "utilisateur_id": user['id']}, setResult)
+      fetchData(`${API_URL}/agenda/create`, 'post', {date_agenda, heure_agenda, description, "utilisateur_id": user[0]['id']}, setResult)
     }
+    recuperer_evenements_utilisateurs();
+
   }
 
 
@@ -58,21 +70,10 @@ export default function Dashboard() {
   }
 
 
-
   const close_bloc_logout = () => {
     container_logout.current.classList.remove('show');
   }
 
-  
-  // const {data: evenements} = useFetch(`${API_URL}/agenda/get`, 'post', {"utilisateur_id": user["id"]});
-  const evenements = ""
-
-
-  // const {
-  //   data: list_agenda,
-  //   loading: loading,
-  //   errors: errors
-  // } = useFetch(`${API_URL}/agenda`)
 
   const voir_statistique_poste_comptable = () => {
     if(poste_choisi != ""){
@@ -104,9 +105,9 @@ export default function Dashboard() {
   }, [])
 
 
+  
   // Donnees generales
-  useEffect(() => {
-
+  const data_generale = () => {
     fetchData(`${API_URL}/data/document/count`, 'post', {'action': 'compter_nombre_documents_generale'}, setNbDoc)
 
     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombre_anomalies_generale'}, setNbAnomalie)
@@ -116,41 +117,58 @@ export default function Dashboard() {
     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombre_anomalies_par_mois'}, setDataAnomalies)
 
     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombres_anomalies_resolues_par_mois'}, setDataAnomalieResolues)
-
-  }, [])
-
-
-  // useEffect(() => {
-  //   if(poste_choisi != ""){
-
-  //     fetchData(`${API_URL}/data/document/count`, 'post', {'action': 'compter_nombre_documents_par_poste_comptable', 'poste_comptable': poste_choisi}, setNbDoc)
-
-  //     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombres_anomalies_par_poste_comptable', 'poste_comptable': poste_choisi}, setNbAnomalie)
-
-  //     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombres_anomalies_resolu_par_poste_comptables', 'poste_comptable': poste_choisi}, setNbCorrige)
-
-  //     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombre_anomalies_par_mois_par_comptable', 'poste_comptable': poste_choisi}, setDataAnomalies)
-
-  //     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombres_anomalies_resolues_par_mois_par_poste_comptable', 'poste_comptable': poste_choisi}, setDataAnomalieResolues)
-
-  //   }
-  // }, [poste_choisi])
+  }
 
 
   // Affichage des postes comptables par fonction de l'utilisateur
-  useEffect(() => {
-
+  const liste_poste_comptables = () => {
+      // auditeur
     if( user[0]['utilisateur__fonction'].toUpperCase() == 'auditeur'.toUpperCase() ){
       fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'user_id': user[0]['id']}, setPosteComptables)
     }
+      // Directeur
     else if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase()){
       fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_tous_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'],'user_id': user[0]['id']}, setPosteComptables)
     }
+      // Chef d'unite
     else{
-      fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables_zone', 'zone': user[0]['utilisateur__zone__nom_zone']}, setPosteComptables)
+      fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables_zone', 'zone': user[0]['utilisateur__zone__id']}, setPosteComptables)
     }
+  }
 
+
+
+  useEffect(() => {
+    data_generale()
   }, [])
+
+
+  
+  useEffect(() => {
+    if(user){
+      liste_poste_comptables()
+    }
+  }, [user])
+
+  useEffect(() => {
+    recuperer_evenements_utilisateurs()
+  }, [])
+
+
+
+  useEffect(() => {
+    if(result){
+      if(result['succes']){
+        setDateAgenda("")
+        setDescription("")
+        setHeureAgenda("")
+        // envoyer_data_to_parent()
+      }
+    }
+  }, [result])
+
+
+  const { logout } = useAuthentification()
 
 
   return (
@@ -167,11 +185,6 @@ export default function Dashboard() {
             <p className='text-center is-size-1 font-thin text-blue-400'>{ nb_doc['total_doc'] ? nb_doc['total_doc'] : 0 }</p>
             
           </div>
-
-          {/* <div className='bg-white h-35 w-5/6 rounded-xl shadow-lg'>
-            <p className='font-bold text-xl text-center mt-4'>Analyse(s)</p>
-            <p className='text-center is-size-1 font-thin text-yellow-400'>60</p>
-          </div> */}
           
           <div className='bg-white h-35 w-5/6 rounded-xl shadow-lg'>
             <p className='font-bold text-xl text-center mt-4'>Anomalie(s)</p>
@@ -263,7 +276,7 @@ export default function Dashboard() {
 
         <div className='relative mr-4 w-2/6 h-full p-2'>
 
-          <div className='container-logout p-4 bg-white rounded-sm border border-gray-300 cursor-pointer duration-150 ease-in-out hover:bg-black hover:text-white' ref={container_logout} onMouseEnter={show_bloc_logout} onMouseLeave={close_bloc_logout}>
+          <div className='container-logout p-4 bg-white rounded-sm border border-gray-300 cursor-pointer duration-150 ease-in-out hover:bg-black hover:text-white' ref={container_logout} onMouseEnter={show_bloc_logout} onMouseLeave={close_bloc_logout} onClick={logout}>
               <button className='cursor-pointer'>Deconnexion</button>
           </div>
 
@@ -295,37 +308,51 @@ export default function Dashboard() {
           </div>
 
           <div className='container-planification-reunion h-9/10 mt-2'>
+
             <p className='text-center font-semibold italic text-xl underline'>Enregistrer un evenement</p>
 
-            <form onSubmit={(e) => Save_agenda(e)}>
+            <form onSubmit={(e) => Save_agenda(e)} className=''>
 
               <div className='field'>
                   <label className='label'>Date de l'evenement</label>
                   <div className='control flex'>
 
-                    <input type="date" className='input w-1/3' value={date_agenda} onChange={(e) => setDateAgenda(e.target.value)}/>
+                    <input type="date" className='input w-1/3' value={date_agenda} onChange={(e) => setDateAgenda(e.target.value)} required/>
 
                     <label className='block text-center is-size-5 label w-1/3'>à</label>
 
-                    <input type="time" name="" id="" className='input w-1/3' value={heure_agenda} onChange={(e) => setHeureAgenda(e.target.value)} />
+                    <input type="time" name="" id="" className='input w-1/3' value={heure_agenda} onChange={(e) => setHeureAgenda(e.target.value)} required/>
                   </div>
               </div>
 
               <div className='field'>
                   <div className='control'>
                     <label className='label'>Description de l'evenement</label>
-                    <textarea name="" className='textarea' placeholder="Description de l'evenement(reunion, ...)" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+                    <textarea rows={2} className='textarea' placeholder="Description de l'evenement(reunion, ...)" value={description} onChange={(e) => setDescription(e.target.value)} required></textarea>
                   </div>
               </div>
-              <button type='submit' className='bg-black text-white py-2 px-4 rounded-lg cursor-pointer mx-4 my-2'>Planifier</button>
+
+              <button type='submit' className='button is-dark mx-4 my-2'>
+                Planifier
+              </button>
             </form>
+
             <Calendrier evenements={evenements}/>
+
           </div>
           
 
         </div>
 
       </div>
+
+      {
+        result ?
+            result['succes'] ?
+                <Alert message={result['succes']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300'/>
+            : null
+        : null
+      }
 
     </section>
   )

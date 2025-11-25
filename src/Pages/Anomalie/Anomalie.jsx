@@ -5,6 +5,7 @@ import { useUserStore } from '../../store/useUserStore';
 import { Alert } from '../../Composants/Alert/Alert';
 import Resolution from './Resolution';
 import Modal from '../../Composants/Modal/Modal';
+import { getCSRFToken } from '../../utils/csrf';
 
 export default function Anomalie() {
     const user = useUserStore((state) => state.user);
@@ -67,6 +68,42 @@ export default function Anomalie() {
     }
 
 
+    const exporter_rapport = () => {
+        const csrftoken = getCSRFToken();
+        fetch(`${API_URL}/data/anomalie/rapport`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken, 
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                action: "exporter_rapport",
+                anomalie: selected_anomalie[0]
+            })
+        })
+        .then(res => {
+            if (!res.ok) throw new Error("Erreur lors de la génération du PDF");
+            return res.blob();  // <-- IMPORTANT
+        })
+        .then(blob => {
+            // Crée une URL temporaire pour le blob
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `rapport_anomalie_${selected_anomalie[0]}.pdf`; // nom du fichier
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url); // libère la mémoire
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Impossible de télécharger le rapport");
+        });
+    };
+
+
 
     // Filter les donnees en fonction
     const data_filter = () => {
@@ -76,7 +113,7 @@ export default function Anomalie() {
             const filter = anomalies_filtered.filter(item => {
 
                 // Filtre pour les status
-                if(item['statut'].toLowerCase() == 'nouveau' && !isNouveau){
+                if(item['statut'].toLowerCase() == 'nouvelle' && !isNouveau){
                     return false;
                 }
                 if( exercice != "" && item['document__exercice'] != exercice.toString()){
@@ -85,7 +122,7 @@ export default function Anomalie() {
                 if(item['statut'].toLowerCase() == 'en cours' && !isEnCours ){
                     return false;
                 }
-                if(['resolu', 'résolu'].includes(item['statut'].toLowerCase())  && !isResolu){
+                if(['resolue', 'résolue'].includes(item['statut'].toLowerCase())  && !isResolu){
                     return false;
                 }
 
@@ -133,14 +170,15 @@ export default function Anomalie() {
         const selected = selected_anomalie.includes(item['id'].toString())
         const estActive = ligneActive === item.id;
         return(
+
             <tr 
-                className={` ${['résolu', 'resolu'].includes(item['statut'].toLowerCase()) ? 'cursor-pointer' : ''} ${estActive ? 'bg-blue-200' : ''} `} 
-                onClick={['résolu', 'resolu'].includes(item['statut'].toLowerCase()) ? () => { setLigneActive(item.id); voir_resolution(item['id']) } : () => {} }
+                className={` ${['résolue', 'resolue'].includes(item['statut'].toLowerCase()) ? 'cursor-pointer' : ''} ${estActive ? 'bg-blue-200' : ''} `} 
+                onClick={['résolue', 'resolue'].includes(item['statut'].toLowerCase()) ? () => { setLigneActive(item.id); voir_resolution(item['id']) } : () => {} }
             >
                 <td>
                     {
-                        !( ['résolu', 'resolu'].includes(item['statut'].toLowerCase()) ) ? 
-                            <input type="checkbox" value={item['id']} onChange={(e) => recuperer_id_anomalie(e.target.value, e.target.checked) } checked={selected}/>
+                        !( ['résolue', 'resolue'].includes(item['statut'].toLowerCase()) ) ? 
+                            <input type="checkbox" value={item['id']} onChange={(e) => recuperer_id_anomalie(e.target.value, e.target.checked) } checked={selected} />
                         : null
                     }
                 </td>
@@ -149,10 +187,12 @@ export default function Anomalie() {
                 <td>{item['description']}</td>
                 <td>
                     {
-                        item['statut'].toLowerCase() == 'nouveau' ?
+                        item['statut'].toLowerCase() == 'nouvelle' ?
                             <p className='bg-red-300 p-2 rounded-xl border border-red-400 text-center'>{item['statut']}</p>
+
                         : item['statut'].toLowerCase() == 'en cours' ? 
                             <p className='bg-blue-300 p-2 rounded-xl border border-blue-400 text-center'>{item['statut']}</p>
+                            
                         : <p className='bg-green-300 p-2 rounded-xl border border-green-400 text-center'>{item['statut']}</p>
                     }
                     
@@ -190,7 +230,7 @@ export default function Anomalie() {
 
   return (
     <div id='anomalie'>
-        <p className='p-2 bg-gray-300'>Liste des anomalies</p>
+        <p className='p-4 bg-gray-300 text-lg'>Liste des anomalies</p>
         <div className="container-table">
 
             {/* Filtre */}
@@ -263,9 +303,15 @@ export default function Anomalie() {
                                     <button className='bg-blue-400 cursor-pointer px-4 py-2 rounded-sm border border-blue-500 duration-200 ease-in-out hover:bg-blue-500' onClick={change_state_anomalie}>
                                         Traiter({selected_anomalie.length})
                                     </button>
+
                                     <button className='bg-green-400 cursor-pointer px-4 py-2 rounded-sm border border-green-500 duration-200 ease-in-out hover:bg-green-500' onClick={() => setIsVisible(true)}>
                                         Resoudre({selected_anomalie.length})
                                     </button>
+
+                                    <button className='button is-dark text-white' onClick={exporter_rapport}>
+                                        Exporter un rapport({selected_anomalie.length})
+                                    </button>
+
                                 </>
                         }
                         
@@ -295,12 +341,12 @@ export default function Anomalie() {
             }
 
 
-            {/* Va contenir les checkboxs de filtre sur les status */}
+            {/* Va contenir les checkboxs de filtres sur les status */}
             <div className='container-filtre is-pulled-right mx-4 my-2'>
 
                 <label htmlFor="" className='mx-4'>
-                    <input type="checkbox" value='nouveau' name="" id="" className='checkbox' checked={isNouveau} onChange={(e) => setIsNouveau(e.target.checked)}/>
-                    Nouveau
+                    <input type="checkbox" value='nouvelle' name="" id="" className='checkbox' checked={isNouveau} onChange={(e) => setIsNouveau(e.target.checked)}/>
+                    Nouvelle
                 </label>
 
                 <label htmlFor="" className='mx-4'>
@@ -309,8 +355,8 @@ export default function Anomalie() {
                 </label>
 
                 <label htmlFor="" className='mx-4'>
-                    <input type="checkbox" value='resolu' name="" id="" className='checkbox' checked={isResolu} onChange={(e) => setIsResolu(e.target.checked)}/>
-                    Résolu
+                    <input type="checkbox" value='résolue' name="" id="" className='checkbox' checked={isResolu} onChange={(e) => setIsResolu(e.target.checked)}/>
+                    Résolue
                 </label>
 
             </div>
@@ -330,9 +376,19 @@ export default function Anomalie() {
 
                 <tbody>
                     {
-                        anomalies && anomalies.map((item, index) => (
-                            <AnomalieItem item={item} key={index}/>
-                        ))
+                        anomalies ? 
+                            anomalies.length > 0 ?
+                                anomalies.map((item, index) => (
+                                    <AnomalieItem item={item} key={index}/>
+                                ))
+                            : 
+                                <tr className='text-center'>
+                                    <td colSpan={6}>Aucune donnée</td>    
+                                </tr>
+                        :   
+                        <tr className='text-center'>
+                            <td colSpan={6}>En attente des données</td>    
+                        </tr>
                     }
                 </tbody>
 

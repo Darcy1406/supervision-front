@@ -130,6 +130,7 @@ export default function Bar() {
                 e.target.reset();
                 reset_all_montant(montant_credit, setMontantCredit)
                 reset_all_montant(montant_debit, setMontantDebit)
+                setDoc(null);
             }
         })
         .catch(error => {
@@ -363,7 +364,7 @@ export default function Bar() {
         {
             result ?
                 result['succes'] ?
-                    <Alert message={result['succes']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300'/>
+                    <Alert message={result['succes']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300' borderColor='border-green-400'/>
                 : null
             : null
         } 

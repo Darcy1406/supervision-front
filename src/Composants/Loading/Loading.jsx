@@ -23,8 +23,7 @@ export default function Loading() {
                 return;
 
             }
-
-            console.log('index', index.current);
+            
             item_liste[index.current].classList.add("show");
             index.current += 1
         }

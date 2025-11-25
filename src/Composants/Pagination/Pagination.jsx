@@ -20,7 +20,7 @@ export default function Pagination({description="", currentPage, itemsPerPage, l
 
     
   return (
-    <div id='pagination'>
+    <div id='bloc-pagination' className='pb-4'>
         <div className="container-pagination flex items-center justify-center gap-4">
 
             <button className={currentPage.current == 1 ? 'cursor-pointer duration-150 ease-in-out hover:text-blue-400 hidden' : 'cursor-pointer duration-150 ease-in-out hover:text-blue-400'} onClick={prev}>
@@ -29,7 +29,7 @@ export default function Pagination({description="", currentPage, itemsPerPage, l
                 </span>
             </button>
 
-            <p className='text-xl font-semibold italic'>{description + " " + currentPage.current}</p>
+            <p className='text-2xl font-semibold italic'>{description + " " + currentPage.current}</p>
 
             <button className={ Math.ceil(liste?.length / itemsPerPage.current) == currentPage.current ? 'cursor-pointer duration-150 ease-in-out hover:text-blue-400 hidden' : 'cursor-pointer duration-150 ease-in-out hover:text-blue-400'} onClick={next}>
             <span className='icon text-2xl'>

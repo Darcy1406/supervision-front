@@ -7,10 +7,6 @@ import { getCSRFToken } from "../utils/csrf";
  * @param {FetchEventInit} options 
  */
 export function fetchData(url, method, body = {}, setResult) {
-    
-    // const [loading, setLoading] = useState(true)
-    // const [data, setData] = useState(null)
-    // const [errors, setErrors] = useState(null)
         
     if(method.toUpperCase() != "GET"){
 
@@ -33,10 +29,9 @@ export function fetchData(url, method, body = {}, setResult) {
         })
         .then(data => {
             setResult(data)
-            // console.log(data);
         })
         .catch((e) => {
-            setResult(e)
+            setResult({'error': e.toString()})
         })
     }
 
@@ -53,17 +48,10 @@ export function fetchData(url, method, body = {}, setResult) {
         })
         .then(data => {
             setResult(data);
-            // console.log(data);
         })
         .catch((e) => {
-            setResult(e)
+            setResult({'error': e.toString()})
         })
     }
-
-    // return {
-    //     loading: loading,
-    //     data: data,
-    //     errors: errors 
-    // }
 
 }

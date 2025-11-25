@@ -80,7 +80,7 @@ export const getRandomColor = (nbColor) =>{
 export function formatNombreAvecEspaces(valeur) {
   if (!valeur) return "";
 
-  // const value_formated = valeur.replace(/./g, ",");
+
 
   // Séparer la partie entière et la partie décimale
   const [entier, decimal] = valeur.toString().split(".");

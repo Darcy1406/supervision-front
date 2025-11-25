@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { formatNombreAvecEspaces } from '../../../../../functions/Function';
 import InputNumber from '../../../../../Composants/InputNumber/InputNumber';
 
-export default function Debit({comptes, total, setTotal, setDebit}) {
+export default function Debit({comptes, total, setTotal, setDebit, reset_all_montant}) {
 
     const [comptes_debit, setComptesDebit] = useState([]);
 
@@ -23,16 +23,19 @@ export default function Debit({comptes, total, setTotal, setDebit}) {
 
 
     const handleChange = (compte, value) => {
-
-        // Retirer les espaces pour le state
-        // const rawValue = value.replace(/\s/g, "");
-        // // Si ce n’est pas un nombre, on ignore
-        // if (!/^\d*$/.test(rawValue)) return;
   
         setMontants(prev => ({
           ...prev,
           [compte]: value,
         }));
+
+    }
+
+
+    const reset_data = () => {
+        Object.keys(montants).forEach(key => {
+          handleChange(key, 0);
+        })
     }
 
 
@@ -87,6 +90,14 @@ export default function Debit({comptes, total, setTotal, setDebit}) {
         }
         // console.log('montants', montants);
     }, [comptes_debit]);
+
+
+    // Ecouter le state reset_all_montant pour effacer les donnees
+    useEffect(() => {
+        if(reset_all_montant){
+            reset_data();
+        }
+    }, [reset_all_montant])
 
 
   return (

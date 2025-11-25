@@ -18,6 +18,8 @@ export default function SoldeCaisse() {
 
     const [result, setResult] = useState(null); // Va stocker un message en cas d'anomalie detectee et inseree
 
+    const [anomalies, setAnomalies] = useState(null);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -32,6 +34,7 @@ export default function SoldeCaisse() {
 
     // Cette fonction va tester s'il y anomalie ou pas. Si oui, elle va effectuer une insertion vers la base
     const detection_anomalie = () => {
+
         if( Number(data.balance[0]['total']) != Number(data.sje[0]['total']) ){
             const texte = `Le solde compte 5310 du mois de ${mois} : ${data.balance[0]['total'].toLocaleString('fr-FR')} Ar ne correspond pas a l'encaisse journaliere du fin de ce mois : ${data.sje[0]['total'].toLocaleString('fr-FR')} Ar`;
 
@@ -42,9 +45,42 @@ export default function SoldeCaisse() {
                 analyse: 'solde_caisse'
             }]
 
-            fetchData(`${API_URL}/data/anomalie/insert`, 'post', {'action': 'ajouter_anomalie', 'data': anomalie}, setResult)
+            setAnomalies(anomalie);
+
+            // fetchData(`${API_URL}/data/anomalie/insert`, 'post', {'action': 'ajouter_anomalie', 'data': anomalie}, setResult)
         }
+        else{
+            setAnomalies([]);
+        }
+
     }
+
+
+    const envoyer_anomalie = () => {
+        fetchData(
+            `${API_URL}/data/anomalie/insert`, 
+            'post', 
+            {
+                'action': 'ajouter_anomalie', 
+                'data': anomalies, 
+                'type_analyse': 'solde_caisse', 
+                'poste_comptable': poste_choisi, 
+                'exercice': exercice, 
+                'mois': mois, 
+                'proprietaire': proprietaire, 
+                'piece': 'BOD'
+            }, 
+            setResult
+        )
+    }
+
+
+    useEffect(() => {
+        if(anomalies){
+            envoyer_anomalie()
+        }
+    }, [anomalies])
+
 
 
     useEffect(() => {
@@ -62,11 +98,12 @@ export default function SoldeCaisse() {
 
             <form onSubmit={handleSubmit}>
 
-                {/* Poste comptable */}
+                
                 <div className='flex gap-6 my-2 px-6'>
-
+                    
                     <div className='w-2/6'>
 
+                        {/* Poste comptable */}
                         <div className=''>
                             <label className='label'>Poste comptable : </label>
                         </div>

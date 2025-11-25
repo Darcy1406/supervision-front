@@ -33,7 +33,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
 
     const reset_file = () => {
         Object.keys(file).forEach(item => {
-            if(item != "piece"){
+            if(item != "piece" && item != "periode"){
                 handleChange(item, "");
             }
         })

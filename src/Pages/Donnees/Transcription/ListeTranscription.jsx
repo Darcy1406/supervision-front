@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, version } from 'react';
 import { fetchData } from '../../../functions/fetchData.js'
 import { API_URL } from '../../../Config'
 import { useUserStore } from '../../../store/useUserStore';
@@ -9,7 +9,8 @@ import Modal from '../../../Composants/Modal/Modal.jsx';
 import TabView from './TabView/TabView.jsx';
 
 export function ListeTranscription() {
-    const user = useUserStore((state) => state.user);
+
+    const user = useUserStore((state) => state.user); // Va contenir les informations de l'utilisateur connectee au systeme
 
     const [refresh, setRefresh] = useState(true);
     const [isVisible, setIsvisible] = useState(false); // State afficher la fenetre modale
@@ -36,12 +37,18 @@ export function ListeTranscription() {
     })
 
     const [liste_pieces, setListePieces] = useState(null);
+
     const [poste_comptables, setPosteComptables] = useState(null);
+    const [poste_comptables_copie, setPosteComptablesCopie] = useState(null);
 
     const [auditeurs, setAuditeurs] = useState(null);
+    const [auditeurs_copie, setAuditeursCopie] = useState(null);
 
     const [zones, setZones] = useState(null); // Va stocker toutes les zones
     const [zone_selected, setZoneSelected] = useState(""); // Va contenir la zone selectionee
+
+    const currentPage = useRef(1);
+    const itemsPerPage = useRef(4);
 
 
     // Fonction qui va recuperer des donnees depuis l'API
@@ -51,13 +58,7 @@ export function ListeTranscription() {
 
 
     // Cette fonction va s'executer au moment ou l'auditeur selectionner change (Chef_unite/Auditeur)
-    const recuperer_les_postes_comptables_liees_a_un_auditeur = (value) => {
-        const id = value.split(" ")[0];
-        if(id){
-            get_data(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'], 'user_id': id}, setPosteComptables)
-        }
-        console.log('auditeur', id);
-    }
+    
 
 
     
@@ -117,7 +118,7 @@ export function ListeTranscription() {
     }
 
 
-    const checker_detail_transcription = (piece, nom_fichier, poste_comptable, date, exercice, mois, index) => {
+    const checker_detail_transcription = (version, piece, nom_fichier, poste_comptable, date, exercice, mois, index) => {
 
         setTranscription(null);
         let texte = '';
@@ -130,7 +131,7 @@ export function ListeTranscription() {
             texte += `${piece} du ${nom_fichier.split(', ')[1]} ${poste_comptable}`
         }
 
-        if(piece.toUpperCase() == 'BAR'){
+        else if(piece.toUpperCase() == 'BAR'){
             const decade = nom_fichier.split(", ")[1];
             texte += `${piece}, ${month_int_to_string(mois)} - ${decade} ${poste_comptable}; ${nom_fichier.split(', ')[2]}`
         }
@@ -146,7 +147,8 @@ export function ListeTranscription() {
         }
 
         setDetailTitre(texte);
-        sendData(`${API_URL}/data/transcription/liste`, 'post', {'piece': piece, 'poste_comptable': poste_comptable, 'date': date, 'mois': mois, 'exercice': exercice, 'action': 'voir_detail_transcription'}, setTranscription);
+
+        sendData(`${API_URL}/data/transcription/liste`, 'post', {'piece': piece, 'poste_comptable': poste_comptable, 'date': date, 'mois': mois, 'exercice': exercice, 'version': version, 'action': 'voir_detail_transcription'}, setTranscription);
     }
 
 
@@ -155,7 +157,7 @@ export function ListeTranscription() {
             <>
                 <tr 
                     className='cursor-pointer'  
-                    onClick={(e) => checker_detail_transcription(item['piece__nom_piece'], item['nom_fichier'], item['poste_comptable__nom_poste'], item['date_arrivee'], item['exercice'], item['mois'], index)}
+                    onClick={(e) => checker_detail_transcription(item['version'], item['piece__nom_piece'], item['nom_fichier'], item['poste_comptable__nom_poste'], item['date_arrivee'], item['exercice'], item['mois'], index)}
                     onDoubleClick={() => setSelected(null)}
                     // style={{
                     //     backgroundColor: selected === index ? "#d1e7dd" : "white",
@@ -172,14 +174,155 @@ export function ListeTranscription() {
         )
     }
 
+    // Cette fonction va recupérer les documents liées a un auditeur (pour un auditeur), les documents liées a une zone (pour les chef d'unités) et tous les documents (pour le directeur)
+    const liste_documents = (setState) => {
 
-    // useEffect(() => {
-    //     put_data_in_documents(data);
-    // }, [data])
+        if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase()){
+            fetchData(
+                `${API_URL}/data/document/liste`, 
+                'post', 
+                {
+                    'action': 'listes_documents_directeur', 
+                    'fonction': user[0]['utilisateur__fonction'], 
+                    'utilisateur': user[0]['id']
+                }, 
+                setState
+            )
+        }
+        else if(user[0]['utilisateur__fonction'].toUpperCase() == 'chef_unite'.toUpperCase()){
+            fetchData(
+                `${API_URL}/data/document/liste`, 
+                'post', 
+                {
+                    'action': 'listes_documents_chef_unite', 
+                    'zone': user[0]['utilisateur__zone__nom_zone']
+                }, 
+                setState
+            )
+        }
+        else{
+            fetchData(
+                `${API_URL}/data/document/liste`, 
+                'post', 
+                {
+                    'action': 'listes_documents_auditeur', 
+                    'utilisateur': user[0]['id']
+                }, 
+                setState
+            )
+        }
+
+    }
 
 
-    const currentPage = useRef(1);
-    const itemsPerPage = useRef(10);
+    // Cette fonction va recuperer les postes comptables liées a un auditeur (pour un auditeur), les postes comptables liées a une zone (pour les chef d'unités) et tous les postes comptables (pour le directeur)
+    const liste_poste_comptables = (setState) => {
+
+        if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase()){
+            fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_tous_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'],'user_id': user[0]['id']}, setState)
+        }
+        else if(user[0]['utilisateur__fonction'].toUpperCase() == 'chef_unite'.toUpperCase()){
+            fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables_zone', 'zone': user[0]['utilisateur__zone__id']}, setState)
+        }
+        else{
+            fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'user_id': user[0]['id']}, setState)
+        }
+
+    }
+
+
+    // Cette fonction va recupérer les auditeurs d'une zone (pour les chefs d'unités) ou tous les auditeurs (pour le directeur)
+    const liste_auditeurs = (setState) => {
+
+        if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase()){
+            fetchData(`${API_URL}/users/get_auditeurs`, 'post', {'action': 'recuperer_auditeurs'}, setState)
+        }
+
+        else if(user[0]['utilisateur__fonction'].toUpperCase() == 'chef_unite'.toUpperCase()){
+            fetchData(`${API_URL}/users/get_auditeurs_zone`, 'post', {'action': 'recuperer_auditeurs_zone', 'zone': user[0]['utilisateur__zone__id']}, setState)
+        }
+
+    }
+
+
+    // Cette fonction va recupérer toutes les zones existantes (pour l'utilisateur : Directeur)
+    const liste_zones = () => {
+        if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase()){
+            fetchData(`${API_URL}/users/zone/get`, 'get', {}, setZones);
+        }
+    }
+
+
+    // Cette fonction va filtrer les donnees initiales(auditeurs et postes comptables) recupérer par rapport au zone selectionnée (pour un directeur)
+    const filtrer_les_auditeurs_et_les_postes_comptables_par_zone = (value) => {
+
+        const auditeurs_filter = auditeurs_copie.filter((item) => {
+            if(item['zone_id']?.toString() != value){
+                return false
+            }
+            return true
+        })
+        setAuditeurs(auditeurs_filter)
+
+        const poste_comptable_filter = poste_comptables_copie.filter((item) => {
+            if(item['utilisateur__zone_id']?.toString() != value ){
+                return false
+            }
+            return true
+        })
+        setPosteComptables(poste_comptable_filter)
+    }
+
+
+    // // Cette fonction va filtrer les donnees initiales(poste comptables) recupérer par rapport au zone selectionnée (pour un directeur et les chef d'unités)
+    const recuperer_les_postes_comptables_liees_a_un_auditeur = (value) => {
+
+
+        if(value != ""){
+            const id = value.split(" ")[0];
+            const filter = poste_comptables_copie.filter((item) => {
+                if( item['utilisateur_id']?.toString() != id ){
+                    return false
+                }
+                return true
+            })
+            setPosteComptables(filter)
+        }
+        else{
+            if(zone_selected != ""){
+                filtrer_les_auditeurs_et_les_postes_comptables_par_zone(zone_selected)
+            }
+            else{
+                setPosteComptables(poste_comptables_copie)
+            }
+        }
+
+
+    }
+
+
+    useEffect(() => {
+        fetchData(`${API_URL}/data/piece/get_pieces`, 'get', {}, setListePieces)
+    }, [])
+
+
+
+    useEffect(() => {
+        if(user){
+
+            liste_documents(setDocuments)
+            liste_documents(setDocumentsAFiltrer)
+
+            liste_poste_comptables(setPosteComptables)
+            liste_poste_comptables(setPosteComptablesCopie)
+
+            liste_auditeurs(setAuditeurs)
+            liste_auditeurs(setAuditeursCopie)
+
+            liste_zones()
+
+        }
+    }, [user])
 
 
     useEffect(() => {
@@ -187,128 +330,6 @@ export function ListeTranscription() {
             paginateData(currentPage.current, itemsPerPage.current, documents, setDocumentsPaginate);
         }
     }, [documents, reload_data])
-
-    // Pour gerer les affichages initiales
-    // useEffect(() => {
-    //     if(user[0]['utilisateur__fonction'].toUpperCase() == 'AUDITEUR'){
-    //         get_data(`${API_URL}/data/document/liste`, 'post', {'action': 'listes_documents', 'fonction': user[0]['utilisateur__fonction'], 'utilisateur': user[0]['id']}, setDocuments)
-    
-    //         get_data(`${API_URL}/data/document/liste`, 'post', {'action': 'listes_documents', 'fonction': user[0]['utilisateur__fonction'], 'utilisateur': user[0]['id']}, setDocumentsAFiltrer)
-            
-    //         get_data(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_tous_les_postes_comptables', 'fonction': user[0]['utilisateur_fonction'],'user_id': user[0]['id']}, setPosteComptables)
-    //     }
-    //     else{
-    //         get_data(`${API_URL}/data/document/liste`, 'post', {'action': 'listes_documents', 'fonction': user[0]['utilisateur__fonction'], 'zone': user[0]['utilisateur__zone__nom_zone']}, setDocuments)
-    //     }
-
-
-    //     get_data(`${API_URL}/data/piece/get_pieces`, 'get', {}, setListePieces)
-
-
-    // }, [])
-
-
-    // Recuperer la liste des auditeurs en fonction du role(fonction) de l'utilisateur
-    // useEffect(() => {
-    //     if(user){
-    //         if(user[0]['utilisateur__fonction'].toUpperCase() == 'chef_unite'.toUpperCase()){
-    //             sendData(`${API_URL}/users/get_auditeurs_zone`, 'post', {'action': 'recuperer_auditeurs_zone', 'zone': user[0]['utilisateur__zone__nom_zone']}, setAuditeurs)
-    //         }
-    //         else if(user[0]['utilisateur__fonction'].toUpperCase() != 'auditeur'.toUpperCase()){
-    //             sendData(`${API_URL}/users/get_auditeurs_zone`, 'post', {'action': 'recuperer_auditeurs'}, setAuditeurs)
-    //         }
-    //     }
-    // }, [user])
-
-
-    // DIRECTEUR
-
-    useEffect(() => {
-        if(user){
-
-            if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase()){
-
-                fetchData(`${API_URL}/users/zone/get`, 'get', {}, setZones);
-
-                fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_tous_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'],'user_id': user[0]['id']}, setPosteComptables)
-
-                fetchData(`${API_URL}/users/get_auditeurs_zone`, 'post', {'action': 'recuperer_auditeurs'}, setAuditeurs)
-
-                fetchData(`${API_URL}/data/document/liste`, 'post', {'action': 'listes_documents_directeur', 'fonction': user[0]['utilisateur__fonction'], 'utilisateur': user[0]['id']}, setDocuments)
-
-                fetchData(`${API_URL}/data/document/liste`, 'post', {'action': 'listes_documents_directeur', 'fonction': user[0]['utilisateur__fonction'], 'utilisateur': user[0]['id']}, setDocumentsAFiltrer)
-
-            }
-        }
-    },[user])
-
-
-    useEffect(() => {
-        if(zone_selected != ""){
-            fetchData(`${API_URL}/users/get_auditeurs_zone`, 'post', {'action': 'recuperer_auditeurs_zone', 'zone': user[0]['utilisateur__zone__nom_zone']}, setAuditeurs)
-        }
-    }, [zone_selected])
-
-    // *** *** ***
-
-
-    // CHEF_UNITE
-    useEffect(() => {
-        if(user){
-            if(user[0]['utilisateur__fonction'].toUpperCase() == 'chef_unite'.toUpperCase()){
-                fetchData(`${API_URL}/data/document/liste`, 'post', {'action': 'listes_documents_chef_unite', 'zone': user[0]['utilisateur__zone__nom_zone']}, setDocuments)
-
-                fetchData(`${API_URL}/data/document/liste`, 'post', {'action': 'listes_documents_chef_unite', 'zone': user[0]['utilisateur__zone__nom_zone']}, setDocumentsAFiltrer)
-
-                fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables_zone', 'zone': user[0]['utilisateur__zone__nom_zone']}, setPosteComptables)
-
-                fetchData(`${API_URL}/users/get_auditeurs_zone`, 'post', {'action': 'recuperer_auditeurs_zone', 'zone': user[0]['utilisateur__zone__nom_zone']}, setAuditeurs)
-            }
-        }
-    }, [user])
-    // *** *** ***
-
-
-    // AUDITEUR
-    useEffect(() => {
-        if(user){
-            if(user[0]['utilisateur__fonction'].toUpperCase() == 'auditeur'.toUpperCase()){
-                fetchData(`${API_URL}/data/document/liste`, 'post', {'action': 'listes_documents_auditeur', 'utilisateur': user[0]['id']}, setDocuments)
-
-                fetchData(`${API_URL}/data/document/liste`, 'post', {'action': 'listes_documents_auditeur', 'utilisateur': user[0]['id']}, setDocumentsAFiltrer)
-
-                fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'user_id': user[0]['id']}, setPosteComptables)
-            }
-        }
-    }, [user]);
-    // *** *** ***
-
-
-    useEffect(() => {
-        fetchData(`${API_URL}/data/piece/get_pieces`, 'get', {}, setListePieces)
-    }, [])
-
-    // Executer la fonction get_liste_document
-    // useEffect(() => {
-    //     if(user){
-    //         get_liste_document(user[0]['id']);
-    //     }
-    //     console.log('transcr', transcription);
-    // }, [user])
-
-
-    const ListeAuditeur = ({auditeur}) => {
-        return (
-            <div className='p-4 flex items-center gap-4'>
-                <label className='label'>Auditeur : </label>
-                <input list="auditeurs" placeholder='Votre auditeur ?' className='bg-white p-2 rounded-lg border border-gray-300 w-1/3' />
-                <datalist id='auditeurs'>
-                    <option value="Auditeur 1" />
-                    <option value="Auditeur 2" />
-                </datalist>
-            </div>
-        )
-    }
 
 
   return (
@@ -331,8 +352,8 @@ export function ListeTranscription() {
                                         user[0]['utilisateur__fonction'].toUpperCase() == 'Directeur'.toUpperCase() ?
                                             <div className='w-1/2 flex items-center gap-4 container-zone'>
                                                 <label className="label">Zone: </label>
-                                                <select className='bg-white p-2 w-full rounded-lg border border-gray-300' value={zone_selected} onChange={(e) => setZoneSelected(e.target.value)}>
-                                                    <option value="">Choisissez une zone</option>
+                                                <select className='bg-white p-2 w-full rounded-lg border border-gray-300' value={zone_selected} onChange={(e) => { setZoneSelected(e.target.value) ; filtrer_les_auditeurs_et_les_postes_comptables_par_zone(e.target.value) } }>
+                                                    <option value="" disabled>Choisissez une zone</option>
                                                     {
                                                         zones && zones.map((item, index) => (
                                                             <option key={index} value={item['id']}>{item['nom_zone']}</option>
@@ -433,7 +454,7 @@ export function ListeTranscription() {
 
                 </div>
 
-                <table className='table is-fullwidth is-hoverable'>
+                <table className='table table-view is-fullwidth'>
                     <thead>
                         <tr>
                             <th>Pièce</th>

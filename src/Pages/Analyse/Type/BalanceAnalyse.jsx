@@ -3,6 +3,7 @@ import { fetchData } from '../../../functions/fetchData';
 import { API_URL } from '../../../Config';
 import { useUserStore } from '../../../store/useUserStore';
 import { Alert } from '../../../Composants/Alert/Alert';
+import { formatNombreAvecEspaces } from '../../../functions/Function'
 
 export default function BalanceAnalyse() {
     const user = useUserStore((state) => state.user);
@@ -91,13 +92,14 @@ export default function BalanceAnalyse() {
         }
         else{
             setDescription("La balance est equilibrée")
+            setAnomalies([]);
         }
 
     }
 
 
     const envoyer_anomalie = () => {
-        fetchData(`${API_URL}/data/anomalie/insert`, 'post', {'action': 'ajouter_anomalie', 'data': anomalies}, setResult)
+        fetchData(`${API_URL}/data/anomalie/insert`, 'post', {'action': 'ajouter_anomalie', 'data': anomalies, 'type_analyse': 'equilibre_balance', 'poste_comptable': poste_choisi, 'exercice': exercice, 'mois': mois, 'proprietaire': proprietaire, 'piece': piece}, setResult)
     }
 
 
@@ -120,10 +122,10 @@ export default function BalanceAnalyse() {
 
 
     useEffect(() => {
-        if(data){
-            console.log('data', data);
+        if(anomalies){
+            envoyer_anomalie()
         }
-    }, [data])
+    }, [anomalies])
 
 
   return (
@@ -131,7 +133,8 @@ export default function BalanceAnalyse() {
 
         <div className="bloc-form">
             <form onSubmit={handleSubmit}>
-                <div className='flex gap-6 my-2'>
+
+                <div className='flex gap-6 my-2 px-6'>
 
                     {/* Poste comptable */}
                     <div className='w-2/6 justify-center gap-2'>
@@ -245,6 +248,7 @@ export default function BalanceAnalyse() {
 
 
                 </div>
+                
             </form>
         </div>
 
@@ -283,8 +287,8 @@ export default function BalanceAnalyse() {
                                                 <p>BE_D</p>
                                                 <p className='mx-4'>
                                                     Montant : 
-                                                    <strong className='mx-1 text-lg'>
-                                                        { (dataMap['BE_D'] ?? 0).toLocaleString('fr-FR') } Ar
+                                                    <strong className='mx-1 text-xl'>
+                                                        { formatNombreAvecEspaces(dataMap['BE_D'] || 0) } Ar
                                                     </strong>
                                                 </p>
                                             </td>
@@ -292,8 +296,8 @@ export default function BalanceAnalyse() {
                                                 <p>BE_C</p>
                                                 <p className='mx-4'>
                                                     Montant : 
-                                                    <strong className='mx-1 text-lg'>
-                                                        { (dataMap['BE_C'] ?? 0).toLocaleString('fr-FR') } Ar
+                                                    <strong className='mx-1 text-xl'>
+                                                        { formatNombreAvecEspaces(dataMap['BE_C']) || 0 } Ar
                                                     </strong>
                                                 </p>
                                             </td>
@@ -304,8 +308,8 @@ export default function BalanceAnalyse() {
                                                 <p>OG_D</p>
                                                 <p className='mx-4'>
                                                     Montant : 
-                                                    <strong className='mx-1 text-lg'>
-                                                        { (dataMap['OG_D'] ?? 0).toLocaleString('fr-FR') } Ar
+                                                    <strong className='mx-1 text-xl'>
+                                                        { formatNombreAvecEspaces(dataMap['OG_D']) || 0} Ar
                                                     </strong>
                                                 </p>
                                             </td>
@@ -313,8 +317,8 @@ export default function BalanceAnalyse() {
                                                 <p>OG_C</p>
                                                 <p className='mx-4'>
                                                     Montant : 
-                                                    <strong className='mx-1 text-lg'>
-                                                        { (dataMap['OG_C'] ?? 0).toLocaleString('fr-FR') } Ar
+                                                    <strong className='mx-1 text-xl'>
+                                                        { formatNombreAvecEspaces(dataMap['OG_C']) || 0} Ar
                                                     </strong>
                                                 </p>
                                             </td>
@@ -325,8 +329,8 @@ export default function BalanceAnalyse() {
                                                 <p>TOT_D</p>
                                                 <p className='mx-4'>
                                                     Montant : 
-                                                    <strong className='mx-1 text-lg'>
-                                                        { (dataMap['TOT_D'] ?? 0).toLocaleString('fr-FR') } Ar
+                                                    <strong className='mx-1 text-xl'>
+                                                        { formatNombreAvecEspaces(dataMap['TOT_D']) || 0 } Ar
                                                     </strong>
                                                 </p>
                                             </td>
@@ -334,8 +338,8 @@ export default function BalanceAnalyse() {
                                                 <p>TOT_C</p>
                                                 <p className='mx-4'>
                                                     Montant :
-                                                    <strong className='mx-1 text-lg'>
-                                                        { (dataMap['TOT_C'] ?? 0).toLocaleString('fr-FR') } Ar
+                                                    <strong className='mx-1 text-xl'>
+                                                        { formatNombreAvecEspaces(dataMap['TOT_C']) || 0 } Ar
                                                     </strong>
                                                 </p>
                                             </td>
@@ -346,8 +350,8 @@ export default function BalanceAnalyse() {
                                                 <p>SLD_D</p>
                                                 <p className='mx-4'>
                                                     Montant :
-                                                    <strong className='mx-1 text-lg'>
-                                                        { (dataMap['SLD_D'] ?? 0).toLocaleString('fr-FR') } Ar
+                                                    <strong className='mx-1 text-xl'>
+                                                        { formatNombreAvecEspaces(dataMap['SLD_D']) || 0 } Ar
                                                     </strong>
                                                 </p>
                                             </td>
@@ -355,8 +359,8 @@ export default function BalanceAnalyse() {
                                                 <p>SLD_C</p>
                                                 <p className='mx-4'>
                                                     Montant :
-                                                    <strong className='mx-1 text-lg'>
-                                                        { (dataMap['SLD_C'] ?? 0).toLocaleString('fr-FR') } Ar
+                                                    <strong className='mx-1 text-xl'>
+                                                        { formatNombreAvecEspaces(dataMap['SLD_C']) || 0 } Ar
                                                     </strong>
                                                 </p>
                                             </td>
@@ -367,8 +371,8 @@ export default function BalanceAnalyse() {
                                                 <p>OFG_D</p>
                                                 <p className='mx-4'>
                                                     Montant :
-                                                    <strong className='mx-1 text-lg'>
-                                                        { (dataMap['OFG_D'] ?? 0).toLocaleString('fr-FR')} Ar
+                                                    <strong className='mx-1 text-xl'>
+                                                        { formatNombreAvecEspaces(dataMap['OFG_D']) || 0} Ar
                                                     </strong>
                                                 </p>
                                             </td>
@@ -376,8 +380,8 @@ export default function BalanceAnalyse() {
                                                 <p>OFG_C</p>
                                                 <p className='mx-4'>
                                                     Montant :
-                                                    <strong className='mx-1 text-lg'>
-                                                        { (dataMap['OFG_C'] ?? 0).toLocaleString('fr-FR') } Ar
+                                                    <strong className='mx-1 text-xl'>
+                                                        { formatNombreAvecEspaces(dataMap['OFG_C']) || 0 } Ar
                                                     </strong>
                                                 </p>
                                             </td>
@@ -388,8 +392,8 @@ export default function BalanceAnalyse() {
                                                 <p>BS_D</p>
                                                 <p className='mx-4'>
                                                     Montant :
-                                                    <strong className='mx-1 text-lg'>
-                                                        { (dataMap['BS_D'] ?? 0).toLocaleString('fr-FR') } Ar
+                                                    <strong className='mx-1 text-xl'>
+                                                        { formatNombreAvecEspaces(dataMap['BS_D']) || 0 } Ar
                                                     </strong>
                                                 </p>
                                             </td>
@@ -397,8 +401,8 @@ export default function BalanceAnalyse() {
                                                 <p>BS_C</p>
                                                 <p className='mx-4'>
                                                     Montant :
-                                                    <strong className='mx-1 text-lg'>
-                                                        { (dataMap['BS_C'] ?? 0).toLocaleString('fr-FR') } Ar
+                                                    <strong className='mx-1 text-xl'>
+                                                        { formatNombreAvecEspaces(dataMap['BS_C']) || 0 } Ar
                                                     </strong>
                                                 </p>
                                             </td>
@@ -426,21 +430,23 @@ export default function BalanceAnalyse() {
                             <tbody>
 
                                 <tr className={ dataMap['BE_D'] != dataMap['BE_C'] ? 'bg-yellow-200' :'' }>
+
                                     <td>
                                         <p>BE_D</p>
                                         <p className='mx-4'>
                                             Montant : 
-                                            <strong className='mx-1 text-lg'>
-                                                { (dataMap['BE_D'] ?? 0).toLocaleString('fr-FR') } Ar
+                                            <strong className='mx-1 text-xl'>
+                                                0 Ar
                                             </strong>
                                         </p>
                                     </td>
+
                                     <td>
                                         <p>BE_C</p>
                                         <p className='mx-4'>
                                             Montant : 
-                                            <strong className='mx-1 text-lg'>
-                                                { (dataMap['BE_C'] ?? 0).toLocaleString('fr-FR') } Ar
+                                            <strong className='mx-1 text-xl'>
+                                                0 Ar
                                             </strong>
                                         </p>
                                     </td>
@@ -451,8 +457,8 @@ export default function BalanceAnalyse() {
                                         <p>OG_D</p>
                                         <p className='mx-4'>
                                             Montant : 
-                                            <strong className='mx-1 text-lg'>
-                                                { (dataMap['OG_D'] ?? 0).toLocaleString('fr-FR') } Ar
+                                            <strong className='mx-1 text-xl'>
+                                                0 Ar
                                             </strong>
                                         </p>
                                     </td>
@@ -460,8 +466,8 @@ export default function BalanceAnalyse() {
                                         <p>OG_C</p>
                                         <p className='mx-4'>
                                             Montant : 
-                                            <strong className='mx-1 text-lg'>
-                                                { (dataMap['OG_C'] ?? 0).toLocaleString('fr-FR') } Ar
+                                            <strong className='mx-1 text-xl'>
+                                                0 Ar
                                             </strong>
                                         </p>
                                     </td>
@@ -472,8 +478,8 @@ export default function BalanceAnalyse() {
                                         <p>TOT_D</p>
                                         <p className='mx-4'>
                                             Montant : 
-                                            <strong className='mx-1 text-lg'>
-                                                { (dataMap['TOT_D'] ?? 0).toLocaleString('fr-FR') } Ar
+                                            <strong className='mx-1 text-xl'>
+                                                0 Ar
                                             </strong>
                                         </p>
                                     </td>
@@ -481,8 +487,8 @@ export default function BalanceAnalyse() {
                                         <p>TOT_C</p>
                                         <p className='mx-4'>
                                             Montant :
-                                            <strong className='mx-1 text-lg'>
-                                                { (dataMap['TOT_C'] ?? 0).toLocaleString('fr-FR') } Ar
+                                            <strong className='mx-1 text-xl'>
+                                                0 Ar
                                             </strong>
                                         </p>
                                     </td>
@@ -493,8 +499,8 @@ export default function BalanceAnalyse() {
                                         <p>SLD_D</p>
                                         <p className='mx-4'>
                                             Montant :
-                                            <strong className='mx-1 text-lg'>
-                                                { (dataMap['SLD_D'] ?? 0).toLocaleString('fr-FR') } Ar
+                                            <strong className='mx-1 text-xl'>
+                                                0 Ar
                                             </strong>
                                         </p>
                                     </td>
@@ -502,8 +508,8 @@ export default function BalanceAnalyse() {
                                         <p>SLD_C</p>
                                         <p className='mx-4'>
                                             Montant :
-                                            <strong className='mx-1 text-lg'>
-                                                { (dataMap['SLD_C'] ?? 0).toLocaleString('fr-FR') } Ar
+                                            <strong className='mx-1 text-xl'>
+                                                0 Ar
                                             </strong>
                                         </p>
                                     </td>
@@ -514,8 +520,8 @@ export default function BalanceAnalyse() {
                                         <p>OFG_D</p>
                                         <p className='mx-4'>
                                             Montant :
-                                            <strong className='mx-1 text-lg'>
-                                                { (dataMap['OFG_D'] ?? 0).toLocaleString('fr-FR')} Ar
+                                            <strong className='mx-1 text-xl'>
+                                                0 Ar
                                             </strong>
                                         </p>
                                     </td>
@@ -523,8 +529,8 @@ export default function BalanceAnalyse() {
                                         <p>OFG_C</p>
                                         <p className='mx-4'>
                                             Montant :
-                                            <strong className='mx-1 text-lg'>
-                                                { (dataMap['OFG_C'] ?? 0).toLocaleString('fr-FR') } Ar
+                                            <strong className='mx-1 text-xl'>
+                                                0 Ar
                                             </strong>
                                         </p>
                                     </td>
@@ -535,8 +541,8 @@ export default function BalanceAnalyse() {
                                         <p>BS_D</p>
                                         <p className='mx-4'>
                                             Montant :
-                                            <strong className='mx-1 text-lg'>
-                                                { (dataMap['BS_D'] ?? 0).toLocaleString('fr-FR') } Ar
+                                            <strong className='mx-1 text-xl'>
+                                                0 Ar
                                             </strong>
                                         </p>
                                     </td>
@@ -544,8 +550,8 @@ export default function BalanceAnalyse() {
                                         <p>BS_C</p>
                                         <p className='mx-4'>
                                             Montant :
-                                            <strong className='mx-1 text-lg'>
-                                                { (dataMap['BS_C'] ?? 0).toLocaleString('fr-FR') } Ar
+                                            <strong className='mx-1 text-xl'>
+                                                0 Ar
                                             </strong>
                                         </p>
                                     </td>

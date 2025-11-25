@@ -140,6 +140,7 @@ export default function Balance() {
                         <select className='w-full bg-white p-2 rounded-lg border border-gray-300' value={proprietaire} onChange={(e) => setProprietaire(e.target.value)}>
                             <option value="" disabled>Choisissez le proprietaire</option>
                             <option value="ETAT">ETAT</option>
+                            <option value="REGION">REGION</option>
                             <option value="COMMUNE">COMMUNE</option>
                         </select>
                     </div>
@@ -180,8 +181,9 @@ export default function Balance() {
         {
             result ?
                 result['succes'] ?
-                    <Alert message={result['succes']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300'/>
-                : null
+                    <Alert message={result['succes']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300' borderColor='border-green-400'/>
+                : 
+                    <Alert message={result['error']} setMessage={setResult} icon='fas fa-times-circle' bgColor='bg-red-300' borderColor='border-red-400'/>
             : null
         }
 

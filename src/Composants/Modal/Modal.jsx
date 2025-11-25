@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import './Modal.css';
 
-export default function Modal({children, isVisible, setIsvisible, width_children='w-1/2'}) {
+export default function Modal({children, isVisible, setIsvisible, width_children='w-3/4'}) {
   const modal = useRef(null);
 
   const show_modal = () => {

@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { NavLink, useLocation, BrowserRouter } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import './Nav.css';
 import { useAuthentification } from '../../hooks/useAuthentification';
 import { useUserStore } from '../../store/useUserStore';
@@ -26,7 +26,7 @@ export default function Nav() {
     const { logout } = useAuthentification()
 
   return (
-    <>
+    <section id='navigation'>
     
         <div id='container-navigation' ref={ref_container_navigation}>
 
@@ -49,7 +49,7 @@ export default function Nav() {
                                     <span className='icon'>
                                         <i className="fas fa-database"></i>
                                     </span>
-                                    <p>Données</p>
+                                    <p>Consultation</p>
                                 </div>
                             </li>
                         </NavLink>
@@ -57,31 +57,35 @@ export default function Nav() {
                         {
                             user ?
                                 user[0]['utilisateur__fonction'].toUpperCase() == 'auditeur'.toUpperCase() ?
+                                <>
                                     <NavLink to='/main/transcription' onClick={show_or_close_navigation}>
                                         <li>
                                             <div className={location.pathname == '/main/transcription' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
                                                 <span className='icon'>
-                                                    <i className="fas fa-chart-line"></i>
+                                                    <i className="fas fa-sitemap"></i>
                                                 </span>
                                                 <p>Transcription</p>
                                             </div>
                                         </li>
                                     </NavLink>
+
+                                    <NavLink to='/main/analysis' onClick={show_or_close_navigation} className='current'>
+                                    <li>
+                                        <div className={location.pathname == '/main/analysis' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
+                                            <span className='icon'>
+                                                <i className="fas fa-chart-pie"></i>
+                                            </span>
+                                            <p>Analyse</p>
+                                        </div>
+                                    </li>
+                                    </NavLink>
+                                </>
+
                                 : null
                             : null
                         }
 
-                        <NavLink to='/main/analysis' onClick={show_or_close_navigation} className='current'>
-                            <li>
-                                <div className={location.pathname == '/main/analysis' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
-                                    <span className='icon'>
-                                        <i className="fas fa-chart-pie"></i>
-                                    </span>
-                                    {/* <NavLink style={{display: 'block'}} to='/main/rapport'>Rapports</NavLink> */}
-                                    <p>Analyse</p>
-                                </div>
-                            </li>
-                        </NavLink>
+                        
 
 
                     
@@ -110,15 +114,22 @@ export default function Nav() {
             </nav>
 
             <div className='container-btn-toggle-navigation'>
-                <span className='icon'>
-                    <i className="fas fa-chevron-down" ref={ref_btn_show_navigation} onClick={show_or_close_navigation}></i>
-                </span>
+                <div className="flex gap-6">
+                    <div className='w-7/6 px-4'>
+                        <p className='text-lg text-center font-light italic'>Plateforme d'analyse automatisée et ciblé des comptes</p>
+                    </div>
+                    <div>
+                        <span className='icon'>
+                            <i className="fas fa-chevron-down" ref={ref_btn_show_navigation} onClick={show_or_close_navigation}></i>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div className='fond' ref={ref_fond}>
 
         </div>
-    </>
+    </ section>
   )
 }

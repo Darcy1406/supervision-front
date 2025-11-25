@@ -27,7 +27,9 @@ export default function Analyse({salutation}) {
 
   return (
     <div id='analyse' className='w-full h-full'>
+
       <label className='mx-2'>Type d'analyse : </label>
+      
       <select name="" id="" value={url_children} className='bg-white p-2 rounded-sm border border-gray-300' onChange={(e) => { setUrlChildren(e.target.value); navigate(`/main/analysis/${e.target.value}`) } }>
         <option value="">Report SJE</option>
         <option value="equilibre_balance">Equilibre balance</option>

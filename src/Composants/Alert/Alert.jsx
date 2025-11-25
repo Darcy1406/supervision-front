@@ -8,7 +8,7 @@ export function Alert({message="", icon="", setMessage, bgColor, borderColor}) {
     // alert.current.classList.remove('show');
     alert.current.classList.add('hide');
     setTimeout(() => {
-      setMessage("");
+      setMessage(null);
     }, 600)
     
   }
