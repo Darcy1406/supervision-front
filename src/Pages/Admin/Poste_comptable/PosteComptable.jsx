@@ -85,8 +85,8 @@ export default function PosteComptable() {
       }
       return true;
     })
-    setPosteComptables(filter)
     currentPage.current = 1
+    setPosteComptables(filter)
   }
   
 

@@ -38,8 +38,8 @@ export default function Main() {
 
 
   const toggle_notification = () => {
-    container_notification.current.classList.toggle('show');
-    bloc_main.current.classList.toggle('show');
+    container_notification?.current?.classList.toggle('show');
+    bloc_main.current?.classList?.toggle('minimize');
   }
 
 
@@ -51,6 +51,11 @@ export default function Main() {
   useEffect( () => {
     getUser(setUser)
   }, [location.pathname])
+
+
+  // useEffect(() => {
+  //   toggle_notification()
+  // }, [container_notification, bloc_main])
 
 
   useEffect(() => {

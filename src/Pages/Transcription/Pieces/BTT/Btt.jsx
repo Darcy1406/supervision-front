@@ -174,7 +174,18 @@ export default function Btt() {
         <form onSubmit={(e) => send_document(e)}>
 
             <div className='flex justify-center gap-2 pt-2'>
-                
+
+                {/* Tableau des debits */}
+                <div className='w-3/8'>
+                    <Debit 
+                        comptes={comptes}
+                        total={total_debit}
+                        setTotal={setTotalDebit}
+                        setDebit={setDebit}
+                        reset_all_montant={reset_all_montant}
+                    />
+                </div>
+
 
                 {/* Tableau des credits */}
                 <div className='w-3/8'>
@@ -189,21 +200,30 @@ export default function Btt() {
 
                 </div>
 
-                {/* Tableau des debits */}
-                <div className='w-3/8'>
-                    <Debit 
-                        comptes={comptes}
-                        total={total_debit}
-                        setTotal={setTotalDebit}
-                        setDebit={setDebit}
-                        reset_all_montant={reset_all_montant}
-                    />
-                </div>
 
                 <div className='flex-1'>
 
                     <fieldset className='border border-gray-300 px-4 rounded-sm my-1 py-1'>
                         <legend className='text-lg'>Antérieur</legend>
+
+                        <div className="my-2 flex items-center justify-center gap-2">
+                            <div className='w-60'>
+                                <input 
+                                    type="text" 
+                                    className='input' 
+                                    placeholder='Débit' 
+                                    required
+                                    value={formatNombreAvecEspaces(anterieur['debit'])}
+                                    onChange={(e) => handleChange('debit', e.target.value.replace(/\s/g, "").replace(/,/g, "."), setAnterieur)}
+                                    pattern='^[0-9,\s]+$'
+                                />
+                            </div>
+
+                            <div className='text-xl'>
+                                Ar  
+                            </div>
+
+                        </div>
 
                         <div className='my-2 flex gap-2 justify-center items-center'>
 
@@ -223,25 +243,6 @@ export default function Btt() {
 
                             <div className='text-xl'>
                                 Ar
-                            </div>
-
-                        </div>
-
-                        <div className="my-2 flex items-center justify-center gap-2">
-                            <div className='w-60'>
-                                <input 
-                                    type="text" 
-                                    className='input' 
-                                    placeholder='Débit' 
-                                    required
-                                    value={formatNombreAvecEspaces(anterieur['debit'])}
-                                    onChange={(e) => handleChange('debit', e.target.value.replace(/\s/g, "").replace(/,/g, "."), setAnterieur)}
-                                    pattern='^[0-9,\s]+$'
-                                />
-                            </div>
-
-                            <div className='text-xl'>
-                                Ar  
                             </div>
 
                         </div>
@@ -300,7 +301,7 @@ export default function Btt() {
                     }
 
                     <div className='mt-4'>
-                        <button className='button is-dark is-block mx-auto' disabled={doc == null}>
+                        <button className='button is-dark is-block mx-auto' disabled={doc == null || anterieur['credit'] == '' || anterieur['debit'] == ''}>
                             <span className='mx-1'>
                                 <i className='fas fa-check-circle'></i>
                             </span>
@@ -322,7 +323,8 @@ export default function Btt() {
             result ?
                 result['succes'] ?
                     <Alert message={result['succes']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300'/>
-                : null
+                : 
+                    <Alert message={result['error']} setMessage={setResult} icon='fas fa-exclamation-triangle' bgColor='bg-red-300' borderColor='border-red-400'/>
             : null
         } 
 

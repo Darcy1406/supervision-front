@@ -132,6 +132,7 @@ export default function BalanceAnalyse() {
     <div id='equilibre_balance'>
 
         <div className="bloc-form">
+
             <form onSubmit={handleSubmit}>
 
                 <div className='flex gap-6 my-2 px-6'>
@@ -259,14 +260,13 @@ export default function BalanceAnalyse() {
                     {/* {description} */}
                 </textarea>
 
-                {
+                {/* {
                     description.includes("La balance n'est pas equilibrée") ?
                         <div className="my-4 h-20 w-full">
                             <button className='bg-red-300 border border-red-400 py-2 px-4 cursor-pointer rounded-sm duration-200 ease-in-out hover:bg-red-400' onClick={envoyer_anomalie}>Considerée comme anomalie</button>
                         </div>
                     : null
-                }
-
+                } */}
 
             </div>
 

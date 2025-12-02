@@ -8,19 +8,22 @@ import { paginateData } from '../../../functions/Function.js';
 import Modal from '../../../Composants/Modal/Modal.jsx'
 import './Pieces.css';
 import { useLocation } from 'react-router-dom';
+import Confirmation from '../../../Composants/Confirmation/Confirmation.jsx';
 
 export default function Pieces() {
-    const location = useLocation();
+    const location = useLocation()
 
-    const [refresh, setRefresh] = useState(true);
-    const [isVisible, setIsVisible] = useState(false);
-    const [result, setResult] = useState(null);
+    const [refresh, setRefresh] = useState(true)
+    const [isVisible, setIsvisible] = useState(false) // Statut utilise pour le modale
+    const [isDelete, setIsDelete] = useState(false)
+    const [id_piece, setIdPiece] = useState(false)
+    const [result, setResult] = useState(null)
     
     const [data_update, setDataUpdate] = useState([]);
     
     const get_data_update = (data) => {
         setDataUpdate(data);
-        setIsVisible(true);
+        setIsvisible(true);
     }
     
    
@@ -32,8 +35,33 @@ export default function Pieces() {
 
     const currentPage = useRef(1);
     const itemsPerPage = useRef(6);
+
+
+    // Cette fonction va afficher la fenetre modale de confirmation
+    const confirmation_suppresion = (id) => {
+        setIdPiece(id);
+        setIsDelete(true);
+        setIsvisible(true);
+    }
+
+
+    // Cette fonction va demander de supprimer une piece
+    const supprimer_une_piece = () => {
+        fetchData(
+            `${API_URL}/data/piece/delete`, 
+            'delete', 
+            {
+              'id': id_piece
+            },
+            setResult
+        )
+        setIsvisible(false)
+        setIsDelete(false)
+        setRefresh(!refresh)
+    }
+
     
-    
+    // Interface JSX pour afficher les pieces
     function PieceItem({item}){
         return(
             <tr>
@@ -48,18 +76,25 @@ export default function Pieces() {
                 <td>{item['fields']['updated_at']}</td>
     
                 <td>
-                    <div>
+                    <div className='flex gap-4'>
+
                         <button className='button is-small is-success' onClick={() => get_data_update([{'id': item['pk'], 'nom_piece': item['fields']['nom_piece'], 'periode': item['fields']['periode']}])}>
                             <span className='icon mx-1'>
                                 <i className='fas fa-edit'></i>
                             </span>
                             Modifier
                         </button>
+
+                        <button className='button is-danger is-small' onClick={() => confirmation_suppresion(item['pk'])}>
+                            Supprimer
+                        </button>
+
                     </div>
                 </td>
             </tr>
         )
     }
+    
 
 
     useEffect(() => {
@@ -83,18 +118,19 @@ export default function Pieces() {
   return (
     <div id='piece'>
 
-        <p className='text-2xl font-semibold bg-gray-100 py-4 px-6'>Liste des pieces comptables</p>
+        <button className='bg-black px-4 py-2 text-white cursor-pointer rounded-lg mx-4 my-2' onClick={() => setIsvisible(true)}>
+            <span className='icon'>
+                <i className='fas fa-plus'></i>
+            </span>
+            Ajouter une piece
+        </button>
 
-        <div className='container-table-pieces w-3/4 mx-auto my-2 h-110'>
+        <div className='container-table-pieces w-4/5 mx-auto my-2'>
 
-            <button className='bg-black px-4 py-2 text-white cursor-pointer rounded-lg my-2' onClick={() => setIsVisible(true)}>
-                <span className='icon'>
-                    <i className='fas fa-plus'></i>
-                </span>
-                Ajouter une piece
-            </button>
+            
+            <p className='text-2xl font-semibold bg-gray-100 py-4 px-6'>Liste des pieces comptables</p>
 
-            <table className='table is-fullwidth is-hoverable'>
+            <table className='table table-view is-fullwidth'>
                 <thead>
 
                     <tr>
@@ -125,11 +161,21 @@ export default function Pieces() {
 
         </div>
 
-        <Modal isVisible={isVisible} setIsvisible={setIsVisible}>
-        
-            <FormPieces isVisible={isVisible} setIsVisible={setIsVisible} data={data_update} setData={setDataUpdate} setRefresh={setRefresh} refresh={refresh} setMessage={setResult} message={result}/>
+        {
+            isDelete ?
+                <Modal isVisible={isVisible} setIsvisible={setIsvisible} width_children='w-1/3'>
+                    <Confirmation supprimer={supprimer_une_piece} setIsvisible={setIsvisible}/>
+                </Modal>
+            :
+                <Modal isVisible={isVisible} setIsvisible={setIsvisible}>
+                
+                    <FormPieces isVisible={isVisible} setIsVisible={setIsvisible} data={data_update} setData={setDataUpdate} setRefresh={setRefresh} refresh={refresh} setMessage={setResult} message={result}/>
 
-        </Modal>
+                </Modal>
+        }
+
+
+
 
 
         {

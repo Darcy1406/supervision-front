@@ -34,9 +34,9 @@ export default function BtnChoice({setIsvisible, isDisabled=false}) {
                     <button type='button' className='dropdown-item' onClick={() => setIsvisible(true)}>
                         Locale
                     </button>
-                    <button type='button' className='dropdown-item'>
+                    {/* <button type='button' className='dropdown-item'>
                         G.E.D
-                    </button>
+                    </button> */}
                 </div>
             </div>
 

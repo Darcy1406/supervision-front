@@ -1,8 +1,17 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 
 export default function Unauthorized() {
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const original_title = document.title;
+        document.title = 'Acces denied';
+        return () => {
+            document.title = original_title;
+        }
+    }, [])
 
   return (
     <div id='unauthorized' className='flex justify-center items-center h-screen'>

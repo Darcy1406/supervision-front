@@ -45,7 +45,7 @@ export default function AuditLog() {
         return (
             <tr>
                 <td>{item['date_action']}</td>
-                <td className={` ${item['action'] == 'Suppression' ?'text-red-400' : item['action'] == 'Modification' ? 'text-blue-400' : 'text-green-400'} font-semibold`}>{item['action']}</td>
+                <td className={` ${item['action'] == 'Suppression' ?'text-red-500' : item['action'] == 'Modification' ? 'text-green-500' : 'text-blue-500'} font-light text-lg`}>{item['action']}</td>
                 {/* <td>{JSON.stringify(item['nouvelle_valeur'])}</td> */}
                 <td>{item['modele']}</td>
                 <td>{item['utilisateur']}</td>
@@ -93,7 +93,7 @@ export default function AuditLog() {
 
 
       // Interface du composant
-  return (
+    return (
     <div className="audit_log">
         <h1 className='title is-3 mx-6 mt-4'>Traçabilité des actions</h1>
         <p className='subtitle is-6 mx-6'>Les actions effectuées sur ce système vont s'afficher ici</p>

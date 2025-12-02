@@ -10,25 +10,28 @@
 #main .container-main .container-notification{
     position: fixed;
     left: 0;
-    width: 225px;
+    width: 0;
     overflow-y: auto;
     scrollbar-width: thin;
     transition: all 0.5s ease-in-out;
 }
 
 #main .container-main .container-notification.show{
-    width: 0;
+    width: 255px;
+    /* width: 0; */
 }
 
 #main .container-main .bloc-main{
     position: absolute;
     right: 0;
-    width: calc(100% - 225px);
+    width: 100vw;
+    /* width: calc(100vw - 255px); */
     transition: all 0.5s ease-in-out;
 }
 
-#main .container-main .bloc-main.show{
-    width: 100vw;
+#main .container-main .bloc-main.minimize{
+    width: calc(100vw - 255px);
+    /* width: 100vw; */
 }
 
 

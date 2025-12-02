@@ -1,11 +1,6 @@
 #bloc-pagination{
     position: fixed;
     left: 50%;
-    bottom: 10px;
-    transform: translateX(-50%);
-    /* position: absolute;
     bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%); */
-    /* background-color: blue; */
+    transform: translateX(-50%);
 }

@@ -27,6 +27,7 @@ import Calendrier from "../Composants/Calendrier/Calendrier.jsx";
 import PosteComptable from "../Pages/Admin/Poste_comptable/PosteComptable.jsx";
 import Formulaire from "../Pages/Admin/Poste_comptable/Formulaire.jsx";
 import Utilisateur from "../Pages/Admin/Utilisateur/Utilisateur.jsx";
+import Exercice from "../Pages/Admin/Exercice/Exercice.jsx";
 // import { Liste as Liste_transcription } from "../Pages/Transcription/Liste.jsx";
 
 
@@ -51,26 +52,28 @@ export const router = createBrowserRouter([
         path: '/main',
         element: <Main />,
         children: [ 
-            {
-                element: <PrivateRoute />,
-                children: [
-                    {
-                        path: 'transcription',
-                        element: <Transcription />,    
-                    }
-                ]
-            },
+
+            // Dashboard
             {
                 path: 'dashboard',
                 element: <Dashboard />
             },
+
+            // Data (consultation)
             {
                 path: 'data',
                 element: <Data />,
                 children: [
+                    // Liste des transcriptions
+                    {
+                        index: true,
+                        element: <ListeTranscription />
+                    },
+
                     {
                         element: <PrivateRoute />,
                         children: [
+                            // Route privee aux auditeurs
                             {
                                 path: 'liaison_compte_piece',
                                 element: <Liste />
@@ -79,68 +82,75 @@ export const router = createBrowserRouter([
                                 path: 'ajouter_liaison_compte_piece',
                                 element: <ComptePiece />
                             },
+                            {
+                                path: 'pieces',
+                                element: <Pieces />
+                            },
+                            {
+                                path: 'comptes',
+                                element: <Comptes />
+                            },
+
                         ]
                     },
+                    
+                ]
+            },
+
+            // Trancription : route accessible seulement aux auditeurs
+            {
+                element: <PrivateRoute />,
+                children: [
                     {
-                        index: true,
-                        element: <ListeTranscription />
-                    },
-                    {
-                        path: 'pieces',
-                        element: <Pieces />
-                    },
-                    {
-                        path: 'comptes',
-                        element: <Comptes />
-                    },
-                    {
-                        path: 'liaison_compte_piece',
-                        element: <Liste />
+                        path: 'transcription',
+                        element: <Transcription />
                     },
                 ]
             },
+
+             // Analyse : routes accessibles seulement aux auditeurs
             {
                 path: 'analysis',
                 element: <Analyse />,
                 children: [
+
                     {
-                        index: true,
-                        element: <SjeAnalyse />
-                    },
-                    {
-                        path: 'equilibre_balance',
-                        element: <BalanceAnalyse />
-                    },
-                    {
-                        path: 'solde_caisse',
-                        element: <SoldeCaisse />
-                    },
-                    {
-                        path: 'solde_anormale',
-                        element: <SoldeAnormale />
+                        element: <PrivateRoute />,
+                        children: [
+
+                            {
+                                index: true,
+                                element: <SjeAnalyse />
+                            },
+                            {
+                                path: 'equilibre_balance',
+                                element: <BalanceAnalyse />
+                            },
+                            {
+                                path: 'solde_caisse',
+                                element: <SoldeCaisse />
+                            },
+                            {
+                                path: 'solde_anormale',
+                                element: <SoldeAnormale />
+                            }
+                        ]
+
                     }
+                    
                 ]
             },
+
+            // Anomlie
             {
                 path: 'anomalie',
                 element: <Anomalie />
             },  
-            {
-                path: 'compte_piece',
-                element: <ComptePiece />
-            },
-            {
-                path: 'compte_piece_list',
-                element: <Liste />
-            },
-            
-            // {
-            //     path: 'liste_transcription',
-            //     element: <Liste_transcription />
-            // }
+
         ]
     },
 
+    // Admin
     {
         path: '/admin',
         element: <MainAdmin />,
@@ -164,6 +174,18 @@ export const router = createBrowserRouter([
                     {
                         path: 'poste_comptable',
                         element: <PosteComptable />
+                    },
+                    {
+                        path: 'pieces',
+                        element: <Pieces />
+                    },
+                    {
+                        path: 'exercice',
+                        element: <Exercice />
+                    },
+                    {
+                        path: 'comptes',
+                        element: <Comptes />
                     },
                     {
                         path: 'poste_comptable/form',

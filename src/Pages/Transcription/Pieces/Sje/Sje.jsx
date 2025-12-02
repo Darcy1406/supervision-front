@@ -22,22 +22,26 @@ export default function Sje() {
 
   const [liaison, setLiaison] = useState(null);
 
+  // State qui va stocker toutes les recettes
   const [recettes, setRecettes] = useState({
     "Recettes propres": 0,
     "Approvisionnement de fonds": 0,
     "Degagement de fonds effectuees par la RAF": 0,
   });
 
+  // State qui va stocjer toutes les depenses
   const [depenses, setDepenses] = useState({
     "Degagements de fonds": 0,
     "Depenses": 0,
   });
 
+  // State qui va stocker les totaux (recettes et depenses)
   const [total, setTotal] = useState({
     'recettes': 0,
     'depenses': 0
   })
 
+  // State qui va stocjer les infos supplementaires
   const [info_supp, setInfoSupp] = useState({
     "date_sje": "",
     "poste_comptable": "",
@@ -47,6 +51,7 @@ export default function Sje() {
   })
 
 
+  // Fcontion qui servir a donner des valeurs aux states
   const handleChange = (name, value, setState) => {
   
     setState(prev => ({
@@ -56,6 +61,7 @@ export default function Sje() {
   }
 
 
+  // Fonction qui va reset les valeurs des states
   const reset_data = (data, value, setState) => {
     Object.keys(data).forEach(key => {
       console.log('key', key);
@@ -64,6 +70,7 @@ export default function Sje() {
   }
 
 
+  // Fonction qui va calculer le total des recettes
   const calcule_total_recettes = () => {
     let total_recettes = 0
     Object.values(recettes).forEach((value) => {
@@ -76,6 +83,7 @@ export default function Sje() {
   }
 
 
+  // Fonction qui va calculer le total des depenses
   const calcule_total_depenses = () => {
     let total_depenses = 0
     Object.values(depenses).forEach((value) => {
@@ -88,17 +96,20 @@ export default function Sje() {
   }
 
 
+  // Fonction qui va calculer le solde (Encaisse fin de journee)
   const calcule_solde = () => {
     let solde = (parseFloat(Number(info_supp['report']).toFixed(2)) + parseFloat(total['recettes']) - parseFloat(total['depenses'])) || 0;
     handleChange('solde_calcule', Number(solde.toFixed(2)), setInfoSupp);
   }
 
 
-  // Enregistrer vers la BD le document (fichier)
+  // Enregistrer vers la BD le document (piece justificative)
   const save_file = () => {
     const formData = new FormData();
     
     const date = new Date(info_supp['date_sje'])
+
+    const mois = (date.getMonth() + 1)
 
     formData.append("fichier", doc['fichier']);
     formData.append("nom_fichier", doc['nom_fichier']);
@@ -108,15 +119,21 @@ export default function Sje() {
     formData.append("exercice", date.getFullYear());
     formData.append("periode", doc['periode']);
     formData.append("info_supp", info_supp['date_sje']);
-    formData.append("mois", (date.getMonth() + 1));
+    if(mois < 10){
+      formData.append("mois", `0${mois.toString()}`);
+    }
+    else{
+      formData.append("mois", mois.toString());
+    }
     formData.append("date_arrivee", doc['date_arrivee']);
     formData.append("action", 'ajouter_un_document');
 
     sendDocument(formData, setIdDoc);
     
-}
+  }
 
 
+  // Dans ce bloc se trouver la fonction qui va etre executer automatiquement lorsque la piece justificative (SJE) sera enregistree
   useEffect(() => {
     if(id_doc){
       
@@ -144,11 +161,13 @@ export default function Sje() {
   }, [id_doc])
 
 
-  useEffect(() => {
-    fetchData(`${API_URL}/data/piece_compte/liste_liaison_pour_une_piece`, 'post', {'action': 'filtrer_liaison', 'piece': 'SJE'}, setLiaison);
-  }, [])
+  
+  // useEffect(() => {
+  //   fetchData(`${API_URL}/data/piece_compte/liste_liaison_pour_une_piece`, 'post', {'action': 'filtrer_liaison', 'piece': 'SJE'}, setLiaison);
+  // }, [])
 
 
+  // Va executer la fonction qui calcule le total des recettes automatiquement (dependances: recettes)
   useEffect(() => {
     if(recettes){
       calcule_total_recettes()
@@ -156,6 +175,7 @@ export default function Sje() {
   }, [recettes])
 
 
+  // Va executer la fonction qui calcule le total des depenses automatiquement (dependances: depenses)
   useEffect(() => {
     if(depenses){
       calcule_total_depenses()
@@ -163,12 +183,15 @@ export default function Sje() {
   }, [depenses])
 
 
+  // Va calculer le solde (Encaisse de fin journnee) automatiquement (dependances : report, total_recettes, total_depenses)
   useEffect(() => {
     if(info_supp['report'] != 0){
       calcule_solde();
     }
   }, [info_supp['report'], total['recettes'], total['depenses']])
 
+
+  // Va fermer la fenetre modale (formulaire d'enregistrement du piece justificative)
   useEffect(() => {
     if(doc != null){
       setIsVisible(false);
@@ -176,6 +199,7 @@ export default function Sje() {
   }, [doc])
 
 
+  // Va reset tous les champs du formulaires
   useEffect(() => {
     if(result && result['succes']){
       reset_data(recettes, 0, setRecettes);
@@ -208,7 +232,7 @@ export default function Sje() {
 
       <div className='bg-gray-300 mt-2 p-4'>
         <p className='titre'>SITUATION JOURNALIERE de l'ENCAISSE</p>
-      </div>
+      </div>  
 
       <div className='flex gap-4 justify-center items-center'>
 
@@ -227,21 +251,23 @@ export default function Sje() {
 
           {/* Report journee anterieure */}
           <div className="field">
-                <div className="control">
-                  <label className="label">Report journee anterieur</label>
 
-                  <input 
-                    type='text'
-                    className='input input-sje'
-                    value={formatNombreAvecEspaces(info_supp['report'])}
-                    onChange={(e) => handleChange('report', e.target.value.replace(/\s/g, "").replace(/,/g, "."), setInfoSupp) }
-                    placeholder="Entrer le montant"
-                    pattern='^[0-9,\s]+$'
-                    required
-                  />
+            <div className="control">
+              <label className="label">Report journee anterieur</label>
 
-                </div>
-              </div>
+              <input 
+                type='text'
+                className='input input-sje'
+                value={formatNombreAvecEspaces(info_supp['report'])}
+                onChange={(e) => handleChange('report', e.target.value.replace(/\s/g, "").replace(/,/g, "."), setInfoSupp) }
+                placeholder="Entrer le montant"
+                pattern='^[0-9,\s]+$'
+                required
+              />
+
+            </div>
+            
+          </div>
 
 
           <div className='flex gap-4'>
@@ -407,6 +433,7 @@ export default function Sje() {
           }
 
 
+          {/* Bouton pour importer la piece justificative */}
           {
             doc ?
             
@@ -423,6 +450,7 @@ export default function Sje() {
           }
 
 
+          {/* Fonction qui va envoyer le formulaire */}
           <div className="container-btn-validation my-4">
             <button className='button is-dark is-block mx-auto' onClick={save_file} disabled={ !doc || info_supp['date_sje'] == "" || info_supp['solde'] == 0 || info_supp['report'] == 0 ? true : false}>
               <span className="icon mx-1">
@@ -444,7 +472,8 @@ export default function Sje() {
         result ?
           result['succes'] ?
             <Alert message={result['succes']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300' borderColor='border-green-400'/>
-          : null
+          : 
+            <Alert message={result['error']} setMessage={setResult} icon='fas fa-times-circle' bgColor='bg-red-300' borderColor='border-red-400'/>
         : null
       }
 

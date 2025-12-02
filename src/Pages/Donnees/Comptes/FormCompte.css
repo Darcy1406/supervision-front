@@ -1,4 +1,4 @@
-#form_compte{
+/* #form_compte{
     width: 100vw;
     height: 100vh;
     position: absolute;
@@ -14,4 +14,4 @@
 #form_compte.show{
     opacity: 1;
     pointer-events: initial;
-}
+} */

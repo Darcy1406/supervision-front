@@ -31,7 +31,7 @@ export default function Pagination({description="", currentPage, itemsPerPage, l
 
             <p className='text-2xl font-semibold italic'>{description + " " + currentPage.current}</p>
 
-            <button className={ Math.ceil(liste?.length / itemsPerPage.current) == currentPage.current ? 'cursor-pointer duration-150 ease-in-out hover:text-blue-400 hidden' : 'cursor-pointer duration-150 ease-in-out hover:text-blue-400'} onClick={next}>
+            <button className={ Math.ceil(liste?.length / itemsPerPage.current) <= currentPage.current ? 'cursor-pointer duration-150 ease-in-out hover:text-blue-400 hidden' : 'cursor-pointer duration-150 ease-in-out hover:text-blue-400'} onClick={next}>
             <span className='icon text-2xl'>
                     <i className="fas fa-arrow-right"></i>
                 </span>

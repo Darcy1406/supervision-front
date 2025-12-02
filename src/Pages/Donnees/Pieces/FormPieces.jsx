@@ -6,7 +6,7 @@ import { getCSRFToken } from '../../../utils/csrf';
 import { fetchData } from '../../../functions/fetchData';
 // import { isVisible } from '@testing-library/user-event/dist/utils';
 
-export function FormPieces({setIsVisible, data=[], setData, refresh, setRefresh, setMessage, message}) {
+export function FormPieces({setIsVisible, isVisible, data=[], setData, refresh, setRefresh, setMessage, message}) {
     // const [refresh, setRefresh] = useState(true); // State utile pour relancer les fetch()
 
     const ref_close_modal = useRef(null);
@@ -22,6 +22,8 @@ export function FormPieces({setIsVisible, data=[], setData, refresh, setRefresh,
     const [type_poste_comptable, setTypePosteComptable] = useState([]);
 
     const [postes, setPostes] = useState(null); // State pour stocker les postes liees au piece a modifier
+
+    const [type_postes, setTypePostes] = useState(null);
 
 
     const add_type_poste = (value, isChecked) => {
@@ -57,73 +59,42 @@ export function FormPieces({setIsVisible, data=[], setData, refresh, setRefresh,
     }
     
 
-    const close_form_modal = () => {
-        // ref_form_modal.current.classList.remove('show');
-        setIsVisible(false);
+    const reset_data = () => {
         setData([]);
         setTypePosteComptable([]);
         setNomPiece("");
         setPeriode("");
     }
 
+    const close_form_modal = () => {
+        // ref_form_modal.current.classList.remove('show');
+        setIsVisible(false);
+        reset_data()
+    }
 
-    // const send_ajout = () => {
-    // }
 
-
+    // Cette fonction va soumettre (submit) le formulaire
     const handlesbumit = (e) => {
         e.preventDefault();
         if(btn_form.current.textContent == 'Ajouter'){
             sendData(`${API_URL}/data/piece/create`, 'POST', {'action': 'ajouter_piece', nom_piece, periode, "poste_comptable": type_poste_comptable}, setResult);
-            // setRefresh(!refresh)
         }
         else{
             sendData(`${API_URL}/data/piece/update`, 'PUT', {id, nom_piece, periode, "poste_comptable": type_poste_comptable}, setResult);
             setData([]);
             setTypePosteComptable([]);
         }
-        // console.log(type_poste_comptable);
         close_form_modal();
     }
 
 
-    const update_data = (e) => {
-        e.preventDefault();
-
-        // const csrftoken = getCSRFToken();
-        // fetch(`${API_URL}/data/piece/update`,{
-        //     method: 'PUT',
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         "X-CSRFToken": csrftoken, // ✅ envoie du token CSRF
-        //     },
-        //     credentials: "include", // important pour que le cookie soit envoyé
-        //     body: JSON.stringify({
-        //         id,
-        //         nom_piece,
-        //         periode
-        //     })
-        // })
-        // .then(res => {
-        //     if(!res.ok){
-        //         throw new Error('Erreur HTTP : ' + res.status);
-        //     }
-        //     return res.json();
-        // })  
-        // .then(data => {
-        //     console.log(data);
-        // })
-        // .catch(error => {
-        //     console.log(error);
-        // })
-    }
-
-
+    // Cette fonction va recuperer les types de postes comptables liees au piece a modifier
     const recuperer_les_postes_liees_au_piece_a_modifier = () => {
         sendData(`${API_URL}/users/poste_comptable/selectionner_poste_piece`, 'post', {'action': 'selectionner_poste_piece', 'piece': data[0].nom_piece}, setPostes);
     }
 
     
+    // Cette fonction va placer les valeurs a modifier dans les states adequats
     const get_data = () => {
         setNomPiece(data[0].nom_piece);
         setPeriode(data[0].periode);
@@ -132,9 +103,6 @@ export function FormPieces({setIsVisible, data=[], setData, refresh, setRefresh,
 
 
     useEffect(() => {
-        // if(isVisible){
-        //     show_form_modal();
-        // }
         if(data.length > 0){
             get_data();
             recuperer_les_postes_liees_au_piece_a_modifier();
@@ -145,15 +113,8 @@ export function FormPieces({setIsVisible, data=[], setData, refresh, setRefresh,
     useEffect(() => {
         if(data.length > 0 && postes){          
             setTypePosteComptable(postes);
-            // console.log('poste', postes);
         }
     }, [data, postes])
-
-
-    // useEffect(() => {
-    //     if
-    //     console.log('type', type_poste_comptable);
-    // }, [isVisible])
 
 
 
@@ -165,23 +126,21 @@ export function FormPieces({setIsVisible, data=[], setData, refresh, setRefresh,
     }, [result])
 
 
-    // const {data: poste} = useFetch(`${API_URL}/users/poste_comptable/type`, 'GET', {}, refresh);
-    const [type_postes, setTypePostes] = useState(null);
-    // console.log(poste);
-
-
     useEffect(() => {
         fetchData(`${API_URL}/users/poste_comptable/type`, 'GET', {}, setTypePostes)
     }, [])
 
 
+    useEffect(() => {
+        if(!isVisible){
+            reset_data()
+        }
+    }, [isVisible])
+
+
 
   return (
     <>
-
-            {/* <span className='block text-right is-marginless cursor-pointer' ref={ref_close_modal} onClick={close_form_modal}>
-                <i className='fas fa-times-circle block text-xl text-red-600 duration:150 ease-in-out hover:text-red-700'></i>
-            </span> */}
 
             <p className='text-center my-2 text-2xl font-semibold'>
                 {
@@ -191,6 +150,7 @@ export function FormPieces({setIsVisible, data=[], setData, refresh, setRefresh,
                 }
             </p>
 
+                {/* Formulaire */}
             <form onSubmit={(e) => { handlesbumit(e); setRefresh(!refresh) } } className='px-8'>
 
                 <div className='field'>
@@ -207,7 +167,7 @@ export function FormPieces({setIsVisible, data=[], setData, refresh, setRefresh,
                             <option value="">Choisissez la période de rendu de la pièce</option>
                             <option value="Journalière">Journalière</option>
                             <option value="Décadaire">Décadaire</option>
-                            <option value="Mensuel">Mensuel</option>
+                            <option value="Mensuelle">Mensuelle</option>
                         </select>
                     </div>
                 </div>

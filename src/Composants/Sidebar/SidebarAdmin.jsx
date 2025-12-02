@@ -49,7 +49,7 @@ export default function SidebarAdmin() {
 
                 <li>
                     
-                    <Link className={location.pathname.includes('/admin/poste_comptable') ? 'is-current' : ''} to="../../admin/poste_comptable">
+                    <Link className={location.pathname.includes('/admin/poste_comptable') ? 'is-current' : ''} to="/admin/poste_comptable">
                         <span className='icon mx-1'>
                             <i className="fas fa-money-check-alt"></i>
                         </span>
@@ -57,6 +57,39 @@ export default function SidebarAdmin() {
                     </Link>
                     
                 </li>
+
+                <li>
+                    
+                    <Link className={location.pathname.includes('/admin/pieces') ? 'is-current' : ''} to="/admin/pieces">
+                        <span className='icon mx-1'>
+                            <i className="fas fa-paste"></i>
+                        </span>
+                        Pièces
+                    </Link>
+                    
+                </li>
+
+                {/* Exercice */}
+                <li>
+                    
+                    <Link className={location.pathname.includes('/admin/exercice') ? 'is-current' : ''} to="/admin/exercice">
+                        <span className='icon mx-1'>
+                            <i className="fas fa-paste"></i>
+                        </span>
+                        Exercice
+                    </Link>
+                    
+                </li>
+
+                <li>
+                    <Link className={location.pathname.includes('/admin/comptes') ? 'is-current' : ''} to="/admin/comptes">
+                        <span className='icon mx-1'>
+                            <i className="fas fa-credit-card"></i>
+                        </span>
+                        Comptes
+                    </Link>
+                </li>
+
             </ul>
 
         </aside>

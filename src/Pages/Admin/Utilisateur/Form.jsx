@@ -184,6 +184,7 @@ export default function Form() {
                         <option value="Auditeur">Auditeur</option>
                         <option value="Chef_unite">Chef d'unité</option>
                         <option value="Directeur">Directeur</option>
+                        <option value="Autres">Autres</option>
                     </select>
                 </div>
             </div>

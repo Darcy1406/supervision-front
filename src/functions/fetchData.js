@@ -31,6 +31,7 @@ export function fetchData(url, method, body = {}, setResult) {
             setResult(data)
         })
         .catch((e) => {
+            // console.log('error :', e.toString());
             setResult({'error': e.toString()})
         })
     }

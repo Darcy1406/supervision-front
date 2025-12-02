@@ -102,7 +102,7 @@ export default function Debit({comptes, total, setTotal, setDebit, reset_all_mon
 
   return (
     <div id='debit'>
-        <p className='text-center bg-gray-300 p-4 font-semibold italic text-xl'>Debit</p>
+        <p className='text-center bg-gray-300 p-4 font-semibold italic text-xl'>Débit</p>
 
         <div className="container-debit flex gap-2">
             

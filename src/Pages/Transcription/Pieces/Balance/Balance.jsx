@@ -99,7 +99,7 @@ export default function Balance() {
                         <div className="flex items-center gap-4">
                             <div className="file">
                                 <label className="file-label">
-                                    <input type="file" className="file-input file-input-balance" onChange={selectedFile} accept=".xls,.xlsx"/>
+                                    <input type="file" className="file-input file-input-balance" onChange={selectedFile} accept=".xls,.xlsx" required/>
                                     <span className="file-cta">
                                         <span className="file-icon">
                                             <i className="fas fa-upload"></i>
@@ -125,7 +125,7 @@ export default function Balance() {
                 <div className="field">
                     <div className="control">
                         <label htmlFor="" className="label">Type</label>
-                        <select name="" id="" className='w-full bg-white p-2 rounded-lg border border-gray-300' value={type} onChange={(e) => setType(e.target.value)}>
+                        <select name="" id="" className='w-full bg-white p-2 rounded-lg border border-gray-300' value={type} onChange={(e) => setType(e.target.value)} required>
                             <option value="" disabled>Choisissez le type de la balance</option>
                             <option value="BOD">BOD</option>
                             <option value="BOV">BOV</option>
@@ -137,7 +137,7 @@ export default function Balance() {
                 <div className="field">
                     <div className="control">
                         <label className="label">Proprietaire</label>
-                        <select className='w-full bg-white p-2 rounded-lg border border-gray-300' value={proprietaire} onChange={(e) => setProprietaire(e.target.value)}>
+                        <select className='w-full bg-white p-2 rounded-lg border border-gray-300' value={proprietaire} onChange={(e) => setProprietaire(e.target.value)} required>
                             <option value="" disabled>Choisissez le proprietaire</option>
                             <option value="ETAT">ETAT</option>
                             <option value="REGION">REGION</option>

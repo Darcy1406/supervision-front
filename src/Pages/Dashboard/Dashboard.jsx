@@ -127,7 +127,7 @@ export default function Dashboard() {
       fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'user_id': user[0]['id']}, setPosteComptables)
     }
       // Directeur
-    else if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase()){
+    else if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase() || user[0]['utilisateur__fonction'].toUpperCase() == 'autres'.toUpperCase()){
       fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_tous_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'],'user_id': user[0]['id']}, setPosteComptables)
     }
       // Chef d'unite

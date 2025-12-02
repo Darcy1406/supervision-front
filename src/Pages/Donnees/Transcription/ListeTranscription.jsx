@@ -28,6 +28,9 @@ export function ListeTranscription() {
 
     const [detail_titre, setDetailTitre] = useState("")
 
+    const [exercices, setExercices] = useState(null)
+
+    // Va contenir les infos sur les filtres (Poste comptable, .....)
     const recherche = useRef({
         'piece': '',
         'poste_comptable': '',
@@ -51,30 +54,7 @@ export function ListeTranscription() {
     const itemsPerPage = useRef(4);
 
 
-    // Fonction qui va recuperer des donnees depuis l'API
-    const get_data = (url, method, body={}, setResult) =>{
-        fetchData(url, method, body, setResult)
-    }
-
-
-    // Cette fonction va s'executer au moment ou l'auditeur selectionner change (Chef_unite/Auditeur)
-    
-
-
-    
-
-
-    // const get_pieces = () => {
-    //     sendData(`${API_URL}/data/piece/get_pieces`, 'get', {}, setListePieces)
-    // }
-
-
-    // const put_data_in_documents = (data) => {
-    //     setDocuments(data);
-    // }
-
-
-    // Filtrer les documents pour les recherches
+    // Filtrer les documents
     const search_execute = (item, value) => {
 
         recherche.current[item] = value;
@@ -118,6 +98,7 @@ export function ListeTranscription() {
     }
 
 
+    // Cette fonction va recuperer les transcriptions du document
     const checker_detail_transcription = (version, piece, nom_fichier, poste_comptable, date, exercice, mois, index) => {
 
         setTranscription(null);
@@ -167,17 +148,18 @@ export function ListeTranscription() {
                     <td>{item['poste_comptable__nom_poste']}</td>
                     <td>{item['nom_fichier'].split(", ")[0] + ", " + item['nom_fichier'].split(", ")[1]}</td>
                     <td>{item['date_arrivee']}</td>
-                    <td>{month_int_to_string(item['mois'])}</td>
+                    <td>{month_int_to_string(item['mois'].toString())}</td>
                     <td>{item['exercice']}</td>
                 </tr>
             </>
         )
     }
 
-    // Cette fonction va recupérer les documents liées a un auditeur (pour un auditeur), les documents liées a une zone (pour les chef d'unités) et tous les documents (pour le directeur)
+
+    // Cette fonction va recupérer les documents liées a un auditeur (pour un auditeur), les documents liées a une zone (pour les chef d'unités) et tous les documents (pour le directeur ou autres)
     const liste_documents = (setState) => {
 
-        if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase()){
+        if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase() || user[0]['utilisateur__fonction'].toUpperCase() == 'autres'.toUpperCase()){
             fetchData(
                 `${API_URL}/data/document/liste`, 
                 'post', 
@@ -215,10 +197,10 @@ export function ListeTranscription() {
     }
 
 
-    // Cette fonction va recuperer les postes comptables liées a un auditeur (pour un auditeur), les postes comptables liées a une zone (pour les chef d'unités) et tous les postes comptables (pour le directeur)
+    // Cette fonction va recuperer les postes comptables liées a un auditeur (pour un auditeur), les postes comptables liées a une zone (pour les chef d'unités) et tous les postes comptables (pour le directeur ou autres)
     const liste_poste_comptables = (setState) => {
 
-        if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase()){
+        if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase() || user[0]['utilisateur__fonction'].toUpperCase() == 'autres'.toUpperCase()){
             fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_tous_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'],'user_id': user[0]['id']}, setState)
         }
         else if(user[0]['utilisateur__fonction'].toUpperCase() == 'chef_unite'.toUpperCase()){
@@ -234,7 +216,7 @@ export function ListeTranscription() {
     // Cette fonction va recupérer les auditeurs d'une zone (pour les chefs d'unités) ou tous les auditeurs (pour le directeur)
     const liste_auditeurs = (setState) => {
 
-        if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase()){
+        if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase() || user[0]['utilisateur__fonction'].toUpperCase() == 'autres'.toUpperCase()){
             fetchData(`${API_URL}/users/get_auditeurs`, 'post', {'action': 'recuperer_auditeurs'}, setState)
         }
 
@@ -247,7 +229,7 @@ export function ListeTranscription() {
 
     // Cette fonction va recupérer toutes les zones existantes (pour l'utilisateur : Directeur)
     const liste_zones = () => {
-        if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase()){
+        if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase() || user[0]['utilisateur__fonction'].toUpperCase() == 'autres'.toUpperCase()){
             fetchData(`${API_URL}/users/zone/get`, 'get', {}, setZones);
         }
     }
@@ -301,8 +283,14 @@ export function ListeTranscription() {
     }
 
 
+    const obtenir_la_liste_des_exercices = () => {
+        fetchData(`${API_URL}/data/exercice/get`, 'get', {}, setExercices)
+    }
+
+
     useEffect(() => {
         fetchData(`${API_URL}/data/piece/get_pieces`, 'get', {}, setListePieces)
+        obtenir_la_liste_des_exercices()
     }, [])
 
 
@@ -349,7 +337,7 @@ export function ListeTranscription() {
                             <>
                                 <div className='flex gap-6 justify-center items-center'>
                                     {
-                                        user[0]['utilisateur__fonction'].toUpperCase() == 'Directeur'.toUpperCase() ?
+                                        user[0]['utilisateur__fonction'].toUpperCase() == 'Directeur'.toUpperCase() || user[0]['utilisateur__fonction'].toUpperCase() == 'Autres'.toUpperCase() ?
                                             <div className='w-1/2 flex items-center gap-4 container-zone'>
                                                 <label className="label">Zone: </label>
                                                 <select className='bg-white p-2 w-full rounded-lg border border-gray-300' value={zone_selected} onChange={(e) => { setZoneSelected(e.target.value) ; filtrer_les_auditeurs_et_les_postes_comptables_par_zone(e.target.value) } }>
@@ -445,8 +433,11 @@ export function ListeTranscription() {
                         <label className='label'>Exercice</label>
                         <select className='bg-white p-2 rounded-sm shadow-sm' value={recherche.current['exercice']} onChange={(e) => search_execute('exercice', e.target.value)}>
                             <option value="" disabled>Exercice</option>
-                            <option value="2025">2025</option>
-                            <option value="2026">2026</option>
+                            {
+                                exercices?.map((item, index) => (
+                                    <option key={index} value={item['annee']}>{item['annee']}</option>
+                                ))
+                            }
                         </select>
                     </div>
                     

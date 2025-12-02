@@ -34,7 +34,7 @@ export default function Data() {
 
   return (
     <section id="data">
-      <h1 className='title is-3 mb-0 text-center'>Gestion des données</h1>
+      <p className='text-lg font-semibold text-center'>Gestion des données</p>
 
       <div className='container-data-name py-2'>
 
@@ -45,7 +45,7 @@ export default function Data() {
           {
             user ?
               user[0]['utilisateur__fonction'].toUpperCase() != 'auditeur'.toUpperCase() ?
-                <option className='bg-gray-300' value="pieces" >Pièces</option>
+                <option className='' value="pieces" >Pièces</option>
               : null
             : null
           }
@@ -58,7 +58,7 @@ export default function Data() {
           {
             user ?
               user[0]['utilisateur__fonction'].toUpperCase() != 'auditeur'.toUpperCase() ?
-                <option className='bg-gray-300' value="liaison_compte_piece">Liaison compte - piece</option>
+                <option className='' value="liaison_compte_piece">Liaison compte - piece</option>
               : null
             : null
           }

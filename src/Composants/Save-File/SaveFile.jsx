@@ -19,6 +19,9 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
         "type_fichier": "",
     })
 
+    const [exercices, setExercices] = useState(null)
+
+
     const [postes_comptables, setPostesComptables] = useState(null); // Va stoker tous les postes comptables liees aux auditeurs
     const [periode, setPeriode] = useState("");
 
@@ -60,6 +63,11 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
     }
 
 
+    const obtenir_exercices = () => {
+        fetchData(`${API_URL}/data/exercice/get`, 'get', {}, setExercices)
+    }
+
+
     useEffect(() => {
         if(type_piece != ""){
 
@@ -79,6 +87,11 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
     }, [periode])
 
 
+    useEffect(() => {
+        obtenir_exercices()
+    }, [])
+
+
     // useEffect(() => {
     //     onRegisterResetFile(reset_file);
     // }, [onRegisterResetFile])
@@ -87,7 +100,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
   return (
     <div id='save-file'>
 
-      <p className='text-center text-xl font-semibold italic mb-2 mt-4'>Enregistrer un fichier</p>
+      <p className='text-center text-xl font-semibold italic mb-2 mt-4'>Enregistrer une pièce justificative</p>
 
       <form className='px-4' onSubmit={(e) => handleSubmit(e)}>
 
@@ -103,7 +116,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
         <div className="field">
             <div className="control">
                 <label className="label">Poste comptable</label>
-                <input list='poste_comptable' className='input' placeholder='Choisissez le poste comptable' value={file['poste_comptable']} onChange={(e) => handleChange('poste_comptable', e.target.value)}/>
+                <input list='poste_comptable' className='input' placeholder='Choisissez le poste comptable' value={file['poste_comptable']} onChange={(e) => handleChange('poste_comptable', e.target.value)} required/>
                 <datalist id='poste_comptable'>
                     {
                         postes_comptables && postes_comptables.map((item, index) => (
@@ -123,7 +136,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
             <div className="field flex-1">
                 <div className="control">
                     <label className="label">Période</label>
-                    <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['periode']} onChange={(e) => handleChange('periode', e.target.value)} required>
+                    <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['periode']} onChange={() => {} } required>
                         <option value="" disabled></option>
                         <option value="Journalière">Journalière</option>
                         <option value="Décadaire">Décadaire</option>
@@ -138,23 +151,27 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
                     <div className="field w-1/3">
                         <div className="control">
                             <label className="label">Exercice</label>
-                            <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['exercice']} onChange={(e) => handleChange('exercice', e.target.value)}>
+                            <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['exercice']} onChange={(e) => handleChange('exercice', e.target.value)} required={file['periode'] != 'Journalière'}>
                                 <option value="" disabled></option>
-                                <option value="2025">2025</option>
-                                <option value="2026">2026</option>
+                                {
+                                    exercices?.map((item, index) => (
+                                        <option key={index} value={item['annee']}>{item['annee']}</option>
+                                    ))
+                                }
                             </select>
                         </div>
                     </div>
                 )
             }
 
+            {/* Mois */}
             {
                 file['periode'] != 'Journalière' && (
 
                     <div className="field w-1/3">
                         <div className="control">
                             <label className="label">Mois</label>
-                            <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['mois']} onChange={(e) => handleChange('mois', e.target.value)}>
+                            <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['mois']} onChange={(e) => handleChange('mois', e.target.value)} required={file['periode'] != 'Journalière'}>
                                 <option value="" disabled></option>
                                 <option value="1">Janvier</option>
                                 <option value="2">Février</option>
@@ -183,7 +200,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
                 <div className="field">
                     <div className="control">
                         <label className="label">Décade</label>
-                        <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['decade']} onChange={(e) => handleChange('decade', e.target.value)}>
+                        <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['decade']} onChange={(e) => handleChange('decade', e.target.value)} required={file['periode'] == "Décadaire"}>
                             <option value="" disabled>Choisissez le décade du document</option>
                             <option value="1ère décade">1ère</option>
                             <option value="2ème décade">2ème</option>

@@ -100,7 +100,7 @@ export default function Credit({comptes, total, setTotal, setCredit, reset_all_m
 
   return (
     <div id='credit'>
-        <p className='text-center bg-gray-300 p-4 font-semibold italic text-xl'>Credit</p>
+        <p className='text-center bg-gray-300 p-4 font-semibold italic text-xl'>Crédit</p>
 
         <div className="container-credit flex gap-2">
 

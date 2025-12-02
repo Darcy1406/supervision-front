@@ -134,7 +134,7 @@ export default function Utilisateur() {
     }, [])
 
 
-    // Executer la fonction pour paginer les donnees au moment du rendu (dependances : poste_comptable, reload_data)
+    // Executer la fonction pour paginer les donnees au moment du rendu (dependances : users, reload_data)
     useEffect(() => {
         if(users.length > 0){
             paginateData(currentPage.current, itemsPerPage.current, users, setDataPaginate);
@@ -147,7 +147,7 @@ export default function Utilisateur() {
         if(result){
           if(result['succes']){
             setIsvisible(false)
-            liste_de_tous_les_utilisateurs()
+            liste_de_tous_les_utilisateurs(setUsers)
             liste_de_tous_les_utilisateurs(setDonneeAFiltrer)
           }
         }

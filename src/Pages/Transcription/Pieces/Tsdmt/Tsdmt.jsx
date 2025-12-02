@@ -281,8 +281,9 @@ export default function Tsdmt() {
       {
         result ?
             result['succes'] ?
-                <Alert message={result['succes']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300'/>
-            : null
+              <Alert message={result['succes']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300'/>
+            : 
+              <Alert message={result['error']} setMessage={setResult} icon='fas fa-exclamation-triangle' bgColor='bg-red-300' borderColor='border-red-400'/>
         : null
       }
 

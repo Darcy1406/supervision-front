@@ -23,7 +23,6 @@ export const useAuthentification = () => {
           return
         }
     
-        // const csrftoken = document.cookie.split("; ").find((row) => row.startsWith("csrftoken="))?.split("=")[1];
     
         const csrftoken = getCSRFToken();
     
@@ -50,27 +49,23 @@ export const useAuthentification = () => {
           return response.json();
         })
         .then(data => {
-          // console.log(data);
-          // const response = fetch(`${API_URL}/users/get_user`, {
-          //   method: 'GET',
-          //   credentials: "include",
-          // })
-          // .then(r => r.json()).then(data => console.log(data)).catch(error => console.log(error))
+          
     
           if(data.detail == 'Connecté'){
-            navigate('./main/dashboard')
+            if(data.identifiant.toLowerCase() == 'admin'){
+              navigate('/admin')
+            }
+            else{
+              navigate('/main/dashboard')
+            }
             setIsSubmitting(false);
           }
           else{
-            // alert('Mot de passe incorrecte')
             setResult(data['error']);
           setIsSubmitting(false);  
           }
         })
         .catch(error => {
-          // alert(error)
-          // alert('erreur');
-
           console.log('Erreur : ', error.toString());
         });
     }

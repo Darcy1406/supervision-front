@@ -199,6 +199,7 @@ export default function Bar() {
                 
                 <div className='w-2/6 p-2'>
 
+                    {/* Numero ordre */}
                     <div className="field">
                         <div className="control">
                             <label className="label">Numero d'ordre : </label>
@@ -206,6 +207,7 @@ export default function Bar() {
                         </div>
                     </div>
 
+                    {/* Date BAR */}
                     <div className="field">
                         <div className="control">
                             <label className="label">Date BAR : </label>
@@ -213,6 +215,7 @@ export default function Bar() {
                         </div>
                     </div>
                     
+                    {/* Reference */}
                     <div className="field">
                         <div className="control">
                             <label className="label">Reference BAR : </label>
@@ -220,7 +223,7 @@ export default function Bar() {
                         </div>
                     </div>
 
-
+                    {/* Date de reception */}
                     <div className="field">
                         <div className="control">
                             <label className="label">Date de reception : </label>
@@ -228,6 +231,7 @@ export default function Bar() {
                         </div>
                     </div>
 
+                    {/* Date de couverture */}
                     <div className="field">
                         <div className="control">
                             <label className="label">Date de couverture : </label>
@@ -365,7 +369,8 @@ export default function Bar() {
             result ?
                 result['succes'] ?
                     <Alert message={result['succes']} setMessage={setResult} icon='fas fa-check-circle' bgColor='bg-green-300' borderColor='border-green-400'/>
-                : null
+                : 
+                    <Alert message={result['error']} setMessage={setResult} icon='fas fa-exclamation-triangle' bgColor='bg-red-300' borderColor='border-red-400'/>
             : null
         } 
 

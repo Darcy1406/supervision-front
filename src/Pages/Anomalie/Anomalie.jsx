@@ -38,6 +38,29 @@ export default function Anomalie() {
 
     const [ligneActive, setLigneActive] = useState(null);
 
+    const [exercices, setExercices] = useState(null)
+
+    const liste_des_anomalies = (setState) => {
+        fetchData(`${API_URL}/data/anomalie/get`, 'get', {}, setState);
+        fetchData(`${API_URL}/data/anomalie/get`, 'get', {}, setState);
+    }
+
+
+    // Cette fonction va recuperer les postes comptables liées a un auditeur (pour un auditeur), les postes comptables liées a une zone (pour les chef d'unités) et tous les postes comptables (pour le directeur)
+    const liste_poste_comptables = () => {
+
+        if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase()){
+            fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_tous_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'],'user_id': user[0]['id']}, setPostesComptables)
+        }
+        else if(user[0]['utilisateur__fonction'].toUpperCase() == 'chef_unite'.toUpperCase()){
+            fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables_zone', 'zone': user[0]['utilisateur__zone__id']}, setPostesComptables)
+        }
+        else{
+            fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'user_id': user[0]['id']}, setPostesComptables)
+        }
+
+    }
+
 
     const recuperer_id_anomalie = (value, checked) => {
         if(checked){
@@ -154,15 +177,24 @@ export default function Anomalie() {
     }
 
 
+    // Cette fonction va recuperer les exercices disponibles
+    const obtenir_exercices = () => {
+        fetchData(`${API_URL}/data/exercice/get`, 'get', {}, setExercices)
+    }
+
+
     useEffect(() => {
         data_filter();
     }, [isNouveau, isEnCours, isResolu, exercice, poste_choisi, type_analyse])
 
 
     useEffect(() => {
-        fetchData(`${API_URL}/data/anomalie/get`, 'get', {}, setAnomalies);
-        fetchData(`${API_URL}/data/anomalie/get`, 'get', {}, setAnomaliesFiltered);
-        fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"user_id": user[0]['id'], 'action': 'afficher_les_postes_comptables'}, setPostesComptables)
+        
+        liste_des_anomalies(setAnomalies)
+        liste_des_anomalies(setAnomaliesFiltered)
+        liste_poste_comptables()
+        obtenir_exercices()
+        
     }, [])
 
 
@@ -281,9 +313,11 @@ export default function Anomalie() {
                     <div className='flex-1'>
                         <select name="" id="" className='bg-white w-full p-2 rounded-lg border border-gray-300' value={exercice} onChange={(e) => {setExercice(e.target.value)}}>
                             <option value="" disabled>------</option>
-                            <option value="2025">2025</option>
-                            <option value="2026">2026</option>
-                            <option value="2027">2027</option>
+                            {
+                                exercices?.map((item, index) => (
+                                    <option key={index} value={item['annee']}>{item['annee']}</option>
+                                ))
+                            }
                         </select>
                     </div>
                 </div>
@@ -383,7 +417,7 @@ export default function Anomalie() {
                                 ))
                             : 
                                 <tr className='text-center'>
-                                    <td colSpan={6}>Aucune donnée</td>    
+                                    <td colSpan={6}>Aucune anomalie</td>    
                                 </tr>
                         :   
                         <tr className='text-center'>
@@ -405,7 +439,7 @@ export default function Anomalie() {
             result ?
                 result['succes'] ?
                     <Alert message={result['succes']} setMessage={setResult} bgColor='bg-green-300' borderColor='border-green-400' />
-                : null
+                : <Alert message={result['error']} setMessage={setResult} icon='fas fa-times-circle' bgColor='bg-red-300' borderColor='border-red-400'/>
             : null
         }
 
