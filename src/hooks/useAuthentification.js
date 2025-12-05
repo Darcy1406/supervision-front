@@ -17,11 +17,11 @@ export const useAuthentification = () => {
           credentials: "include"  // pour recevoir le cookie
         });
     
-        if(!captchaToken){
-          setResult("Veuillez valider le reCAPTCHA");
-          setIsSubmitting(false)
-          return
-        }
+        // if(!captchaToken){
+        //   setResult("Veuillez valider le reCAPTCHA");
+        //   setIsSubmitting(false)
+        //   return
+        // }
     
     
         const csrftoken = getCSRFToken();

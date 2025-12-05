@@ -77,10 +77,10 @@ export default function Login() {
                   </select>
                 </div> */}
 
-                <ReCAPTCHA 
+                {/* <ReCAPTCHA 
                   sitekey='6LeVF8srAAAAALAiB0y2lXFh1y8facfBKsJU-Foq'
                   onChange={setCaptchaToken}
-                />
+                /> */}
 
                 {/* <NavLink to='/inscription' style={{ textDecoration: 'underline' }} className='block my-4 float-right'>S'inscrire</NavLink> */}
 
