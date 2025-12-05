@@ -42,12 +42,17 @@ export default function AuditLog() {
 
     // Interface JSX pour afficher tous les logs
     const LogsItem = ({item}) => {
+        const date = new Date(item.date_action);  // JS interprète correctement le fuseau
+        const date_formatted = date.toLocaleString("fr-FR", { hour12: false });
+
         return (
             <tr>
-                <td>{item['date_action']}</td>
-                <td className={` ${item['action'] == 'Suppression' ?'text-red-500' : item['action'] == 'Modification' ? 'text-green-500' : 'text-blue-500'} font-light text-lg`}>{item['action']}</td>
+                {/* <td>{item['date_action']}</td> */}
+                <td>{date_formatted}</td>
+                <td className={` ${item['action'].toLowerCase() == 'suppression' ?'text-red-500' : item['action'].toLowerCase() == 'modification' ? 'text-green-500' : 'text-blue-500'} font-light text-lg`}>{item['action']}</td>
                 {/* <td>{JSON.stringify(item['nouvelle_valeur'])}</td> */}
                 <td>{item['modele']}</td>
+                <td>{item['document_filename'] || ''}</td>
                 <td>{item['utilisateur']}</td>
                 <td>{item['adresse_ip']}</td>
             </tr>
@@ -126,6 +131,7 @@ export default function AuditLog() {
                         <th>Action</th>
                         {/* <th>Donnees</th> */}
                         <th>Modèle</th>
+                        <th>Document concerne</th>
                         <th>Utilisateur</th>
                         <th>Adresse</th>
                     </tr>
@@ -133,9 +139,28 @@ export default function AuditLog() {
 
                 <tbody>
                     {
-                        data_paginate && data_paginate.length > 0 && data_paginate.map((item, index) => (
-                            <LogsItem key={index} item={item}/>
-                        ))
+                        data_paginate ?
+
+                            data_paginate.length > 0 ?
+                                data_paginate.map((item, index) => (
+                                    <LogsItem key={index} item={item}/>
+                                ))
+
+                            : <tr>
+                                <td colSpan={6}>
+                                    <p className="text-center">
+                                        Aucune donnée à afficher
+                                    </p>
+                                </td>
+                            </tr>
+
+                        : <tr>
+                            <td colSpan={6}>
+                                <p className="text-center">
+                                    En attente des données
+                                </p>
+                            </td>
+                        </tr>
                     }
                 </tbody>
 

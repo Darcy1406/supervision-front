@@ -97,11 +97,30 @@ export default function Liste() {
                     </thead>
 
                     <tbody>
+
                         {
-                            data_paginate && data_paginate.map((item, index) => (
-                                <ListeItem key={index} item={item} />
-                            ))
+                            data_paginate ?
+
+                                data_paginate.length > 0 ?
+
+                                    data_paginate.map((item, index) => (
+                                        <ListeItem key={index} item={item} />
+                                    ))
+
+                                : <tr>
+                                    <td colSpan={6}>
+                                        <p className='text-center'>Aucune donnée à afficher</p>
+                                    </td>
+                                </tr>
+
+                            : <tr>
+                                <td colSpan={6}>
+                                    <p className='text-center'>En attente des données</p>
+                                </td>
+                            </tr>
+
                         }
+                        
                     </tbody>
                 </table>
 

@@ -12,6 +12,8 @@ export default function SoldeCaisse() {
     const [poste_choisi, setPosteChoisi] = useState("");
     const [proprietaire, setProprietaire] = useState("");
     const [mois, setMois] = useState("");
+
+    const [liste_exercices, setListeExercices] = useState(null)
     const [exercice, setExercice] = useState("");
 
     const [data, setData] = useState(null); // Va stocker les donnees a analyser
@@ -21,6 +23,11 @@ export default function SoldeCaisse() {
     const [anomalies, setAnomalies] = useState(null);
 
 
+    const obtenir_la_liste_des_exercices = () => {
+        fetchData(`${API_URL}/data/exercice/get`, 'get', {}, setListeExercices)
+    }
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
         fetchData(`${API_URL}/data/analyse/solde_caisse`, 'post', {'action': 'verfication_solde_caisse', 'poste_comptable': poste_choisi, 'proprietaire': proprietaire, 'exercice': exercice, 'mois': mois}, setData)
@@ -28,7 +35,11 @@ export default function SoldeCaisse() {
 
 
     useEffect(() => {
+
         fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['id'], "piece": 'BOD', 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
+
+        obtenir_la_liste_des_exercices()
+
     }, [])
 
 
@@ -99,16 +110,16 @@ export default function SoldeCaisse() {
             <form onSubmit={handleSubmit}>
 
                 
-                <div className='flex gap-6 my-2 px-6'>
+                <div className='flex justify-center items-center gap-6 my-2 px-6'>
                     
-                    <div className='w-2/6'>
+                    <div className='flex items-center gap-2'>
 
                         {/* Poste comptable */}
                         <div className=''>
                             <label className='label'>Poste comptable : </label>
                         </div>
 
-                        <div className=''>
+                        <div className='w-70'>
                             <input list='poste_comptable' className='input' placeholder='Choisissez un poste comptable' value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value)} required/>
                             <datalist id='poste_comptable'>
                                 {
@@ -122,7 +133,8 @@ export default function SoldeCaisse() {
                     </div>
 
                     {/* Proprietaire */}
-                    <div className='w-1/6'>
+                    <div className='flex items-center gap-2'>
+
                         <div className="">
                             <label className='label'>Proprietaire</label>
                         </div>
@@ -140,10 +152,12 @@ export default function SoldeCaisse() {
 
 
                     {/* Mois */}
-                    <div className='w-1/6'>
+                    <div className='flex items-center gap-2'>
+
                         <div className=''>
                             <label className='label'>Mois : </label>
                         </div>
+
                         <div className=''>
                             <select className='bg-white w-full p-2 border border-gray-300 rounded-sm' value={mois} onChange={(e) => setMois(e.target.value)} required>
                                 <option value="">-----</option>
@@ -161,10 +175,11 @@ export default function SoldeCaisse() {
                                 <option value="12">Décembre</option>
                             </select>
                         </div>
+
                     </div>
 
                     {/* Exercice */}
-                    <div className='w-1/6'>
+                    <div className='flex items-center gap-2'>
 
                         <div className=''>
                             <label className='label'>Exercice : </label>
@@ -173,15 +188,19 @@ export default function SoldeCaisse() {
                         <div className=''>
                             <select className='w-full bg-white p-2 rounded-sm border border-gray-300' value={exercice} onChange={(e) => setExercice(e.target.value)}>
                                 <option value="">------</option>
-                                <option value="2025">2025</option>
-                                <option value="2026">2026</option>
-                                <option value="2027">2027</option>
+
+                                {
+                                    liste_exercices && liste_exercices.map((item, index) => (
+                                        <option key={index} value={item['annee']}>{item['annee']}</option>
+                                    ))
+                                }
+                              
                             </select>
                         </div>
 
                     </div>
 
-                    <div className='flex-1 flex items-center justify-center gap-2'>
+                    <div className=''>
                         <div className="">
                             <button className="button is-dark">
                                 Lancer
@@ -239,7 +258,7 @@ export default function SoldeCaisse() {
                         <i className="fas fa-rocket"></i>
                     </span>
                     Veuillez lancer une analyse
-                    </p>
+                </p>
             </div>
         }
 

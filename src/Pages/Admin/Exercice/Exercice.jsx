@@ -1,13 +1,20 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { fetchData } from "../../../functions/fetchData"
 import { API_URL } from "../../../Config"
 import { Alert } from "../../../Composants/Alert/Alert"
+import Pagination from "../../../Composants/Pagination/Pagination"
+import { paginateData } from "../../../functions/Function"
 
 export default function Exercice() {
 
     const [exercices, setExercices] = useState(null)
+    const [data_paginate, setDataPaginate] = useState(null)
+    const [reload_data, setReloadData] = useState(false)
     const [annee, setAnnee] = useState("")
     const [result, setResult] = useState(null)
+
+    const currentPage = useRef(1)
+    const itemsPerPage = useRef(6)
 
     const obtenir_la_liste_des_exercices = () => {
         fetchData(`${API_URL}/data/exercice/get`, 'get', {}, setExercices)
@@ -33,6 +40,14 @@ export default function Exercice() {
     }, [])
 
 
+    // Executer la fonction pour paginer les donnees au moment du rendu (dependances : users, reload_data)
+    useEffect(() => {
+        if(exercices){
+            paginateData(currentPage.current, itemsPerPage.current, exercices, setDataPaginate);
+        }
+    }, [exercices, reload_data])
+
+
     useEffect(() => {
         if(result){
             if(result['succes']){
@@ -45,7 +60,10 @@ export default function Exercice() {
 
   return (
     <div id="exercice" className="p-4 w-3/4 mx-auto">
+
         <p className="p-4 bg-gray-300">Exercice</p>
+
+        <p className="my-2 italic text-lg">La liste des exercices disponibles pour les pièces comptables en entrées s'affichent ici</p>
 
         <div className="container-table w-1/3 mx-auto my-4">
 
@@ -74,13 +92,37 @@ export default function Exercice() {
 
                 <tbody>
                     {
-                        exercices && exercices.map((item, index) => (
-                            <ExerciceItem key={index} item={item}/>
-                        ))
+
+                        data_paginate ?
+
+                            data_paginate.length > 0 ?
+
+                                data_paginate.map((item, index) => (
+                                    <ExerciceItem key={index} item={item}/>
+                                ))
+
+                            : <tr>
+                                <td colSpan={2}>
+                                    <p className='text-center'>Aucune donnée à afficher</p>
+                                </td>
+                            </tr>
+
+                        : <tr>
+                            <td colSpan={2}>
+                            <p className='text-center'>En attente des données</p>
+                            </td>
+                        </tr>
+
                     }
                 </tbody>
 
             </table>
+
+            {
+                exercices?.length > itemsPerPage.current ?
+                <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={exercices} reload={reload_data} setReload={setReloadData} description='Page'/>
+                : null
+            }
 
         </div>
 

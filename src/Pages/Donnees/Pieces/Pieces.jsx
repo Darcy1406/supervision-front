@@ -136,7 +136,6 @@ export default function Pieces() {
                     <tr>
                         <th>Nom</th>
                         <th>Periode</th>
-                        {/* <th>Liste des postes comptables</th> */}
                         <th>Date de creation</th>
                         <th>Date de modification</th>
                         <th>Actions</th>
@@ -145,9 +144,27 @@ export default function Pieces() {
 
                 <tbody>
                     {
-                        data_paginate && data_paginate.map((item, index) => (
-                            <PieceItem item={item} key={index}/>
-                        ))
+                        
+                        data_paginate ?
+
+                            data_paginate.length > 0 ?
+
+                                data_paginate.map((item, index) => (
+                                    <PieceItem item={item} key={index}/>
+                                ))
+
+                            : <tr>
+                                <td colSpan={5}>
+                                    <p className='text-center'>Aucune donnée à afficher</p>
+                                </td>
+                            </tr>
+
+                        : <tr>
+                            <td colSpan={5}>
+                            <p className='text-center'>En attente des données</p>
+                            </td>
+                        </tr>
+
                     }
                 </tbody>
 

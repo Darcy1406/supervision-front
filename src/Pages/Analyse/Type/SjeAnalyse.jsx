@@ -55,13 +55,13 @@ export default function SjeAnalyse() {
 
             
 
-                <div className="container-filtre flex justify-center items-center gap-2 w-1/2">
+                <div className="container-filtre flex justify-center items-center gap-2">
 
                     <div className=''>
                         <label htmlFor="" className="label">Poste comptable : </label>
                     </div>
 
-                    <div className='flex-1 bg-'>
+                    <div className='w-70'>
                         <input list="poste_comptable" placeholder="Choisissez un poste comptable" className="bg-white p-2 border border-gray-300 rounded-lg w-full" value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value) } required/>
                         <datalist id="poste_comptable">
                             {

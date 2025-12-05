@@ -44,7 +44,7 @@ export const useAuthentification = () => {
         })
         .then(response => {
           if(!response.ok){
-            throw new Error('Error HTTP' + response.status)
+            throw new Error('Error HTTP' + res.status)
           }
           return response.json();
         })

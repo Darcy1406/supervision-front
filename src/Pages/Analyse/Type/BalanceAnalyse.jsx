@@ -13,6 +13,7 @@ export default function BalanceAnalyse() {
     const [piece, setPiece] = useState("");
     const [proprietaire, setProprietaire] = useState("");
     const [mois, setMois] = useState("");
+    const [liste_exercices, setListeExercices] = useState(null)
     const [exercice, setExercice] = useState("");
 
     const [data, setData] = useState(null);
@@ -34,10 +35,6 @@ export default function BalanceAnalyse() {
     ];
 
     // Transformer les données en objet pour un accès rapide
-    // const dataMap = {};
-    // data?.forEach(item => {
-    //     dataMap[item.nature] = item.total;
-    // });
     const dataMap = useMemo(() => {
         const map = {};
         data?.forEach(item => {
@@ -46,6 +43,10 @@ export default function BalanceAnalyse() {
         return map;
     }, [data]);
       
+
+    const obtenir_la_liste_des_exercices = () => {
+        fetchData(`${API_URL}/data/exercice/get`, 'get', {}, setListeExercices)
+    }
 
 
     const description_analyse = () => {
@@ -98,19 +99,28 @@ export default function BalanceAnalyse() {
     }
 
 
+    // Cette fonction va envoyer l'anomalie (si il y en a) vers l'API
     const envoyer_anomalie = () => {
         fetchData(`${API_URL}/data/anomalie/insert`, 'post', {'action': 'ajouter_anomalie', 'data': anomalies, 'type_analyse': 'equilibre_balance', 'poste_comptable': poste_choisi, 'exercice': exercice, 'mois': mois, 'proprietaire': proprietaire, 'piece': piece}, setResult)
     }
 
 
+    // Cette fonction va recuperer les donnees a analyser
     const handleSubmit = (e) => {
         e.preventDefault();
         setDescription("Aucune description pour l'instant");
         fetchData(`${API_URL}/data/analyse/equilibre_balance`, 'post', {'action': 'analyse_equilibre_balance', 'poste_comptable': poste_choisi, 'piece': piece, 'proprietaire': proprietaire , 'exercice': exercice, 'mois': mois}, setData)
     }
 
+
+    // Ce script va recuperer les postes comptables (specifiques au balance) liees a l'auditeur
     useEffect(() => {
+
         fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['id'], "piece": ['BOD', 'BOV'], 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
+
+        obtenir_la_liste_des_exercices()
+
+
     }, [])
 
 
@@ -135,14 +145,16 @@ export default function BalanceAnalyse() {
 
             <form onSubmit={handleSubmit}>
 
-                <div className='flex gap-6 my-2 px-6'>
+                <div className='flex items-center justify-center gap-6 my-2 px-6'>
 
                     {/* Poste comptable */}
-                    <div className='w-2/6 justify-center gap-2'>
-                        <div className='w-35'>
+                    <div className='flex items-center gap-2'>
+
+                        <div className=''>
                             <label className='label'>Poste comptable : </label>
                         </div>
-                        <div className='flex-1'>
+
+                        <div className='w-70'>
                             <input list='poste_comptable' className='input' placeholder='Choisissez un poste comptable' value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value)} required/>
                             <datalist id='poste_comptable'>
                                 {
@@ -156,13 +168,13 @@ export default function BalanceAnalyse() {
 
 
                     {/* Piece */}
-                    <div className='w-1/6 gap-2'>
+                    <div className='flex items-center gap-2'>
 
-                        <div className='w-14'>
+                        <div className=''>
                             <label className="label">Piece : </label>
                         </div>
 
-                        <div className='flex-1'>
+                        <div className=''>
                             <select value={piece} onChange={(e) => setPiece(e.target.value)} className='bg-white w-full p-2 rounded-sm border border-gray-300' required>
                                 <option value="">-----</option>
                                 <option value="BOD">BOD</option>
@@ -175,10 +187,12 @@ export default function BalanceAnalyse() {
                     </div>
 
                     {/* Proprietaire */}
-                    <div className="w-1/6">
+                    <div className="flex items-center gap-2">
+
                         <div>
                             <label className='label'>Propriétaire : </label>
                         </div>
+
                         <div>
                             <select className='w-full bg-white rounded-sm border border-gray-300 p-2' value={proprietaire} onChange={(e) => setProprietaire(e.target.value)} required>
                                 <option value="">------</option>
@@ -187,16 +201,17 @@ export default function BalanceAnalyse() {
                                 <option value="COMMUNE">COMMUNE</option>
                             </select>
                         </div>
+                        
                     </div>
 
                     {/* Mois */}
-                    <div className='w-1/6'>
+                    <div className='flex items-center gap-2'>
 
                         <div className=''>
                             <label className='label'>Mois : </label>
                         </div>
 
-                        <div className='flex-1'>
+                        <div className=''>
                             <select className='bg-white w-full p-2 border border-gray-300 rounded-sm' value={mois} onChange={(e) => setMois(e.target.value)} required>
                                 <option value="">-----</option>
                                 <option value="01">Janvier</option>
@@ -216,7 +231,7 @@ export default function BalanceAnalyse() {
                     </div>
 
                     {/* Exercice */}
-                    <div className='w-1/6'>
+                    <div className='flex items-center gap-2'>
 
                         <div className=''>
                             <label className='label'>Exercice : </label>
@@ -225,10 +240,15 @@ export default function BalanceAnalyse() {
                         <div className=''>
 
                             <select className='bg-white w-full p-2 rounded-sm shadow border border-gray-300' value={exercice} onChange={(e) => setExercice(e.target.value)}>
+
                                 <option value="">------</option>
-                                <option value="2025">2025</option>
-                                <option value="2026">2026</option>
-                                <option value="2027">2027</option>
+
+                                {
+                                    liste_exercices && liste_exercices.map((item, index) => (
+                                        <option key={index} value={item['annee']}>{item['annee']}</option>
+                                    ))
+                                }
+
                             </select>
  
                         </div>
@@ -236,7 +256,7 @@ export default function BalanceAnalyse() {
 
 
                     {/* Bouton */}
-                    <div className='flex-1 flex items-center justify-center gap-2'>
+                    <div className='flex items-center justify-center gap-2'>
 
                         <div className="">
                             <button className="button is-dark">
@@ -256,17 +276,7 @@ export default function BalanceAnalyse() {
         <div className="flex gap-4 items-center justify-center w-full h-120 py-4">
 
             <div className='w-1/3 h-full border-r border-gray-300 p-4'>
-                <textarea className={ description == "La balance est equilibrée" ? 'textarea has-text-succes' : description.includes("La balance n'est pas equilibrée") ? 'textarea has-text-danger' : 'textarea'} rows={10} value={description} onChange={() => {}}>
-                    {/* {description} */}
-                </textarea>
-
-                {/* {
-                    description.includes("La balance n'est pas equilibrée") ?
-                        <div className="my-4 h-20 w-full">
-                            <button className='bg-red-300 border border-red-400 py-2 px-4 cursor-pointer rounded-sm duration-200 ease-in-out hover:bg-red-400' onClick={envoyer_anomalie}>Considerée comme anomalie</button>
-                        </div>
-                    : null
-                } */}
+                <textarea className={ description == "La balance est equilibrée" ? 'textarea has-text-succes' : description.includes("La balance n'est pas equilibrée") ? 'textarea has-text-danger' : 'textarea'} rows={10} value={description} onChange={() => {}}></textarea>
 
             </div>
 

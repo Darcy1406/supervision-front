@@ -40,9 +40,37 @@ export default function Anomalie() {
 
     const [exercices, setExercices] = useState(null)
 
+
+    // Cette fonction va demander (requete) la listes des anomalies
     const liste_des_anomalies = (setState) => {
-        fetchData(`${API_URL}/data/anomalie/get`, 'get', {}, setState);
-        fetchData(`${API_URL}/data/anomalie/get`, 'get', {}, setState);
+
+        if(user[0]['utilisateur__fonction'].toUpperCase() == 'auditeur'.toUpperCase()){
+            
+            fetchData(
+                `${API_URL}/data/anomalie/liste`, 
+                'post', 
+                {
+                    'action': 'lister_les_anomalies_pour_un_auditeur',
+                    'utilisateur_id': user[0]['id']
+                }, 
+                setState
+            );
+
+        }
+        else if(user[0]['utilisateur__fonction'].toUpperCase() == 'chef_unite'.toUpperCase()){
+            fetchData(
+                `${API_URL}/data/anomalie/liste`, 
+                'post', 
+                {
+                    'action': 'lister_des_aomalies_pour_un_chef_unite',
+                    'zone': user[0]['utilisateur__zone__nom_zone']
+                },
+                setState
+            )
+        }
+        else{
+            fetchData(`${API_URL}/data/anomalie/liste`, 'get', {}, setState);
+        }
     }
 
 
@@ -62,6 +90,7 @@ export default function Anomalie() {
     }
 
 
+    // Cette fonction va gerer les checkbox pour la selection des anomalies
     const recuperer_id_anomalie = (value, checked) => {
         if(checked){
             const selected = [...selected_anomalie, value];
@@ -79,18 +108,21 @@ export default function Anomalie() {
     }
 
 
+    // Cette fonction va demander de changer par "En cours" le statut de(s) anomalie(s) selectionnee(s)
     const change_state_anomalie = () => {
         // console.log('anomalie', selected_anomalie);
         fetchData(`${API_URL}/data/anomalie/change_state`, 'post', {'action': 'changer_statut_anomalie_en_cours', 'anomalies': selected_anomalie}, setResult)
     }
 
 
+    // Cette fonction va demander (requete) d'enregistrer la correction d'une anomalie
     const resoudre_anomalie = (e) => {
         e.preventDefault();
         fetchData(`${API_URL}/data/correction/insert`, 'post', {'action': 'ajouter_correction', 'commentaire': commentaire, 'anomalie': selected_anomalie[0]}, setResult)
     }
 
 
+    // Cette fonction va demander (requete) de generer un rapport pdf d'une anomalie non resolue
     const exporter_rapport = () => {
         const csrftoken = getCSRFToken();
         fetch(`${API_URL}/data/anomalie/rapport`, {
@@ -125,7 +157,6 @@ export default function Anomalie() {
             alert("Impossible de télécharger le rapport");
         });
     };
-
 
 
     // Filter les donnees en fonction
@@ -167,11 +198,9 @@ export default function Anomalie() {
         }
     }
 
-
-    // Filter les anomalies en fonction du poste comptable, analyse, exercice
     
 
-
+    // Cette fonction va recuperer la correction d'une anomalie resolue selectionnee 
     const voir_resolution = (id) => {
         fetchData(`${API_URL}/data/correction/voir_detail`, 'post', {'action': 'voir_detail_resolution_anomalie', 'anomalie': id}, setResolution)
     }
@@ -182,12 +211,13 @@ export default function Anomalie() {
         fetchData(`${API_URL}/data/exercice/get`, 'get', {}, setExercices)
     }
 
-
+    // Le filtrage des anomalies vont se declencher automatiquement en fonction de ses dependances (isNouveau, isEnCours, isResolu, exercice, poste_choisi, type_analyse)
     useEffect(() => {
         data_filter();
     }, [isNouveau, isEnCours, isResolu, exercice, poste_choisi, type_analyse])
 
 
+    // Charger au tout debut les donnees utiles
     useEffect(() => {
         
         liste_des_anomalies(setAnomalies)
@@ -198,6 +228,7 @@ export default function Anomalie() {
     }, [])
 
 
+    // Interface JSX pour afficher les anomalies
     const AnomalieItem = ({item}) => {
         const selected = selected_anomalie.includes(item['id'].toString())
         const estActive = ligneActive === item.id;
@@ -235,6 +266,7 @@ export default function Anomalie() {
     }
 
 
+    // Ce bloc va s'executer si depuis l'API on retourne un message (succes)
     useEffect(() => {
         if(result){
             if(result['succes']){
@@ -248,6 +280,7 @@ export default function Anomalie() {
     }, [result])
 
 
+    // Titre de la page
     useEffect(() => {
     
         const original_title = document.title;
@@ -262,19 +295,20 @@ export default function Anomalie() {
 
   return (
     <div id='anomalie'>
+
         <p className='p-4 bg-gray-300 text-lg'>Liste des anomalies</p>
         <div className="container-table">
 
             {/* Filtre */}
             <div className="recherche flex justify-center items-center my-2 py-2 px-4 gap-4">
 
-                <div className='flex gap-2 items-center w-1/3'>
+                <div className='flex gap-2 items-center '>
 
-                    <div className='w-35'>
+                    <div className=''>
                         <label htmlFor="" className="label">Poste comptable : </label>
                     </div>
 
-                    <div className="flex-1">
+                    <div className="w-70">
                         <input list='poste_comptable' className=' w-1/2 input' placeholder='Choisissez un poste comptable' value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value) }/>
                         <datalist id='poste_comptable'>
                             {
@@ -284,15 +318,16 @@ export default function Anomalie() {
                             }
                         </datalist>
                     </div>
+
                 </div>
 
-                <div className='flex gap-2 w-1/3 items-center'>
+                <div className='flex gap-2 items-center'>
 
-                    <div className='w-35'>
+                    <div className=''>
                         <label htmlFor="" className="label">Type d'anomalie : </label>
                     </div>
 
-                    <div className='flex-1'>
+                    <div className=''>
                         <select name="" id="" className='bg-white w-full p-2 border border-gray-300 rounded-lg' value={type_analyse} onChange={ (e) => setTypeAnalyse(e.target.value) }>
                             <option value="" disabled>------</option>
                             <option value="report_sje">Report SJE</option>
@@ -304,13 +339,13 @@ export default function Anomalie() {
 
                 </div>
 
-                <div className='flex w-1/3 gap-2 items-center'>
+                <div className='flex gap-2 items-center'>
 
-                    <div className='w-20'>
+                    <div className=''>
                         <label htmlFor="" className="label">Exercice : </label>
                     </div>
                     
-                    <div className='flex-1'>
+                    <div className=''>
                         <select name="" id="" className='bg-white w-full p-2 rounded-lg border border-gray-300' value={exercice} onChange={(e) => {setExercice(e.target.value)}}>
                             <option value="" disabled>------</option>
                             {
@@ -363,7 +398,7 @@ export default function Anomalie() {
                                 <span className='mx-1 icon text-red-500 cursor-pointer duration-150 ease-in-out hover:text-red-600' onClick={() => { setResolution(null); setLigneActive(null) } }>
                                     <i className='fas fa-times-circle'></i>
                                 </span>
-                                Resoltion de l'anomalie
+                                Resoltion de l'anomalie : {resolution[0].created_at}
                             </legend>
 
                             <p>
@@ -409,21 +444,28 @@ export default function Anomalie() {
                 </thead>
 
                 <tbody>
+
                     {
+
                         anomalies ? 
+
                             anomalies.length > 0 ?
+
                                 anomalies.map((item, index) => (
                                     <AnomalieItem item={item} key={index}/>
                                 ))
+
                             : 
                                 <tr className='text-center'>
-                                    <td colSpan={6}>Aucune anomalie</td>    
+                                    <td colSpan={6}>Aucune donnée à afficher</td>    
                                 </tr>
+
                         :   
                         <tr className='text-center'>
                             <td colSpan={6}>En attente des données</td>    
                         </tr>
                     }
+
                 </tbody>
 
             </table>

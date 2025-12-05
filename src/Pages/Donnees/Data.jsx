@@ -50,8 +50,13 @@ export default function Data() {
             : null
           }
 
+          {
+            user && user[0]['utilisateur__fonction'].toUpperCase() != 'auditeur'.toUpperCase() ?
 
-          <option value="comptes">Comptes</option>
+              <option value="comptes">Comptes</option>
+
+            : null
+          }
 
           <option value="">Transcription</option>
 
@@ -69,16 +74,9 @@ export default function Data() {
       </div>
 
       <div className='w-full h-136'>
-        {/* {
-          view_data == 'Pièces' ?
-            <Pieces />
-          : view_data == 'Comptes' ? 
-            <Comptes />
-          : view_data == 'Transcription' ?
-            <ListeTranscription />
-          : <Liste />
-        } */}
+      
         <Outlet />
+
       </div>
 
     </section>

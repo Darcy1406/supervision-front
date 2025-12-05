@@ -47,7 +47,6 @@ export default function Comptes() {
 
 
   const compte_regroupements = "";
-  const loading = ""
 
 
   // Filtrer l'affichage des comptes
@@ -236,14 +235,27 @@ export default function Comptes() {
 
           <tbody>
             {
-              loading ?
-                <tr>
-                  <td className='text-center' colSpan={5}>Aucun donnee trouvee</td>
+              
+              data_paginate ?
+
+                data_paginate.length > 0 ?
+
+                  data_paginate.map((item, index) => (
+                    <CompteItem item={item} key={index}/>
+                  ))
+
+                : <tr>
+                  <td colSpan={6}>
+                    <p className='text-center'>Aucune donnée à afficher</p>
+                  </td>
                 </tr>
-              :
-              data_paginate && data_paginate.map((item, index) => (
-                  <CompteItem item={item} key={index}/>
-                ))
+
+              : <tr>
+                <td colSpan={6}>
+                  <p className='text-center'>En attente des données</p>
+                </td>
+              </tr>
+
             }
           </tbody>
 

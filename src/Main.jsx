@@ -109,9 +109,7 @@ export default function Main() {
               </div>
 
               <div className='container-body py-2 px-4'>
-                  {/* <Outlet context={{ handleReceiveFromDashboard }} /> */}
                   <Outlet />
-                  {/* <Alert /> */}
               </div>
             </div>
 

@@ -18,9 +18,15 @@ export const paginateData = (currentPage, itemsPerPage, data, setItem) => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  const currentItems = data.slice(startIndex, endIndex)
+  if(data.length > 0){
+    const currentItems = data?.slice(startIndex, endIndex)
+    setItem(currentItems);
+  }
+  else{
+    setItem(data);
+  }
 
-  setItem(currentItems);
+
 
 }
 

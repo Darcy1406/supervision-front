@@ -183,7 +183,7 @@ export default function Utilisateur() {
 
                     <thead>
                         <tr>
-                        <th>Nom</th>
+                            <th>Nom</th>
                             <th>Prénom</th>
                             <th>Email</th>
                             <th>Fonction</th>
@@ -195,9 +195,29 @@ export default function Utilisateur() {
 
                     <tbody>
                         {
-                            data_paginate && data_paginate.map((item, index) => (
-                                <UserItem key={index} item={item}/>
-                            ))
+                            data_paginate ? 
+
+                                data_paginate.length > 0 ?
+
+                                    data_paginate.map((item, index) => (
+                                        <UserItem key={index} item={item}/>
+                                    ))
+
+                                : <tr>
+                                    <td colSpan={7}>
+                                        <p className="text-center">
+                                            Aucune donnée à afficher
+                                        </p>
+                                    </td>
+                                </tr>
+
+                            : <tr>
+                                <td colSpan={7}>
+                                    <p className='text-center'>
+                                        En attente des données
+                                    </p>
+                                </td>
+                            </tr>
                         }
                     </tbody>
 

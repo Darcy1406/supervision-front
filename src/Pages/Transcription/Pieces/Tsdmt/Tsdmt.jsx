@@ -244,12 +244,11 @@ export default function Tsdmt() {
 
                   <div className='dropdown-menu' id='dropdown-menu' role='menu'>
                     <div className="dropdown-content is-block">
+                      
                       <button className='dropdown-item' onClick={() => setIsvisible(true)}>
                         Locale
                       </button>
-                      <button className='dropdown-item'>
-                        G.E.D
-                      </button>
+                    
                     </div>
                   </div>
 

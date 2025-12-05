@@ -14,6 +14,8 @@ export default function SoldeAnormale() {
     const [piece, setPiece] = useState("");
     const [proprietaire, setProprietaire] = useState("");
     const [mois, setMois] = useState("");
+
+    const [liste_exercices, setListeExercices] = useState(null)
     const [exercice, setExercice] = useState("");
 
     const [data, setData] = useState(null);
@@ -21,6 +23,11 @@ export default function SoldeAnormale() {
     const [anomalies_description, setAnomaliesDescription] = useState(null)
 
     const [result, setResult] = useState(null); // Va stocker un message en cas d'anomalie detectee et inseree
+
+    const obtenir_la_liste_des_exercices = () => {
+        fetchData(`${API_URL}/data/exercice/get`, 'get', {}, setListeExercices)
+    }
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -103,7 +110,11 @@ export default function SoldeAnormale() {
 
 
     useEffect(() => {
+
         fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['id'], "piece": ['BOD', 'BOV'], 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
+
+        obtenir_la_liste_des_exercices()
+
     }, [])
 
 
@@ -127,16 +138,16 @@ export default function SoldeAnormale() {
 
             <form onSubmit={handleSubmit}>
 
-                <div className='flex gap-6 my-2 px-6'>
+                <div className='flex items-center justify-center gap-6 my-2 px-6'>
 
                     {/* Poste comptable */}
-                    <div className='w-3/6 gap-2'>
+                    <div className='flex items-center gap-2'>
 
                         <div className=''>
                             <label className='label'>Poste comptable : </label>
                         </div>
 
-                        <div className=''>
+                        <div className='w-70'>
                             <input list='poste_comptable' className='input' placeholder='Choisissez un poste comptable' value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value)} required/>
                             <datalist id='poste_comptable'>
                                 {
@@ -150,13 +161,13 @@ export default function SoldeAnormale() {
                     </div>
 
                     {/* Piece */}
-                    <div className='w-1/6 justify-center gap-2'>
+                    <div className='flex items-center gap-2'>
 
                         <div className=''>
                             <label className="label">Piece : </label>
                         </div>
 
-                        <div className='flex-1'>
+                        <div className=''>
                             <select value={piece} onChange={(e) => setPiece(e.target.value)} className='bg-white w-full p-2 rounded-sm border border-gray-300' required>
                                 <option value="">-----</option>
                                 <option value="BOD">BOD</option>
@@ -167,9 +178,10 @@ export default function SoldeAnormale() {
                     </div>
 
                     {/* Proprietaire */}
-                    <div className="w-1/6">
+                    <div className="flex items-center gap-2">
+
                         <div className="">
-                            <label className="label">Proprietaire</label>
+                            <label className="label">Proprietaire : </label>
                         </div>
 
                         <div>
@@ -184,7 +196,7 @@ export default function SoldeAnormale() {
                     </div>
 
 
-                    <div className='w-1/6'>
+                    <div className='flex items-center gap-2'>
 
                         <div className=''>
                             <label className='label'>Mois : </label>
@@ -211,7 +223,7 @@ export default function SoldeAnormale() {
                     </div>
 
 
-                    <div className='w-1/6'>
+                    <div className='flex items-center gap-2'>
 
                         <div className=''>
                             <label className='label'>Exercice : </label>
@@ -221,16 +233,20 @@ export default function SoldeAnormale() {
 
                             <select className='w-full bg-white p-2 rounded-sm border border-gray-300' value={exercice} onChange={(e) => setExercice(e.target.value)}>
                                 <option value="">------</option>
-                                <option value="2025">2025</option>
-                                <option value="2026">2026</option>
-                                <option value="2027">2027</option>
+
+                                {
+                                    liste_exercices && liste_exercices.map((item , index) => (
+                                        <option key={index} value={item['annee']}>{item['annee']}</option>
+                                    ))
+                                }
+
                             </select>
 
                         </div>
 
                     </div>
 
-                    <div className='flex-1 flex items-center justify-center gap-2'>
+                    <div className=''>
                         <div className="">
                             <button className="button is-dark">
                                 Lancer
@@ -267,13 +283,23 @@ export default function SoldeAnormale() {
                     : 
                         null
 
-                : <div className='w-full mx-auto border-2 border-yellow-300 p-6 rounded-xl my-6'>
-                    <p className='text-center text-lg font-semibold'>Aucune donnée à analyser</p>
+                : <div className='w-6/7 mx-auto border-2 border-yellow-300 p-6 rounded-xl my-6'>
+                    <p className='text-center text-lg font-semibold'>
+                        <span className='mx-2 text-3xl'>
+                            <i className="fas fa-database"></i>
+                        </span>
+                        Aucune donnée à analyser
+                    </p>
                 </div>
 
             : 
-                <div className='w-full mx-auto border-2 border-gray-300 p-6 rounded-xl my-6'>
-                    <p className='text-center text-lg font-semibold'>Veuillez lancer une analyse</p>
+                <div className='w-6/7  mx-auto border-2 border-gray-300 p-6 rounded-xl my-6'>
+                    <p className='text-center text-lg font-semibold'>
+                        <span className='mx-2 text-3xl'>
+                            <i className="fas fa-rocket"></i>
+                        </span>
+                        Veuillez lancer une analyse
+                    </p>
                 </div>
 
         }

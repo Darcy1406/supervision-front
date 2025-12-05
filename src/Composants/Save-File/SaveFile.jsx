@@ -173,15 +173,15 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
                             <label className="label">Mois</label>
                             <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['mois']} onChange={(e) => handleChange('mois', e.target.value)} required={file['periode'] != 'Journalière'}>
                                 <option value="" disabled></option>
-                                <option value="1">Janvier</option>
-                                <option value="2">Février</option>
-                                <option value="3">Mars</option>
-                                <option value="4">Avril</option>
-                                <option value="5">Mai</option>
-                                <option value="6">Juin</option>
-                                <option value="7">Juillet</option>
-                                <option value="8">Aout</option>
-                                <option value="9">Septembre</option>
+                                <option value="01">Janvier</option>
+                                <option value="02">Février</option>
+                                <option value="03">Mars</option>
+                                <option value="04">Avril</option>
+                                <option value="05">Mai</option>
+                                <option value="06">Juin</option>
+                                <option value="07">Juillet</option>
+                                <option value="08">Aout</option>
+                                <option value="09">Septembre</option>
                                 <option value="10">Octobre</option>
                                 <option value="11">Novembre</option>
                                 <option value="12">Décembre</option>

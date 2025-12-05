@@ -171,7 +171,6 @@ export default function PosteComptable() {
               <tr>
                 <th>Code</th>
                 <th>Nom</th>
-                {/* <th>Lieu</th> */}
                 <th>Poste</th>
                 <th>Responsable</th>
                 <th>Actions</th>
@@ -180,9 +179,23 @@ export default function PosteComptable() {
 
             <tbody>
               {
-                data_paginate && data_paginate.map((item, index) => (
-                  <PosteComptableItem key={index} item={item}/>
-                ))
+                data_paginate ?
+                  data_paginate.length > 0 ?
+                    data_paginate.map((item, index) => (
+                      <PosteComptableItem key={index} item={item}/>
+                    ))
+
+                  : <tr>
+                    <td colSpan={5}>
+                      <p className='text-center'>Aucune donnée à afficher</p>
+                    </td>
+                  </tr>
+
+                : <tr>
+                  <td colSpan={5}>
+                    <p className='text-center'>En attente des données</p>
+                  </td>
+                </tr>
               }
             </tbody>
 

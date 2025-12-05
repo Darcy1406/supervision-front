@@ -459,9 +459,30 @@ export function ListeTranscription() {
 
                     <tbody>
                         {
-                            documents_paginate && documents_paginate.map((item, index) => (
-                                <ListeItem key={index} index={index} item={item}/>
-                            ))
+
+                            documents_paginate ?
+
+                                documents_paginate.length > 0 ?
+
+                                    documents_paginate.map((item, index) => (
+                                        <ListeItem key={index} index={index} item={item}/>
+                                    ))
+                                
+                                : <tr>
+                                    <td colSpan={6}>
+                                        <p className="text-center">
+                                            Aucune donnée à afficher
+                                        </p>
+                                    </td>
+                                </tr>
+
+                            : <tr>
+                                <td colSpan={6}>
+                                    <p className="text-center">
+                                        En attente des données
+                                    </p>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
