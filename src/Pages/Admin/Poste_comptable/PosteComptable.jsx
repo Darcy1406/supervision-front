@@ -151,12 +151,12 @@ export default function PosteComptable() {
   return (
 
     <>
-      <div id='poste_comptable' className=''>
+      <div id='poste_comptable' className='h-full'>
 
         <NavLink to='/admin/poste_comptable/form' className='button is-dark mx-6 my-4'>Ajouter un poste Comptable</NavLink>
 
 
-        <div className="container-table px-6 my-2">
+        <div className="container-table my-2 relative" style={{height: 'calc(100% - 105px)'}}>
 
           <p className='text-xl bg-gray-300 p-4 rounded-sm my-2'>Liste des comptables</p>
         

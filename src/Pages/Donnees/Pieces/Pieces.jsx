@@ -86,6 +86,9 @@ export default function Pieces() {
                         </button>
 
                         <button className='button is-danger is-small' onClick={() => confirmation_suppresion(item['pk'])}>
+                            <span className='icon mx-1'>
+                                <i className='fas fa-trash'></i>
+                            </span>
                             Supprimer
                         </button>
 
@@ -116,7 +119,7 @@ export default function Pieces() {
 
 
   return (
-    <div id='piece'>
+    <div id='piece' className='h-full'>
 
         <button className='bg-black px-4 py-2 text-white cursor-pointer rounded-lg mx-4 my-2' onClick={() => setIsvisible(true)}>
             <span className='icon'>
@@ -125,12 +128,13 @@ export default function Pieces() {
             Ajouter une piece
         </button>
 
-        <div className='container-table-pieces w-4/5 mx-auto my-2'>
+
+        <div className='container-table-pieces my-2 relative' style={{height: 'calc(100% - 80px)'}}>
 
             
             <p className='text-2xl font-semibold bg-gray-100 py-4 px-6'>Liste des pieces comptables</p>
 
-            <table className='table table-view is-fullwidth'>
+            <table className='table table-view is-fullwidth' style={{background: 'none'}}>
                 <thead>
 
                     <tr>

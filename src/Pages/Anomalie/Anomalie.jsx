@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { fetchData } from '../../functions/fetchData';
 import { API_URL } from '../../Config';
 import { useUserStore } from '../../store/useUserStore';
@@ -6,16 +6,20 @@ import { Alert } from '../../Composants/Alert/Alert';
 import Resolution from './Resolution';
 import Modal from '../../Composants/Modal/Modal';
 import { getCSRFToken } from '../../utils/csrf';
+import { paginateData } from '../../functions/Function';
+import Pagination from '../../Composants/Pagination/Pagination';
 
 export default function Anomalie() {
     const user = useUserStore((state) => state.user);
 
-    const [anomalies, setAnomalies] = useState(null);
-    const [anomalies_filtered, setAnomaliesFiltered] = useState(null);
+    const [anomalies, setAnomalies] = useState(null)
+    const [anomalies_filtered, setAnomaliesFiltered] = useState(null)
+    const [data_paginate, setDataPaginate] = useState(null)
+    const [reload_data, setReloadData] = useState(false)
 
-    const [selected_anomalie, setSelectedAnomalie] = useState([]); 
+    const [selected_anomalie, setSelectedAnomalie] = useState([]) 
 
-    const [postes_comptables, setPostesComptables] = useState(null);
+    const [postes_comptables, setPostesComptables] = useState(null)
 
     // Status
     const [isNouveau, setIsNouveau] = useState(true);
@@ -39,6 +43,9 @@ export default function Anomalie() {
     const [ligneActive, setLigneActive] = useState(null);
 
     const [exercices, setExercices] = useState(null)
+
+    const currentPage = useRef(1);
+    const itemsPerPage = useRef(4);
 
 
     // Cette fonction va demander (requete) la listes des anomalies
@@ -78,13 +85,13 @@ export default function Anomalie() {
     const liste_poste_comptables = () => {
 
         if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase()){
-            fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_tous_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'],'user_id': user[0]['id']}, setPostesComptables)
+            fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_tous_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'],'user_id': user[0]['utilisateur_id']}, setPostesComptables)
         }
         else if(user[0]['utilisateur__fonction'].toUpperCase() == 'chef_unite'.toUpperCase()){
             fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables_zone', 'zone': user[0]['utilisateur__zone__id']}, setPostesComptables)
         }
         else{
-            fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'user_id': user[0]['id']}, setPostesComptables)
+            fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'user_id': user[0]['utilisateur_id']}, setPostesComptables)
         }
 
     }
@@ -290,14 +297,22 @@ export default function Anomalie() {
           document.title = original_title
         }
     
-      }, [])
+    }, [])
+
+
+    useEffect(() => {
+        if(anomalies){
+            paginateData(currentPage.current, itemsPerPage.current, anomalies, setDataPaginate);
+        }
+    }, [anomalies, reload_data])
 
 
   return (
-    <div id='anomalie'>
+    <div id='anomalie' className='h-full px-4'>
 
-        <p className='p-4 bg-gray-300 text-lg'>Liste des anomalies</p>
-        <div className="container-table">
+        <p className='p-4 bg-gray-300 text-lg rounded-lg'>Liste des anomalies</p>
+
+        <div className="container-table border-2 border-b-4 border-gray-300 px-2 relative my-4 bg-white rounded-lg shadow-sm p-1" style={{height: 'calc(100% - 95px)'}}>
 
             {/* Filtre */}
             <div className="recherche flex justify-center items-center my-2 py-2 px-4 gap-4">
@@ -469,6 +484,13 @@ export default function Anomalie() {
                 </tbody>
 
             </table>
+
+            {
+                anomalies?.length > 0 ?
+                    <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={anomalies} reload={reload_data} setReload={setReloadData} description='Page'/>
+                : null
+            }
+
         </div>
 
 

@@ -68,10 +68,11 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
     }
 
 
+    // Charger le poste comptable qui peuvent rendre la piece, rattachee a l'auditeur et la periode de la piece
     useEffect(() => {
         if(type_piece != ""){
 
-            fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['id'], "piece": type_piece.toUpperCase(), 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
+            fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['utilisateur_id'], "piece": type_piece.toUpperCase(), 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
             handleChange('piece', type_piece)
 
             obtenir_periode_piece();
@@ -91,10 +92,6 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
         obtenir_exercices()
     }, [])
 
-
-    // useEffect(() => {
-    //     onRegisterResetFile(reset_file);
-    // }, [onRegisterResetFile])
 
 
   return (

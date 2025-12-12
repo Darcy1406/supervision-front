@@ -160,7 +160,7 @@ export default function Balance() {
                         <BtnChoice setIsvisible={setIsVisible} isDisabled={type == ""}/>
                 }
 
-                <button className='bg-green-400 text-white py-2 rounded-sm w-full my-4' style={{fontSize: '20px'}}>
+                <button className='button is-dark w-full my-6' style={{fontSize: '20px'}} disabled={!doc || proprietaire == '' || type == '' || !fichier}>
                     {
                         isSubmitting ?
                             <Loading />

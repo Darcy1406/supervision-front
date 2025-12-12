@@ -33,12 +33,12 @@ export default function Data() {
 
 
   return (
-    <section id="data">
+    <section id="data" className='px-6'>
       <p className='text-lg font-semibold text-center'>Gestion des données</p>
 
-      <div className='container-data-name py-2'>
+      <div className='container-data-name my-1 border-b border-gray-300 py-2'>
 
-        <select value={view_data} onChange={(e) => { setViewData(e.target.value); navigate(`/main/data/${e.target.value}`) } } name="" id="" className='bg-white px-4 py-2 ml-2 cursor-pointer shadow-lg rounded-sm border border-gray-300'>
+        <select value={view_data} onChange={(e) => { setViewData(e.target.value); navigate(`/main/data/${e.target.value}`) } } name="" id="" className='bg-white px-4 py-2 cursor-pointer shadow-lg rounded-sm border border-gray-300'>
 
           <option value="description" disabled>Choisissez les donnees que vous voulez traitez</option>
 

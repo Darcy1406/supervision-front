@@ -1,6 +1,15 @@
 #bloc-pagination{
-    position: fixed;
-    left: 50%;
+    /* background-color: violet; */
+    position: absolute;
+    width: 100%;
+    /* right: 10px; */
+    /* left: 50%; */
     bottom: 5px;
-    transform: translateX(-50%);
+    /* transform: translateX(-50%); */
 }
+
+#bloc-pagination .container-pagination{
+    position: relative;
+    right: 10;
+}
+

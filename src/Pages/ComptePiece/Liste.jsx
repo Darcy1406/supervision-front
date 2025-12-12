@@ -20,7 +20,7 @@ export default function Liste() {
     const [liste, setListe] = useState(null);
 
     const currentPage = useRef(1);
-    const itemsPerPage = useRef(6);
+    const itemsPerPage = useRef(5);
 
 
     const modifier = (id, piece, num_compte, nature) => {
@@ -71,19 +71,22 @@ export default function Liste() {
 
 
   return (
-    <section id='liste'>
-        <div className='container-liste w-5/6 mx-auto mt-5'>
+
+    <section id='liste' className='h-full'>
+
 
             <button className='bg-orange-400 px-6 py-2 rounded-sm cursor-pointer text-white durtion-200 ease-in-out hover:bg-orange-500 my-2' onClick={() => navigate('/main/data/ajouter_liaison_compte_piece')}>
                 Créer une liaison
             </button>
 
-            <div className='container-title'>
-                <p className='px-2 py-4 bg-gray-300 text-lg my-2 rounded-xs'>Liste des liaisons entre pièces et comptes</p>
-            </div>
 
-            <div className="container-table table-view h-95 relative">
-                <table className='table w-full'>
+            <div className="container-table table-view relative" style={{height: 'calc(100% - 75px)'}}>
+            
+                <div className='container-title my-2'>
+                    <p className='px-2 py-4 bg-gray-300 text-lg rounded-xs'>Liste des liaisons entre pièces et comptes</p>
+                </div>
+
+                <table className='table w-full' style={{background: 'none'}}>
 
                     <thead>
                         <tr>
@@ -125,10 +128,9 @@ export default function Liste() {
                 </table>
 
                 <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={liste} reload={reload_data} setReload={setReloadData} description='Page'/>
+
             </div>
 
-
-        </div>
     </section>
   )
 }

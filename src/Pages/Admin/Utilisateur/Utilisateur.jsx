@@ -166,11 +166,11 @@ export default function Utilisateur() {
 
   return (
     <>
-        <div id='utilisateur_liste'>
+        <div id='utilisateur_liste' className='h-full'>
 
             <button className='button is-dark mx-6 my-4' onClick={() => navigate('/admin/utilisateur/form')}>Ajouter un utilisateur</button>
 
-            <div className="container-table px-6">
+            <div className="container-table relative" style={{height: 'calc(100% - 105px)'}}>
 
                 <p className='text-xl bg-gray-300 p-4 rounded-sm my-2'>Liste des utilisateurs du système</p>
 
@@ -179,7 +179,7 @@ export default function Utilisateur() {
                     <input type="text" className="input" placeholder="Entrer le nom ou le prenom de l'utilisateur" onChange={(e) => rechercher_utilisateur(e.target.value)} />
                 </div>
 
-                <table className="table table-view is-fullwidth">
+                <table className="table table-view is-fullwidth" style={{background: 'none'}}>
 
                     <thead>
                         <tr>

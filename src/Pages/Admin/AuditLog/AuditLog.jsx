@@ -99,11 +99,14 @@ export default function AuditLog() {
 
       // Interface du composant
     return (
-    <div className="audit_log">
+
+    <div className="audit_log h-full p-1">
+
         <h1 className='title is-3 mx-6 mt-4'>Traçabilité des actions</h1>
+
         <p className='subtitle is-6 mx-6'>Les actions effectuées sur ce système vont s'afficher ici</p>
 
-        <div className="container-table px-6">
+        <div className="container-table relative" style={{height: 'calc(100% - 125px)'}}>
 
             <div className="container-recherche flex gap-4 items-center my-2">
                 <div>
@@ -165,13 +168,15 @@ export default function AuditLog() {
                 </tbody>
 
             </table>
+
+            {
+                logs?.length > itemsPerPage.current ?
+                <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={logs} reload={reload_data} setReload={setReloadData} description='Page'/>
+                : null
+            }
+
         </div>
 
-        {
-            logs?.length > itemsPerPage.current ?
-              <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={logs} reload={reload_data} setReload={setReloadData} description='Page'/>
-            : null
-          }
 
     </div>
   )

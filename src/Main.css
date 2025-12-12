@@ -1,9 +1,13 @@
 #main{
     position: relative;
+    /* background-color: violet; */
     width: 100vw;
+    height: 100vh;
 }
 
 #main .container-main{
+    /* background-color: red; */
+    height: 100%;
     position: relative;
 }
 
@@ -16,22 +20,32 @@
     transition: all 0.5s ease-in-out;
 }
 
+
 #main .container-main .container-notification.show{
     width: 255px;
     /* width: 0; */
 }
 
+
 #main .container-main .bloc-main{
     position: absolute;
+    /* background-color: blue; */
     right: 0;
     width: 100vw;
+    height: 100%;
     /* width: calc(100vw - 255px); */
     transition: all 0.5s ease-in-out;
 }
 
+
 #main .container-main .bloc-main.minimize{
     width: calc(100vw - 255px);
     /* width: 100vw; */
+}
+
+
+#main .container-main .bloc-main .container-body{
+    height: calc(100% - 45px);
 }
 
 

@@ -33,10 +33,10 @@ export default function SoldeCaisse() {
         fetchData(`${API_URL}/data/analyse/solde_caisse`, 'post', {'action': 'verfication_solde_caisse', 'poste_comptable': poste_choisi, 'proprietaire': proprietaire, 'exercice': exercice, 'mois': mois}, setData)
     }
 
-
+    // Charger les poste comptables et les exercices
     useEffect(() => {
 
-        fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['id'], "piece": 'BOD', 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
+        fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['utilisateur_id'], "piece": 'BOD', 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
 
         obtenir_la_liste_des_exercices()
 

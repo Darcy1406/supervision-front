@@ -113,10 +113,10 @@ export default function BalanceAnalyse() {
     }
 
 
-    // Ce script va recuperer les postes comptables (specifiques au balance) liees a l'auditeur
+    // Charger les postes comptables et les exercices
     useEffect(() => {
 
-        fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['id'], "piece": ['BOD', 'BOV'], 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
+        fetchData(`${API_URL}/users/poste_comptable/get`, 'POST', {"utilisateur_id": user[0]['utilisateur_id'], "piece": ['BOD', 'BOV'], 'action': 'afficher_les_postes_comptables_specifique_a_une_piece'}, setPostesComptables)
 
         obtenir_la_liste_des_exercices()
 

@@ -22,10 +22,12 @@ export default function MainAdmin() {
 
   return (
     <section id='main-admin'>
+
         <NavAdmin />
+      
         <SidebarAdmin />
 
-        <div className='bloc-body-admin h-screen'>
+        <div className='bloc-body-admin h-screen px-6'>
             <Outlet />
         </div>
 

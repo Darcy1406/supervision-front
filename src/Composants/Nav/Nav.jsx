@@ -30,8 +30,11 @@ export default function Nav() {
     
         <div id='container-navigation' ref={ref_container_navigation}>
 
+            {/* Navigation */}
             <nav className='navigation' ref={ref_navigation}>
                 <ul>
+
+                        {/* Tableau de bord */}
                         <NavLink to='/main/dashboard' onClick={show_or_close_navigation}>
                             <li>
                                 <div className={location.pathname == '/main/dashboard' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
@@ -43,9 +46,10 @@ export default function Nav() {
                             </li>
                         </NavLink>
 
+                        {/* Consultation des donnees */}
                         <NavLink to='/main/data' onClick={show_or_close_navigation}>
                             <li>
-                                <div className={location.pathname == '/main/data' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
+                                <div className={location.pathname.includes('/main/data') ? 'bloc-item-nav current' : 'bloc-item-nav'}>
                                     <span className='icon'>
                                         <i className="fas fa-database"></i>
                                     </span>
@@ -54,6 +58,7 @@ export default function Nav() {
                             </li>
                         </NavLink>
 
+                        {/* Afficher les menus : Transcription et analyse quand  un auditeur est connecté*/}
                         {
                             user ?
                                 user[0]['utilisateur__fonction'].toUpperCase() == 'auditeur'.toUpperCase() ?
@@ -71,7 +76,7 @@ export default function Nav() {
 
                                     <NavLink to='/main/analysis' onClick={show_or_close_navigation} className='current'>
                                     <li>
-                                        <div className={location.pathname == '/main/analysis' ? 'bloc-item-nav current' : 'bloc-item-nav'}>
+                                        <div className={location.pathname.includes('/main/analysis') ? 'bloc-item-nav current' : 'bloc-item-nav'}>
                                             <span className='icon'>
                                                 <i className="fas fa-chart-pie"></i>
                                             </span>
@@ -88,7 +93,7 @@ export default function Nav() {
                         
 
 
-                    
+                    {/* Anomalie */}
                     <NavLink to='/main/anomalie' onClick={show_or_close_navigation} className='current'>
                         <li>
                             <div className={ location.pathname == '/main/anomalie' ?'bloc-item-nav current' : 'bloc-item-nav'}>
@@ -102,21 +107,14 @@ export default function Nav() {
                     </NavLink>
 
 
-                    {/* <li>
-                        <div className='bloc-item-nav'>
-                            <span className='icon'>
-                                <i className='fas fa-trash-alt'></i>
-                            </span>
-                            <p>Supprimer</p>
-                        </div>
-                    </li> */}
+                    
                 </ul>
             </nav>
 
             <div className='container-btn-toggle-navigation'>
                 <div className="flex gap-6">
                     <div className='w-7/6 px-4'>
-                        <p className='text-lg text-center font-light italic'>Plateforme d'analyse automatisée et ciblé des comptes</p>
+                        <p className='text-lg text-center font-light'>Plateforme d'analyse automatisée et ciblé des comptes</p>
                     </div>
                     <div>
                         <span className='icon'>

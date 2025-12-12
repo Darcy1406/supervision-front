@@ -113,13 +113,13 @@ export function ListeTranscription() {
         }
 
         else if(piece.toUpperCase() == 'BAR'){
-            const decade = nom_fichier.split(", ")[1];
-            texte += `${piece}, ${month_int_to_string(mois)} - ${decade} ${poste_comptable}; ${nom_fichier.split(', ')[2]}`
+            const info_supplementaire = nom_fichier.split(", ")[1];
+            texte += `${piece}, ${month_int_to_string(mois)} - ${info_supplementaire} ${poste_comptable}; ${nom_fichier.split(', ')[2]}`
         }
 
         else if(piece.toUpperCase() != 'SJE'){
-            const decade = nom_fichier.split(", ")[1];
-            texte += `${piece}, ${month_int_to_string(mois)} - ${decade} ${poste_comptable}`
+            const info_supplementaire = nom_fichier.split(", ")[1];
+            texte += `${piece} - ${info_supplementaire} - ${month_int_to_string(mois)} - ${poste_comptable}`
         }
 
 
@@ -201,13 +201,13 @@ export function ListeTranscription() {
     const liste_poste_comptables = (setState) => {
 
         if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase() || user[0]['utilisateur__fonction'].toUpperCase() == 'autres'.toUpperCase()){
-            fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_tous_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'],'user_id': user[0]['id']}, setState)
+            fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_tous_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'],'user_id': user[0]['utilisateur_id']}, setState)
         }
         else if(user[0]['utilisateur__fonction'].toUpperCase() == 'chef_unite'.toUpperCase()){
             fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables_zone', 'zone': user[0]['utilisateur__zone__id']}, setState)
         }
         else{
-            fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'user_id': user[0]['id']}, setState)
+            fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'user_id': user[0]['utilisateur_id']}, setState)
         }
 
     }
@@ -321,61 +321,65 @@ export function ListeTranscription() {
 
 
   return (
-    <section id='liste-transcription'>
-        <p className='text-lg p-4 bg-gray-300'>Liste des transcriptions</p>
+    <section id='liste-transcription' className='h-full'>
+
+        <p className='mx-auto text-lg p-4 bg-gray-300 rounded-lg'>Liste des transcriptions</p>
         
-        <div className='w-full h-full flex justify-center gap-2'>
+        <div className='w-full flex justify-center gap-2' style={{height: 'calc(100% - 95px)'}}>
             
 
-            <div className='w-full relative h-115'>
-
+            <div className="container-table w-full h-full relative p-1 my-4 mx-auto rounded-lg bg-white shadow-sm border-2 border-b-4 border-gray-300" >
 
                 {/* Liste des auditeurs (afficher si l'utilisateur connecte n'est pas un auditeur) */}
-                {
-                    user ?
-                        user[0]['utilisateur__fonction'].toUpperCase() != 'Auditeur'.toUpperCase() ?
-                            <>
-                                <div className='flex gap-6 justify-center items-center'>
-                                    {
-                                        user[0]['utilisateur__fonction'].toUpperCase() == 'Directeur'.toUpperCase() || user[0]['utilisateur__fonction'].toUpperCase() == 'Autres'.toUpperCase() ?
-                                            <div className='w-1/2 flex items-center gap-4 container-zone'>
-                                                <label className="label">Zone: </label>
-                                                <select className='bg-white p-2 w-full rounded-lg border border-gray-300' value={zone_selected} onChange={(e) => { setZoneSelected(e.target.value) ; filtrer_les_auditeurs_et_les_postes_comptables_par_zone(e.target.value) } }>
-                                                    <option value="" disabled>Choisissez une zone</option>
-                                                    {
-                                                        zones && zones.map((item, index) => (
-                                                            <option key={index} value={item['id']}>{item['nom_zone']}</option>
-                                                        ))
-                                                    }
-                                                </select>
-                                            </div>
-                                        : null
-                                    }
+            {
+                user ?
+                    user[0]['utilisateur__fonction'].toUpperCase() != 'Auditeur'.toUpperCase() ?
+                        <>
+                            <div className='flex gap-6 justify-center items-center'>
+
+                                {
+                                    user[0]['utilisateur__fonction'].toUpperCase() == 'Directeur'.toUpperCase() || user[0]['utilisateur__fonction'].toUpperCase() == 'Autres'.toUpperCase() ?
+
+                                        <div className='flex items-center gap-4 container-zone'>
+                                            <label className="label">Zone: </label>
+                                            <select className='bg-white p-2 w-full rounded-lg border border-gray-300' value={zone_selected} onChange={(e) => { setZoneSelected(e.target.value) ; filtrer_les_auditeurs_et_les_postes_comptables_par_zone(e.target.value) } }>
+                                                <option value="" disabled>Choisissez une zone</option>
+                                                {
+                                                    zones && zones.map((item, index) => (
+                                                        <option key={index} value={item['id']}>{item['nom_zone']}</option>
+                                                    ))
+                                                }
+                                            </select>
+                                        </div>
+                                    : null
+                                }
 
 
-                                    <div className='flex-1 p-4 flex items-center gap-4'>
-                                        <label className="label">Auditeur: </label>
-                                        <input list="auditeurs" className='bg-white p-2 rounded-lg border border-gray-300 w-full' placeholder='Votre auditeur ?' onChange={(e) => recuperer_les_postes_comptables_liees_a_un_auditeur(e.target.value)}/>
-                                        <datalist id='auditeurs'>
-                                            {
-                                                auditeurs && auditeurs.map((auditeur, index) => (
-                                                    <option key={index} value={auditeur['id'] + " " + auditeur['nom'] + " " + auditeur['prenom']} />
-                                                ))
-                                            }
-                                        </datalist>
-                                    </div>
+                                <div className='p-4 flex items-center gap-4'>
 
+                                    <label className="label">Auditeur: </label>
+
+                                    <input list="auditeurs" className='bg-white p-2 rounded-lg border border-gray-300 w-110' placeholder='Votre auditeur ?' onChange={(e) => recuperer_les_postes_comptables_liees_a_un_auditeur(e.target.value)}/>
+                                    <datalist id='auditeurs'>
+                                        {
+                                            auditeurs && auditeurs.map((auditeur, index) => (
+                                                <option key={index} value={auditeur['id'] + " " + auditeur['nom'] + " " + auditeur['prenom']} />
+                                            ))
+                                        }
+                                    </datalist>
                                 </div>
-                            </>
-                        : null
+
+                            </div>
+                        </>
                     : null
-                }
+                : null
+            }
 
                 {/* Recherche */}
                 <div className='my-2 container-recherche flex items-center justify-center gap-6'>
 
                     <div>
-                        <p className='italic text-lg  font-semibold underline'>Rechercher : </p>
+                        <p className='text-lg font-light underline'>Filtrer les donneés : </p>
                     </div>
 
                     <div>
@@ -398,7 +402,7 @@ export function ListeTranscription() {
                             <option value="" disabled>Poste comptable</option>
                             {
                                 poste_comptables && poste_comptables.map((item, index) => (
-                                       <option key={index} value={item['nom_poste']} />
+                                    <option key={index} value={item['nom_poste']} />
                                 ))
                             }
                         </datalist>
@@ -426,7 +430,7 @@ export function ListeTranscription() {
                             <option value="09">Septembre</option>
                             <option value="10">Octobre</option>
                             <option value="11">Novembre</option>
-                            <option value="11">Décembre</option>
+                            <option value="12">Décembre</option>
                         </select>
                     </div>
                     <div>
@@ -445,7 +449,7 @@ export function ListeTranscription() {
 
                 </div>
 
-                <table className='table table-view is-fullwidth'>
+                <table className='table table-view is-fullwidth' style={{background: 'none'}}>
                     <thead>
                         <tr>
                             <th>Pièce</th>
@@ -488,15 +492,16 @@ export function ListeTranscription() {
                 </table>
 
                 {
-                    documents?.length > itemsPerPage.current ?
+                    documents?.length > 0 ?
                         <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={documents} reload={reload_data} setReload={setReloadData} description='Page'/>
                     : null
                 }
 
-
             </div>
 
-            <Modal isVisible={isVisible} setIsvisible={setIsvisible} width_children='w-2/3'>
+
+
+            <Modal isVisible={isVisible} setIsvisible={setIsvisible} width_children='w-3/4'>
                 <TabView data={transcription} titre={detail_titre} piece={piece}/>
             </Modal>
 

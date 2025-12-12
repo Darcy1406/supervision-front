@@ -108,6 +108,7 @@ export default function Dashboard() {
   
   // Donnees generales
   const data_generale = () => {
+
     fetchData(`${API_URL}/data/document/count`, 'post', {'action': 'compter_nombre_documents_generale'}, setNbDoc)
 
     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombre_anomalies_generale'}, setNbAnomalie)
@@ -117,6 +118,7 @@ export default function Dashboard() {
     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombre_anomalies_par_mois'}, setDataAnomalies)
 
     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombres_anomalies_resolues_par_mois'}, setDataAnomalieResolues)
+  
   }
 
 
@@ -124,11 +126,11 @@ export default function Dashboard() {
   const liste_poste_comptables = () => {
       // auditeur
     if( user[0]['utilisateur__fonction'].toUpperCase() == 'auditeur'.toUpperCase() ){
-      fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'user_id': user[0]['id']}, setPosteComptables)
+      fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_les_postes_comptables', 'user_id': user[0]['utilisateur_id']}, setPosteComptables)
     }
       // Directeur
     else if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase() || user[0]['utilisateur__fonction'].toUpperCase() == 'autres'.toUpperCase()){
-      fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_tous_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'],'user_id': user[0]['id']}, setPosteComptables)
+      fetchData(`${API_URL}/users/poste_comptable/all`, 'post', {'action': 'afficher_tous_les_postes_comptables', 'fonction': user[0]['utilisateur__fonction'],'user_id': user[0]['utilisateur_id']}, setPosteComptables)
     }
       // Chef d'unite
     else{
@@ -177,21 +179,22 @@ export default function Dashboard() {
       <div className='w-full flex items-center justify-center gap-2'>
 
         {/* Count */}
+
         <div className='container-count w-1/6 h-full flex flex-wrap justify-center items-center gap-6'>
 
-          <div className='bg-white h-35 w-5/6 rounded-xl shadow-lg'>
+          <div className='bg-white h-35 w-5/6 rounded-xl shadow-lg border border-blue-400'>
 
-            <p className='font-bold text-xl text-center mt-4'>Document(s)</p>
+            <p className='font-bold text-xl text-center mt-4 '>Document(s)</p>
             <p className='text-center is-size-1 font-thin text-blue-400'>{ nb_doc['total_doc'] ? nb_doc['total_doc'] : 0 }</p>
             
           </div>
           
-          <div className='bg-white h-35 w-5/6 rounded-xl shadow-lg'>
+          <div className='bg-white h-35 w-5/6 rounded-xl shadow-lg border border-yellow-400'>
             <p className='font-bold text-xl text-center mt-4'>Anomalie(s)</p>
-            <p className='text-center is-size-1 font-thin text-red-400'>{ nb_anomalie['total_anomalies'] ? nb_anomalie['total_anomalies'] : 0 }</p>
+            <p className='text-center is-size-1 font-thin text-yellow-400'>{ nb_anomalie['total_anomalies'] ? nb_anomalie['total_anomalies'] : 0 }</p>
           </div>
 
-          <div className='bg-white h-35 w-5/6 rounded-xl shadow-lg'>
+          <div className='bg-white h-35 w-5/6 rounded-xl shadow-lg border border-green-400'>
             <p className='font-bold text-xl text-center mt-4'>Correction(s)</p>
             <p className='text-center is-size-1 font-thin text-green-400'>{ nb_corrige['total_anomalies_resolu'] ? nb_corrige['total_anomalies_resolu'] : 0 }</p>
           </div>

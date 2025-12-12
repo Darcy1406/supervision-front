@@ -71,11 +71,12 @@ export default function Main() {
       user ?
         <section id='main' className='bg-gray-50'>
 
-          <div className='container-main bg-gray-50'>
+          <div className='container-main'>
 
 
+            {/* Agenda */}
             <div 
-              className='container-notification border-r border-gray-400 w-1/7 h-full bg-gray-50'
+              className='container-notification border-r border-gray-400 w-1/7 h-full'
               ref={container_notification}
 
             >
@@ -95,11 +96,14 @@ export default function Main() {
              
             </div>
 
-            <div className="bloc-main bg-gray-50" ref={bloc_main}>
+            {/* Conteneur Main */}
+            <div className="bloc-main" ref={bloc_main}>
 
+              {/* Nav */}
               <Nav />
 
 
+              {/* Bouton pour afficher ou pas l'agenda */}
               <div className='px-2 py-2 cursor-pointer container-btn-toggle-notification'>
 
                 <span className='icon text-2xl' onClick={toggle_notification}>
@@ -108,9 +112,11 @@ export default function Main() {
 
               </div>
 
+              {/* Corps du main */}
               <div className='container-body py-2 px-4'>
                   <Outlet />
               </div>
+
             </div>
 
 

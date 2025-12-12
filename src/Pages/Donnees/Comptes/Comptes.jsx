@@ -183,7 +183,7 @@ export default function Comptes() {
 
 
   return (
-    <div id='compte'>
+    <div id='compte' className='h-full'>
 
       <button className='mx-6 mt-2 bg-black px-4 py-2 text-white cursor-pointer rounded-lg ' onClick={() => setIsVisible(true)}>
             <span className='icon'>
@@ -192,19 +192,24 @@ export default function Comptes() {
               Ajouter un compte
       </button>
 
-      <div className="container-table px-2 w-full mx-auto my-2">
+      <div className="container-table px-2 w-full mx-auto my-2 relative" style={{height: 'calc(100% - 75px)'}}>
 
         <p className='text-2xl font-semibold bg-gray-100 p-4'>Liste des comptes</p>
 
+        {/* Filtre (recherche) */}
         <div className='container-recherche flex justify-center items-center gap-4 w-1/3 my-2'>
+
           <div>
             <label className='label'>Rechercher : </label>
           </div>
+
           <div className='flex-1'>
             <input type="text" className="input" placeholder='Entrer le numero du compte' onChange={(e) => rechercher_compte(e.target.value)} />
           </div>
+
         </div>
 
+        {/* Filtrer par type du compte */}
         <div className='my-2'>
           
           <div className='container-show-item w-4/6 is-pulled-right'>

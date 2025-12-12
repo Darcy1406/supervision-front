@@ -28,14 +28,18 @@ export default function Analyse({salutation}) {
   return (
     <div id='analyse' className='w-full h-full'>
 
-      <label className='mx-2'>Type d'analyse : </label>
-      
-      <select name="" id="" value={url_children} className='bg-white p-2 rounded-sm border border-gray-300' onChange={(e) => { setUrlChildren(e.target.value); navigate(`/main/analysis/${e.target.value}`) } }>
-        <option value="">Report SJE</option>
-        <option value="equilibre_balance">Equilibre balance</option>
-        <option value="solde_caisse">Verification Solde caisse</option>
-        <option value="solde_anormale">Verification Solde anormale</option>
-      </select>
+      <div className='container_type_analyse border-b border-gray-300 py-2 w-8/9 mx-auto'>
+
+        <label className='mx-2'>Type d'analyse : </label>
+        
+        <select name="" id="" value={url_children} className='bg-white p-2 rounded-sm border border-gray-300' onChange={(e) => { setUrlChildren(e.target.value); navigate(`/main/analysis/${e.target.value}`) } }>
+          <option value="">Report SJE</option>
+          <option value="equilibre_balance">Equilibre balance</option>
+          <option value="solde_caisse">Verification Solde caisse</option>
+          <option value="solde_anormale">Verification Solde anormale</option>
+        </select>
+
+      </div>
 
       <div className='container-type-analyse w-full'>
         <Outlet />
