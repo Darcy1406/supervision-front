@@ -8,7 +8,7 @@ import { BarChart } from '../../Composants/Graphique/BarChart'
 import { LineChart } from '../../Composants/Graphique/LineChart';
 import { DoughnutChart } from '../../Composants/Graphique/DoughnutChart';
 import { useUserStore } from '../../store/useUserStore';
-import { getRandomColor } from '../../functions/Function';
+import { formatNombreAvecEspaces, getRandomColor } from '../../functions/Function';
 import { useOutletContext } from "react-router-dom";
 import { Alert } from '../../Composants/Alert/Alert';
 import { useAuthentification } from '../../hooks/useAuthentification';
@@ -33,6 +33,7 @@ export default function Dashboard() {
   const [nb_doc, setNbDoc] = useState(0);
   const [nb_anomalie, setNbAnomalie] = useState(0);
   const [nb_corrige, setNbCorrige] = useState(0);
+  const [nb_transcription, setNbTranscription] = useState(0);
 
   const [data_anomalies, setDataAnomalies] = useState(null);
   const [data_anomalie_resolues, setDataAnomalieResolues] = useState(null);
@@ -84,6 +85,8 @@ export default function Dashboard() {
 
       fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombres_anomalies_resolu_par_poste_comptables', 'poste_comptable': poste_choisi}, setNbCorrige)
 
+      fetchData(`${API_URL}/data/transcription/count`, 'post', {'action': 'compter_nombre_total_transcription_par_poste_comptable', 'poste_comptable': poste_choisi}, setNbTranscription)
+
       fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombre_anomalies_par_mois_par_comptable', 'poste_comptable': poste_choisi}, setDataAnomalies)
 
       fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombres_anomalies_resolues_par_mois_par_poste_comptable', 'poste_comptable': poste_choisi}, setDataAnomalieResolues)
@@ -114,6 +117,8 @@ export default function Dashboard() {
     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombre_anomalies_generale'}, setNbAnomalie)
 
     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombre_anomalies_resolu'}, setNbCorrige)
+
+    fetchData(`${API_URL}/data/transcription/count`, 'post', {'action': 'compter_nombre_total_transcription'}, setNbTranscription)
 
     fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombre_anomalies_par_mois'}, setDataAnomalies)
 
@@ -178,38 +183,50 @@ export default function Dashboard() {
 
       <div className='w-full flex items-center justify-center gap-2'>
 
-        {/* Count */}
+        {/* Count - Item 1 */}
+        <div className='container-count w-1/7 h-full flex flex-wrap justify-center items-center gap-4'>
 
-        <div className='container-count w-1/6 h-full flex flex-wrap justify-center items-center gap-6'>
-
-          <div className='bg-white h-35 w-5/6 rounded-xl shadow-lg border border-blue-400'>
+          {/* Document */}
+          <div className='bg-white h-35 w-full rounded-sm shadow-sm border border-blue-400'>
 
             <p className='font-bold text-xl text-center mt-4 '>Document(s)</p>
-            <p className='text-center is-size-1 font-thin text-blue-400'>{ nb_doc['total_doc'] ? nb_doc['total_doc'] : 0 }</p>
+            <p className='text-center text-4xl/20 font-thin text-blue-400'>{ nb_doc['total_doc'] ? formatNombreAvecEspaces(nb_doc['total_doc']) : 0 }</p>
             
           </div>
+
+          {/* Transcription */}
+          <div className='bg-white h-35 w-full rounded-sm shadow-sm border border-pink-400'>
+            <p className='font-bold text-xl text-center mt-4'>Transcription(s)</p>
+            <p className='text-center text-4xl/20 font-thin text-pink-400'>{ nb_transcription['total_transcription'] ? formatNombreAvecEspaces(nb_transcription['total_transcription']) : 0 }</p>
+          </div>
           
-          <div className='bg-white h-35 w-5/6 rounded-xl shadow-lg border border-yellow-400'>
+          {/* Anomalie */}
+          <div className='bg-white h-35 w-full rounded-sm shadow-sm border border-yellow-400'>
             <p className='font-bold text-xl text-center mt-4'>Anomalie(s)</p>
-            <p className='text-center is-size-1 font-thin text-yellow-400'>{ nb_anomalie['total_anomalies'] ? nb_anomalie['total_anomalies'] : 0 }</p>
+            <p className='text-center text-4xl/20 font-thin text-yellow-400'>{ nb_anomalie['total_anomalies'] ? formatNombreAvecEspaces(nb_anomalie['total_anomalies']) : 0 }</p>
           </div>
 
-          <div className='bg-white h-35 w-5/6 rounded-xl shadow-lg border border-green-400'>
+          {/* Correction */}
+          <div className='bg-white h-35 w-full rounded-sm shadow-sm border border-green-400'>
             <p className='font-bold text-xl text-center mt-4'>Correction(s)</p>
-            <p className='text-center is-size-1 font-thin text-green-400'>{ nb_corrige['total_anomalies_resolu'] ? nb_corrige['total_anomalies_resolu'] : 0 }</p>
-          </div>
+            <p className='text-center text-4xl/20 font-thin text-green-400'>{ nb_corrige['total_anomalies_resolu'] ? formatNombreAvecEspaces(nb_corrige['total_anomalies_resolu']) : 0 }</p>
+          </div>  
+
         </div>
 
-        <div className='container-chart w-3/6 h-full flex justify-center flex-wrap gap-1'>
+
+        {/* Item - 2 */}
+        <div className='container-chart w-4/7 h-full flex flex-col justify-center flex-wrap gap-1 p-1'>
 
           {/* Filtrer le tableau de bord par poste comptable */}
           <div className='flex items-center gap-4 p-2'>
+
             <div>
               <label className='label'>Poste comptable : </label>
-
             </div>
 
             <div>
+
               <input list='poste_comptable' className='input' placeholder='Poste comptable' value={poste_choisi} onChange={(e) => {setPosteChoisi(e.target.value)} }/>
               <datalist id='poste_comptable'>
                 {
@@ -218,18 +235,21 @@ export default function Dashboard() {
                   ))
                 }
               </datalist>
+
             </div>
 
             <div>
-                <button className='button is-dark' disabled={poste_choisi == ""} onClick={voir_statistique_poste_comptable}>
-                  Voir
-                </button>
+
+              <button className='button is-dark' disabled={poste_choisi == ""} onClick={voir_statistique_poste_comptable}>
+                Voir
+              </button>
+
             </div>
 
           </div>
 
           {/* Titre */}
-          <div className='w-6/7 text-xl font-semibold text-gray-400'>
+          <div className='w-full text-xl font-semibold text-gray-400'>
 
             <p className='italic tracking-widest'>
               {
@@ -241,25 +261,43 @@ export default function Dashboard() {
               }
               
             </p>
+
           </div>
 
-          {/* Les graphiques */}
-          <div className='w-6/7 h-65 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
-            
-            <BarChart 
-              info={data_anomalies} 
-              tabColor={getRandomColor(1)}
-              labels={['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']}
-              object='Anomlies'
-              title='Anomalies detectées par mois'
-            />
+
+          {/* Les graphiques (anomalies) */}
+          <div className='w-full h-65 flex justify-center items-center gap-2'>
+           
+            <div className='w-2/3 h-full flex justify-center items-center chart-1 rounded-sm shadow-sm bg-white'>
+
+              <BarChart 
+                info={data_anomalies} 
+                tabColor={getRandomColor(1)}
+                labels={['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']}
+                object='Anomlies'
+                title='Anomalies detectées par mois'
+              />
+
+            </div>
+
+            <div className="w-1/3 h-full chart-2 rounded-sm shadow-sm bg-white">
+              <DoughnutChart 
+                info={data_anomalies}
+                tabColor={getRandomColor(12)}
+                labels={["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']}
+                object='Anomalies'
+                title='Anomalies detectées par mois'
+              />
+            </div>
      
 
           </div>
 
-        {/* <div className='flex gap-2 w-full'> */}
+          {/* Les graphiques (correction) */}
+          <div className='w-full h-66 flex gap-2 w-full'>
 
-          <div className='w-6/7 h-65 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
+            <div className='w-2/3 flex justify-center items-center rounded-sm shadow-sm bg-white'>
+
               <LineChart 
                 info={data_anomalie_resolues} 
                 tabColor={getRandomColor(1)}
@@ -267,28 +305,39 @@ export default function Dashboard() {
                 object='Anomalies resolues'
                 title='Anomalies resolues par mois'
               />
+
+            </div> 
+
+            <div className='w-1/3 h-full chart-4 rounded-sm shadow-sm bg-white'>
+              <DoughnutChart 
+                info={data_anomalie_resolues}
+                tabColor={getRandomColor(12)}
+                labels={["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']}
+                object='Anomalies resolues'
+                title='Anomalies resolues par mois'
+              />
             </div>
 
-            {/* <div className='w-1/2 h-58 bg-white rounded-xl shadow-lg p-4 flex justify-center items-center'>
-              <DoughnutChart info={[12, 19, 10, 5, 22, 30]} tabColor={getRandomColor(6)}/>
-
-            </div> */}
           </div>
 
-        {/* </div> */}
 
-        <div className='relative mr-4 w-2/6 h-full p-2'>
+        </div>
+
+
+        
+        {/* Item 3 */}
+        <div className='relative mr-4 w-2/7 h-full p-2 rounded-sm shadow-sm bg-white'>
 
           <div className='container-logout p-4 bg-white rounded-sm border border-gray-300 cursor-pointer duration-150 ease-in-out hover:bg-black hover:text-white' ref={container_logout} onMouseEnter={show_bloc_logout} onMouseLeave={close_bloc_logout} onClick={logout}>
-              <button className='cursor-pointer'>Deconnexion</button>
+            <button className='cursor-pointer'>Déconnexion</button>
           </div>
 
-          <div className='w-full h-16 rounded-lg flex items-center bg-white cursor-pointer duration-200 ease-in-out hover:border border-gray-300 hover:shadow-sm' onMouseEnter={show_bloc_logout} onMouseLeave={close_bloc_logout}>
+          <div className='w-full h-16 rounded-lg flex items-center bg-gray-100 cursor-pointer duration-200 ease-in-out hover:border border-gray-300 hover:shadow-sm' onMouseEnter={show_bloc_logout} onMouseLeave={close_bloc_logout}>
 
             <div className='ml-2 w-15 h-15 flex items-center justify-center'>
-                <span className='icon'>
-                  <i className='fas fa-user text-3xl/8'></i>
-                </span>
+              <span className='icon'>
+                <i className='fas fa-user text-3xl/8'></i>
+              </span>
             </div>
 
             
@@ -302,7 +351,7 @@ export default function Dashboard() {
                       user[0]['utilisateur__fonction'] + " : " + user[0]['utilisateur__nom'] + " " + user[0]['utilisateur__prenom']
                   : null
                 } 
-                </p>
+              </p>
 
             </div>
 
@@ -317,15 +366,15 @@ export default function Dashboard() {
             <form onSubmit={(e) => Save_agenda(e)} className=''>
 
               <div className='field'>
-                  <label className='label'>Date de l'evenement</label>
-                  <div className='control flex'>
+                <label className='label'>Date de l'evenement</label>
+                <div className='control flex'>
 
-                    <input type="date" className='input w-1/3' value={date_agenda} onChange={(e) => setDateAgenda(e.target.value)} required/>
+                  <input type="date" className='input w-1/3' value={date_agenda} onChange={(e) => setDateAgenda(e.target.value)} required/>
 
-                    <label className='block text-center is-size-5 label w-1/3'>à</label>
+                  <label className='block text-center is-size-5 label w-1/3'>à</label>
 
-                    <input type="time" name="" id="" className='input w-1/3' value={heure_agenda} onChange={(e) => setHeureAgenda(e.target.value)} required/>
-                  </div>
+                  <input type="time" name="" id="" className='input w-1/3' value={heure_agenda} onChange={(e) => setHeureAgenda(e.target.value)} required/>
+                </div>
               </div>
 
               <div className='field'>
@@ -338,14 +387,15 @@ export default function Dashboard() {
               <button type='submit' className='button is-dark mx-4 my-2'>
                 Planifier
               </button>
+
             </form>
 
             <Calendrier evenements={evenements}/>
 
           </div>
-          
-
-        </div>
+        
+      
+      </div>
 
       </div>
 

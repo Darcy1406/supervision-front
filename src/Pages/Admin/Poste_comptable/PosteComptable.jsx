@@ -26,7 +26,7 @@ export default function PosteComptable() {
   const [isVisible, setIsvisible] = useState(false); // State utilie pour une confirmation avant suppression
 
   const currentPage = useRef(1)
-  const itemsPerPage = useRef(6)
+  const itemsPerPage = useRef(7)
 
 
 
@@ -101,10 +101,27 @@ export default function PosteComptable() {
         <td>{item['responsable']}</td>
         <td>
           <div className="flex gap-2">
+
             <button className="button is-success is-small" onClick={() => modifier_un_poste_comptable(item['id'], item['code_poste'], item['nom_poste'], item['lieu'], item['poste'], item['responsable'], item['utilisateur_id'])}>
+
+              <span className='mx-1'>
+                <i className="fas fa-edit"></i>
+              </span>
+
               Modifier
+
             </button>
-            <button className="button is-danger is-small" onClick={() => show_confirmation(item['id'])}>Supprimer</button>
+
+            <button className="button is-danger is-small" onClick={() => show_confirmation(item['id'])}>
+
+              <span className='mx-1'>
+                <i className='fas fa-trash'></i>
+              </span>
+              
+              Supprimer
+
+            </button>
+
           </div>
         </td>
       </tr>
@@ -151,21 +168,28 @@ export default function PosteComptable() {
   return (
 
     <>
-      <div id='poste_comptable' className='h-full'>
-
-        <NavLink to='/admin/poste_comptable/form' className='button is-dark mx-6 my-4'>Ajouter un poste Comptable</NavLink>
+      <div id='poste_comptable' className='h-full p-1'>
 
 
-        <div className="container-table my-2 relative" style={{height: 'calc(100% - 105px)'}}>
+        <div className="container-table my-2 relative" style={{height: 'calc(100% - 35px)'}}>
 
-          <p className='text-xl bg-gray-300 p-4 rounded-sm my-2'>Liste des comptables</p>
-        
-          <div className='container-recherche w-1/3'>
-            <label className='label'>Rechercher</label>
-            <input type="text" className="input" placeholder='Entrer le nom du poste comptable' onChange={(e) => rechercher_poste_comptable(e.target.value)} />
+          <p className='text-xl font-semibold bg-white p-4 rounded-sm shadow-sm mt-4'>Liste des postes comptables</p>
+
+          <NavLink to='/admin/poste_comptable/form' className='button is-dark my-2'>Ajouter un poste Comptable</NavLink>
+
+          {/* Rechercher un poste comptable */}
+          <div className='container-recherche flex bg-white border border-gray-300 p-2 rounded-sm shadow-sm mb-2'>
+
+            <span>
+              <i className='fas fa-search'></i>
+            </span>
+
+
+            <input type="text" className="outline-none w-full mx-2" placeholder='Entrer le nom du poste comptable' onChange={(e) => rechercher_poste_comptable(e.target.value)} />
+
           </div>
 
-          <table className='table table-view is-fullwidth' style={{background: 'none'}}>
+          <table className='table is-hoverable is-fullwidth is-marginless'>
 
             <thead>
               <tr>

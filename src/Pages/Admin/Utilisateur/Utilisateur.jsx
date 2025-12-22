@@ -87,8 +87,8 @@ export default function Utilisateur() {
     // Interface JSX pour afficher les utilisateurs
     const UserItem = ({item}) => {
         return (
-            <tr>
-                <td>{item['nom']}</td>
+            <tr className=''>
+                <td className=''>{item['nom']}</td>
                 <td>{item['prenom']}</td>
                 <td>{item['email']}</td>
                 <td>{item['fonction']}</td>
@@ -112,10 +112,16 @@ export default function Utilisateur() {
                 <td>
                     <div className='flex gap-2'>
                         <button className="button is-success is-small" onClick={() => modifier_un_utilisateur(item['id'], item['nom'], item['prenom'], item['email'], item['fonction'], item['zone_id'], item['authentification'])}>
+                            <span className='mx-1'>
+                                <i className="fas fa-edit"></i>
+                            </span>
                             Modifier
                         </button>
 
                         <button className="button is-danger is-small" onClick={() => show_confirmation(item['id'])}>
+                            <span className='mx-1'>
+                                <i className='fas fa-trash'></i>
+                            </span>
                             Supprimer
                         </button>
 
@@ -168,18 +174,26 @@ export default function Utilisateur() {
     <>
         <div id='utilisateur_liste' className='h-full'>
 
-            <button className='button is-dark mx-6 my-4' onClick={() => navigate('/admin/utilisateur/form')}>Ajouter un utilisateur</button>
+            <div className="container-table relative p-1" style={{height: 'calc(100% - 25px)'}}>
 
-            <div className="container-table relative" style={{height: 'calc(100% - 105px)'}}>
+                <p className='text-xl font-semibold bg-white shadow-lg p-4 rounded-sm mt-4'>Liste des utilisateurs du système</p>
 
-                <p className='text-xl bg-gray-300 p-4 rounded-sm my-2'>Liste des utilisateurs du système</p>
 
-                <div className='container-recherche w-1/3 my-2'>
-                    <label className='label'>Rechercher</label>
-                    <input type="text" className="input" placeholder="Entrer le nom ou le prenom de l'utilisateur" onChange={(e) => rechercher_utilisateur(e.target.value)} />
+                <button className='button is-dark my-2' onClick={() => navigate('/admin/utilisateur/form')}>Ajouter un utilisateur</button>
+
+                {/* Rechercher un utiisateur */}
+                <div className='container-recherche mb-1 flex bg-white p-2 border border-gray-300 rounded-sm shadow-lg'>
+
+                    {/* <label className='label'>Rechercher</label> */}
+                    <span>
+                        <i className="fas fa-search"></i>
+                    </span>
+
+                    <input type="text" className="outline-none is-inline-block mx-2 w-full" placeholder="Entrer le nom ou le prenom de l'utilisateur" onChange={(e) => rechercher_utilisateur(e.target.value)} />
+
                 </div>
 
-                <table className="table table-view is-fullwidth" style={{background: 'none'}}>
+                <table className="table is-marginless is-hoverable is-fullwidth">
 
                     <thead>
                         <tr>

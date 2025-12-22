@@ -145,12 +145,12 @@ export default function BalanceAnalyse() {
 
             <form onSubmit={handleSubmit}>
 
-                <div className='flex items-center justify-center gap-6 my-2 px-6'>
+                <div className='flex items-center justify-center gap-4 my-2 px-4 py-2 bg-white rounded-sm shadow-sm'>
 
                     {/* Poste comptable */}
-                    <div className='flex items-center gap-2'>
+                    <div className='flex-1 flex items-center gap-2'>
 
-                        <div className=''>
+                        <div className='w-35'>
                             <label className='label'>Poste comptable : </label>
                         </div>
 
@@ -168,13 +168,13 @@ export default function BalanceAnalyse() {
 
 
                     {/* Piece */}
-                    <div className='flex items-center gap-2'>
+                    <div className='flex-1 flex items-center gap-2'>
 
                         <div className=''>
                             <label className="label">Piece : </label>
                         </div>
 
-                        <div className=''>
+                        <div className='flex-1'>
                             <select value={piece} onChange={(e) => setPiece(e.target.value)} className='bg-white w-full p-2 rounded-sm border border-gray-300' required>
                                 <option value="">-----</option>
                                 <option value="BOD">BOD</option>
@@ -187,13 +187,13 @@ export default function BalanceAnalyse() {
                     </div>
 
                     {/* Proprietaire */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex-1 flex items-center gap-2">
 
-                        <div>
+                        <div className='w-35'>
                             <label className='label'>Propriétaire : </label>
                         </div>
 
-                        <div>
+                        <div className=''>
                             <select className='w-full bg-white rounded-sm border border-gray-300 p-2' value={proprietaire} onChange={(e) => setProprietaire(e.target.value)} required>
                                 <option value="">------</option>
                                 <option value="ETAT">ETAT</option>
@@ -205,13 +205,13 @@ export default function BalanceAnalyse() {
                     </div>
 
                     {/* Mois */}
-                    <div className='flex items-center gap-2'>
+                    <div className='flex-1 flex items-center gap-2'>
 
                         <div className=''>
                             <label className='label'>Mois : </label>
                         </div>
 
-                        <div className=''>
+                        <div className='flex-1'>
                             <select className='bg-white w-full p-2 border border-gray-300 rounded-sm' value={mois} onChange={(e) => setMois(e.target.value)} required>
                                 <option value="">-----</option>
                                 <option value="01">Janvier</option>
@@ -231,13 +231,13 @@ export default function BalanceAnalyse() {
                     </div>
 
                     {/* Exercice */}
-                    <div className='flex items-center gap-2'>
+                    <div className='flex-1 flex items-center gap-2'>
 
                         <div className=''>
                             <label className='label'>Exercice : </label>
                         </div>
 
-                        <div className=''>
+                        <div className='flex-1'>
 
                             <select className='bg-white w-full p-2 rounded-sm shadow border border-gray-300' value={exercice} onChange={(e) => setExercice(e.target.value)}>
 

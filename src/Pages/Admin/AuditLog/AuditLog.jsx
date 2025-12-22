@@ -49,7 +49,7 @@ export default function AuditLog() {
             <tr>
                 {/* <td>{item['date_action']}</td> */}
                 <td>{date_formatted}</td>
-                <td className={` ${item['action'].toLowerCase() == 'suppression' ?'text-red-500' : item['action'].toLowerCase() == 'modification' ? 'text-green-500' : 'text-blue-500'} font-light text-lg`}>{item['action']}</td>
+                <td className={` ${item['action'].toLowerCase() == 'suppression' ?'text-red-500' : item['action'].toLowerCase() == 'modification' ? 'text-green-500' : item['action'].toLowerCase() == 'creation' ? 'text-blue-500' : item['action'].toLowerCase() == 'login' ? 'text-dark' : 'text-yellow-500' } font-light text-lg`}>{item['action']}</td>
                 {/* <td>{JSON.stringify(item['nouvelle_valeur'])}</td> */}
                 <td>{item['modele']}</td>
                 <td>{item['document_filename'] || ''}</td>
@@ -102,18 +102,26 @@ export default function AuditLog() {
 
     <div className="audit_log h-full p-1">
 
-        <h1 className='title is-3 mx-6 mt-4'>Traçabilité des actions</h1>
+        <div className="bg-white rounded-sm shadow-sm p-4 mt-4">
+            <h1 className='title is-4'>Traçabilité des actions</h1>
 
-        <p className='subtitle is-6 mx-6'>Les actions effectuées sur ce système vont s'afficher ici</p>
+            <p className='subtitle is-6'>Les actions effectuées sur ce système vont s'afficher ici</p>
+        </div>
 
         <div className="container-table relative" style={{height: 'calc(100% - 125px)'}}>
 
-            <div className="container-recherche flex gap-4 items-center my-2">
-                <div>
-                    <label className="label">Utilisateur : </label>
-                </div>
-                <div className="w-1/3">
-                    <input list="auditeurs" className="input" placeholder="Entrer un utilisateur" onChange={(e) => rechercher_logs(e.target.value)}/>
+            <div className="container-recherche flex p-2 bg-white items-center my-2 rounded-sm shadow-sm">
+                
+                <span className="">
+                    <i className="fas fa-search"></i>
+                </span>
+
+                <div className="flex-1">
+                    <input type="text" className="outline-none w-full mx-2" placeholder="Entrer un utilisateur" onChange={(e) => rechercher_logs(e.target.value)}/>
+
+                    
+
+                    {/* <input list="auditeurs" className="outline-none w-full mx-2" placeholder="Entrer un utilisateur" onChange={(e) => rechercher_logs(e.target.value)}/>
 
                     <datalist id="auditeurs">
                         {
@@ -121,12 +129,12 @@ export default function AuditLog() {
                                 <option key={index} value={item['nom'] + " " + item['prenom']} />
                             ))
                         }
-                    </datalist>
+                    </datalist> */}
 
                 </div>
             </div>
 
-            <table className="table table-view is-fullwidth">
+            <table className="table is-hoverable is-marginless is-fullwidth">
                 
                 <thead>
                     <tr>

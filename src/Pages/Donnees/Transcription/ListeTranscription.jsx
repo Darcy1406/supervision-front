@@ -158,7 +158,7 @@ export function ListeTranscription() {
 
     // Cette fonction va recupérer les documents liées a un auditeur (pour un auditeur), les documents liées a une zone (pour les chef d'unités) et tous les documents (pour le directeur ou autres)
     const liste_documents = (setState) => {
-
+        // Directeur
         if(user[0]['utilisateur__fonction'].toUpperCase() == 'directeur'.toUpperCase() || user[0]['utilisateur__fonction'].toUpperCase() == 'autres'.toUpperCase()){
             fetchData(
                 `${API_URL}/data/document/liste`, 
@@ -166,11 +166,12 @@ export function ListeTranscription() {
                 {
                     'action': 'listes_documents_directeur', 
                     'fonction': user[0]['utilisateur__fonction'], 
-                    'utilisateur': user[0]['id']
+                    'utilisateur': user[0]['utilisateur_id']
                 }, 
                 setState
             )
         }
+        // Chef d'unite
         else if(user[0]['utilisateur__fonction'].toUpperCase() == 'chef_unite'.toUpperCase()){
             fetchData(
                 `${API_URL}/data/document/liste`, 
@@ -182,13 +183,14 @@ export function ListeTranscription() {
                 setState
             )
         }
+        // Auditeur
         else{
             fetchData(
                 `${API_URL}/data/document/liste`, 
                 'post', 
                 {
                     'action': 'listes_documents_auditeur', 
-                    'utilisateur': user[0]['id']
+                    'utilisateur': user[0]['utilisateur_id']
                 }, 
                 setState
             )
@@ -321,141 +323,142 @@ export function ListeTranscription() {
 
 
   return (
-    <section id='liste-transcription' className='h-full'>
+    <section id='liste-transcription' className='h-full p-1'>
 
-        <p className='mx-auto text-lg p-4 bg-gray-300 rounded-lg'>Liste des transcriptions</p>
+        <p className='mx-auto text-lg p-4 bg-white rounded-sm shadow-sm my-2'>Liste des transcriptions</p>
+
+        {/* Liste des auditeurs (afficher si l'utilisateur connecte n'est pas un auditeur) */}
+        {
+            user ?
+                user[0]['utilisateur__fonction'].toUpperCase() != 'Auditeur'.toUpperCase() ?
+                    <>
+                        <div className='px-2 flex gap-4 justify-center items-center bg-white rounded-sm shadow-sm'>
+
+                            {
+                                user[0]['utilisateur__fonction'].toUpperCase() == 'Directeur'.toUpperCase() || user[0]['utilisateur__fonction'].toUpperCase() == 'Autres'.toUpperCase() ?
+
+                                    <div className='flex-1 flex items-center gap-4 container-zone'>
+                                        <label className="label">Zone: </label>
+                                        <select className='bg-white p-2 w-full rounded-lg border border-gray-300' value={zone_selected} onChange={(e) => { setZoneSelected(e.target.value) ; filtrer_les_auditeurs_et_les_postes_comptables_par_zone(e.target.value) } }>
+                                            <option value="" disabled>Choisissez une zone</option>
+                                            {
+                                                zones && zones.map((item, index) => (
+                                                    <option key={index} value={item['id']}>{item['nom_zone']}</option>
+                                                ))
+                                            }
+                                        </select>
+                                    </div>
+                                : null
+                            }
+
+
+                            <div className='flex-1 p-4 flex items-center gap-4'>
+
+                                <label className="label">Auditeur: </label>
+
+                                <input list="auditeurs" className='bg-white p-2 rounded-lg border border-gray-300 w-full' placeholder='Votre auditeur ?' onChange={(e) => recuperer_les_postes_comptables_liees_a_un_auditeur(e.target.value)}/>
+                                <datalist id='auditeurs'>
+                                    {
+                                        auditeurs && auditeurs.map((auditeur, index) => (
+                                            <option key={index} value={auditeur['id'] + " " + auditeur['nom'] + " " + auditeur['prenom']} />
+                                        ))
+                                    }
+                                </datalist>
+                            </div>
+
+                        </div>
+                    </>
+                : null
+            : null
+        }
+
+        {/* Recherche */}
+        <div className='my-2 container-recherche bg-white rounded-sm shadow-sm p-2 flex items-center justify-center gap-4'>
+
+            <div className=''>
+                <p className='text-lg font-light underline'>Filtrer les donneés : </p>
+            </div>
+
+            <div className='flex-1'>
+                <label className='label'>Pièce</label>
+                <select className='bg-white p-2 rounded-sm shadow-sm w-full' value={recherche.current['piece']} onChange={(e) => search_execute('piece', e.target.value)}>
+                    <option value="" disabled>Pièce</option>
+                    {
+                        liste_pieces && liste_pieces.map((item, index) => (
+                            <option key={index} value={item['fields']['nom_piece']}>{item['fields']['nom_piece']}</option>
+                        ))
+                    }
+
+                </select>
+            </div>
+
+            <div className='flex-1'>
+                <label className='label'>Poste comptable</label>
+                <input list='poste_comptable' className='input' onChange={(e) => search_execute('poste_comptable', e.target.value)} placeholder='Poste comptable'/>
+                <datalist id='poste_comptable' className='bg-white p-2 rounded-sm shadow-sm'>
+                    <option value="" disabled>Poste comptable</option>
+                    {
+                        poste_comptables && poste_comptables.map((item, index) => (
+                            <option key={index} value={item['nom_poste']} />
+                        ))
+                    }
+                </datalist>
+            </div>
+
+            <div className='flex-1'>
+                <label className="label">Date d'arrivée</label>
+
+                <input type="date" className='input' onChange={(e) => { search_execute('date', e.target.value)} }/>
+
+            </div>
+
+            <div className='flex-1'>
+                <label className="label">Mois</label>
+                <select className='bg-white p-2 rounded-sm shadow-sm w-full' value={recherche.current['mois']} onChange={(e) => search_execute('mois', e.target.value)}>
+                    <option value="" disabled>Mois</option>
+                    <option value="01">Janvier</option>
+                    <option value="02">Février</option>
+                    <option value="03">Mars</option>
+                    <option value="04">Avril</option>
+                    <option value="05">Mai</option>
+                    <option value="06">Juin</option>
+                    <option value="07">Juillet</option>
+                    <option value="08">Août</option>
+                    <option value="09">Septembre</option>
+                    <option value="10">Octobre</option>
+                    <option value="11">Novembre</option>
+                    <option value="12">Décembre</option>
+                </select>
+            </div>  
+
+            <div className='flex-1'>
+                <label className='label'>Exercice</label>
+                <select className='bg-white p-2 rounded-sm shadow-sm w-full' value={recherche.current['exercice']} onChange={(e) => search_execute('exercice', e.target.value)}>
+                    <option value="" disabled>Exercice</option>
+                    {
+                        exercices?.map((item, index) => (
+                            <option key={index} value={item['annee']}>{item['annee']}</option>
+                        ))
+                    }
+                </select>
+            </div>
+
+
+
+        </div>
         
-        <div className='w-full flex justify-center gap-2' style={{height: 'calc(100% - 95px)'}}>
+        <div className='w-full flex justify-center gap-2' style={{height: 'calc(100% - 250px)'}}>
             
 
-            <div className="container-table w-full h-full relative p-1 my-4 mx-auto rounded-lg bg-white shadow-sm border-2 border-b-4 border-gray-300" >
-
-                {/* Liste des auditeurs (afficher si l'utilisateur connecte n'est pas un auditeur) */}
-            {
-                user ?
-                    user[0]['utilisateur__fonction'].toUpperCase() != 'Auditeur'.toUpperCase() ?
-                        <>
-                            <div className='flex gap-6 justify-center items-center'>
-
-                                {
-                                    user[0]['utilisateur__fonction'].toUpperCase() == 'Directeur'.toUpperCase() || user[0]['utilisateur__fonction'].toUpperCase() == 'Autres'.toUpperCase() ?
-
-                                        <div className='flex items-center gap-4 container-zone'>
-                                            <label className="label">Zone: </label>
-                                            <select className='bg-white p-2 w-full rounded-lg border border-gray-300' value={zone_selected} onChange={(e) => { setZoneSelected(e.target.value) ; filtrer_les_auditeurs_et_les_postes_comptables_par_zone(e.target.value) } }>
-                                                <option value="" disabled>Choisissez une zone</option>
-                                                {
-                                                    zones && zones.map((item, index) => (
-                                                        <option key={index} value={item['id']}>{item['nom_zone']}</option>
-                                                    ))
-                                                }
-                                            </select>
-                                        </div>
-                                    : null
-                                }
-
-
-                                <div className='p-4 flex items-center gap-4'>
-
-                                    <label className="label">Auditeur: </label>
-
-                                    <input list="auditeurs" className='bg-white p-2 rounded-lg border border-gray-300 w-110' placeholder='Votre auditeur ?' onChange={(e) => recuperer_les_postes_comptables_liees_a_un_auditeur(e.target.value)}/>
-                                    <datalist id='auditeurs'>
-                                        {
-                                            auditeurs && auditeurs.map((auditeur, index) => (
-                                                <option key={index} value={auditeur['id'] + " " + auditeur['nom'] + " " + auditeur['prenom']} />
-                                            ))
-                                        }
-                                    </datalist>
-                                </div>
-
-                            </div>
-                        </>
-                    : null
-                : null
-            }
-
-                {/* Recherche */}
-                <div className='my-2 container-recherche flex items-center justify-center gap-6'>
-
-                    <div>
-                        <p className='text-lg font-light underline'>Filtrer les donneés : </p>
-                    </div>
-
-                    <div>
-                        <label className='label'>Piece</label>
-                        <select className='bg-white p-2 rounded-sm shadow-sm' value={recherche.current['piece']} onChange={(e) => search_execute('piece', e.target.value)}>
-                            <option value="" disabled>Pièce</option>
-                            {
-                                liste_pieces && liste_pieces.map((item, index) => (
-                                    <option key={index} value={item['fields']['nom_piece']}>{item['fields']['nom_piece']}</option>
-                                ))
-                            }
-
-                        </select>
-                    </div>
-
-                    <div>
-                        <label className='label'>Poste comptable</label>
-                        <input list='poste_comptable' className='input' onChange={(e) => search_execute('poste_comptable', e.target.value)} placeholder='Poste comptable'/>
-                        <datalist id='poste_comptable' className='bg-white p-2 rounded-sm shadow-sm'>
-                            <option value="" disabled>Poste comptable</option>
-                            {
-                                poste_comptables && poste_comptables.map((item, index) => (
-                                    <option key={index} value={item['nom_poste']} />
-                                ))
-                            }
-                        </datalist>
-                    </div>
-
-                    <div>
-                        <label className="label">Date d'arrivee</label>
-
-                        <input type="date" className='input' onChange={(e) => { search_execute('date', e.target.value)} }/>
-
-                    </div>
-
-                    <div>
-                        <label className="label">Mois</label>
-                        <select className='bg-white p-2 rounded-sm shadow-sm' value={recherche.current['mois']} onChange={(e) => search_execute('mois', e.target.value)}>
-                            <option value="" disabled>Mois</option>
-                            <option value="01">Janvier</option>
-                            <option value="02">Février</option>
-                            <option value="03">Mars</option>
-                            <option value="04">Avril</option>
-                            <option value="05">Mai</option>
-                            <option value="06">Juin</option>
-                            <option value="07">Juillet</option>
-                            <option value="08">Août</option>
-                            <option value="09">Septembre</option>
-                            <option value="10">Octobre</option>
-                            <option value="11">Novembre</option>
-                            <option value="12">Décembre</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className='label'>Exercice</label>
-                        <select className='bg-white p-2 rounded-sm shadow-sm' value={recherche.current['exercice']} onChange={(e) => search_execute('exercice', e.target.value)}>
-                            <option value="" disabled>Exercice</option>
-                            {
-                                exercices?.map((item, index) => (
-                                    <option key={index} value={item['annee']}>{item['annee']}</option>
-                                ))
-                            }
-                        </select>
-                    </div>
-                    
-
-
-                </div>
-
-                <table className='table table-view is-fullwidth' style={{background: 'none'}}>
+            <div className="container-table w-full h-full relative p-1 mx-auto">
+                
+                <table className='table is-fullwidth is-marginless border-b-4 border-gray-300'>
                     <thead>
                         <tr>
                             <th>Pièce</th>
                             <th>Poste comptable</th>
                             <th>Document</th>
-                            <th>Date</th>
+                            <th>Date d'arrivée</th>
                             <th>Mois</th>
                             <th>Année</th>
                         </tr>

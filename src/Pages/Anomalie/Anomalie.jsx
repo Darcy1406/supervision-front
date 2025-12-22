@@ -310,69 +310,69 @@ export default function Anomalie() {
   return (
     <div id='anomalie' className='h-full px-4'>
 
-        <p className='p-4 bg-gray-300 text-lg rounded-lg'>Liste des anomalies</p>
+        <p className='p-4 bg-white text-lg rounded-sm shadow-sm'>Liste des anomalies</p>
 
-        <div className="container-table border-2 border-b-4 border-gray-300 px-2 relative my-4 bg-white rounded-lg shadow-sm p-1" style={{height: 'calc(100% - 95px)'}}>
+        {/* Filtre */}
+        <div className="bg-white rounded-sm shadow-sm recherche flex justify-center items-center my-2 p-2 gap-4">
 
-            {/* Filtre */}
-            <div className="recherche flex justify-center items-center my-2 py-2 px-4 gap-4">
+            <div className='flex-1 flex gap-2 items-center '>
 
-                <div className='flex gap-2 items-center '>
-
-                    <div className=''>
-                        <label htmlFor="" className="label">Poste comptable : </label>
-                    </div>
-
-                    <div className="w-70">
-                        <input list='poste_comptable' className=' w-1/2 input' placeholder='Choisissez un poste comptable' value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value) }/>
-                        <datalist id='poste_comptable'>
-                            {
-                                postes_comptables && postes_comptables.map((item, index) => (
-                                    <option key={index} value={item['nom_poste']} />
-                                ))
-                            }
-                        </datalist>
-                    </div>
-
+                <div className=''>
+                    <label htmlFor="" className="label">Poste comptable : </label>
                 </div>
 
-                <div className='flex gap-2 items-center'>
-
-                    <div className=''>
-                        <label htmlFor="" className="label">Type d'anomalie : </label>
-                    </div>
-
-                    <div className=''>
-                        <select name="" id="" className='bg-white w-full p-2 border border-gray-300 rounded-lg' value={type_analyse} onChange={ (e) => setTypeAnalyse(e.target.value) }>
-                            <option value="" disabled>------</option>
-                            <option value="report_sje">Report SJE</option>
-                            <option value="equilibre_balance">Equilibre Balance</option>
-                            <option value="solde_caisse">Verification Solde caisse</option>
-                            <option value="solde_anormale">Verification Solde anormale</option>
-                        </select>
-                    </div>
-
-                </div>
-
-                <div className='flex gap-2 items-center'>
-
-                    <div className=''>
-                        <label htmlFor="" className="label">Exercice : </label>
-                    </div>
-                    
-                    <div className=''>
-                        <select name="" id="" className='bg-white w-full p-2 rounded-lg border border-gray-300' value={exercice} onChange={(e) => {setExercice(e.target.value)}}>
-                            <option value="" disabled>------</option>
-                            {
-                                exercices?.map((item, index) => (
-                                    <option key={index} value={item['annee']}>{item['annee']}</option>
-                                ))
-                            }
-                        </select>
-                    </div>
+                <div className="flex-1">
+                    <input list='poste_comptable' className='input' placeholder='Choisissez un poste comptable' value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value) }/>
+                    <datalist id='poste_comptable'>
+                        {
+                            postes_comptables && postes_comptables.map((item, index) => (
+                                <option key={index} value={item['nom_poste']} />
+                            ))
+                        }
+                    </datalist>
                 </div>
 
             </div>
+
+            <div className='flex-1 flex gap-2 items-center'>
+
+                <div className=''>
+                    <label htmlFor="" className="label">Type d'anomalie : </label>
+                </div>
+
+                <div className='flex-1'>
+                    <select name="" id="" className='bg-white p-2 border border-gray-300 rounded-lg w-full' value={type_analyse} onChange={ (e) => setTypeAnalyse(e.target.value) }>
+                        <option value="" disabled>------</option>
+                        <option value="report_sje">Report SJE</option>
+                        <option value="equilibre_balance">Equilibre Balance</option>
+                        <option value="solde_caisse">Verification Solde caisse</option>
+                        <option value="solde_anormale">Verification Solde anormale</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div className='flex-1 flex gap-2 items-center'>
+
+                <div className=''>
+                    <label htmlFor="" className="label">Exercice : </label>
+                </div>
+                
+                <div className='flex-1'>
+                    <select name="" id="" className='bg-white w-full p-2 rounded-lg border border-gray-300' value={exercice} onChange={(e) => {setExercice(e.target.value)}}>
+                        <option value="" disabled>------</option>
+                        {
+                            exercices?.map((item, index) => (
+                                <option key={index} value={item['annee']}>{item['annee']}</option>
+                            ))
+                        }
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div className="container-table px-2 relative my-4 p-1" style={{height: 'calc(100% - 140px)'}}>
 
             {
                 selected_anomalie.length > 0 ?
@@ -445,7 +445,7 @@ export default function Anomalie() {
 
             </div>
 
-            <table className='table is-fullwidth'>
+            <table className='table is-fullwidth border-b-4 border-gray-300 is-marginless'>
 
                 <thead>
                     <tr>

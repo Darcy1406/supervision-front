@@ -183,34 +183,34 @@ export default function Comptes() {
 
 
   return (
-    <div id='compte' className='h-full'>
-
-      <button className='mx-6 mt-2 bg-black px-4 py-2 text-white cursor-pointer rounded-lg ' onClick={() => setIsVisible(true)}>
-            <span className='icon'>
-              <i className='fas fa-plus'></i>
-            </span>
-              Ajouter un compte
-      </button>
+    <div id='compte' className='h-full p-1'>
 
       <div className="container-table px-2 w-full mx-auto my-2 relative" style={{height: 'calc(100% - 75px)'}}>
 
-        <p className='text-2xl font-semibold bg-gray-100 p-4'>Liste des comptes</p>
+        <p className='text-xl font-semibold bg-white rounded-sm shadow-sm p-4'>Liste des comptes</p>
+
+        <button className='mt-2 bg-black px-4 py-2 text-white cursor-pointer rounded-lg ' onClick={() => setIsVisible(true)}>
+          <span className='icon'>
+            <i className='fas fa-plus'></i>
+          </span>
+          Ajouter un compte
+        </button>
 
         {/* Filtre (recherche) */}
-        <div className='container-recherche flex justify-center items-center gap-4 w-1/3 my-2'>
+        <div className='container-recherche flex justify-center items-center gap-4 my-2 bg-white p-2 rounded-sm shadow-sm'>
 
-          <div>
-            <label className='label'>Rechercher : </label>
-          </div>
+          <span>
+            <i className='fas fa-search'></i>
+          </span>
 
           <div className='flex-1'>
-            <input type="text" className="input" placeholder='Entrer le numero du compte' onChange={(e) => rechercher_compte(e.target.value)} />
+            <input type="text" className="outline-none w-full" placeholder='Entrer le numero du compte' onChange={(e) => rechercher_compte(e.target.value)} />
           </div>
 
         </div>
 
         {/* Filtrer par type du compte */}
-        <div className='my-2'>
+        <div className='my-4'>
           
           <div className='container-show-item w-4/6 is-pulled-right'>
             <div className='inline float-right'>

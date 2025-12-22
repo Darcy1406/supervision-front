@@ -14,23 +14,51 @@ export default function Exercice() {
     const [result, setResult] = useState(null)
 
     const currentPage = useRef(1)
-    const itemsPerPage = useRef(6)
+    const itemsPerPage = useRef(5)
 
     const obtenir_la_liste_des_exercices = () => {
         fetchData(`${API_URL}/data/exercice/get`, 'get', {}, setExercices)
     }
+
 
     const creer_un_nouveau_exercice = (e) => {
         e.preventDefault()
         fetchData(`${API_URL}/data/exercice/create`, 'post', {'annee': annee}, setResult)
     }
 
+
     const ExerciceItem = ({item}) => {
         return (
-            <tr>
-                <td>{item['id']}</td>
-                <td>{item['annee']}</td>
-            </tr>
+
+            <div className="my-4 bg-white rounded-sm shadow-sm p-4 relative">
+
+                <div className="bg-gray-400 rounded-xl text-center" style={{position: 'absolute', top: '-10px', left: '-10px', height: '30px', width: '30px', lineHeight: '30px', borderRadius: '9999px'}}>
+
+                    {item['id']}
+
+                </div>
+
+                <p className="text-center text-lg">{item['annee']}</p>
+
+                <div className="container-button flex gap-2 mx-2" style={{position: 'absolute', right: '10px', bottom: '5px'}}>
+
+                   
+
+                        <button className="text-green-400 cursor-pointer duration-150 ease-in-out hover:text-green-500">
+                            <span>
+                                <i className="fas fa-edit"></i>
+                            </span>
+                        </button>
+
+                        <button className="text-red-400 cursor-pointer duration-150 ease-in-out hover:text-red-500">
+                            <span>
+                                <i className="fas fa-trash"></i>
+                            </span>
+                        </button>
+
+
+                </div>
+            </div>
         )
     }
 
@@ -59,70 +87,63 @@ export default function Exercice() {
 
 
   return (
-    <div id="exercice" className="p-4 w-3/4 mx-auto">
 
-        <p className="p-4 bg-gray-300">Exercice</p>
+    <div id="exercice" className="h-full p-1 flex gap-2">
 
-        <p className="my-2 italic text-lg">La liste des exercices disponibles pour les pièces comptables en entrées s'affichent ici</p>
+        
+        {/* Formulaire */}
+        <div className="w-1/3 container-form px-4 py-1 border-r border-gray-300">
 
-        <div className="container-table w-1/3 mx-auto my-4">
+            <form onSubmit={creer_un_nouveau_exercice} className="my-4">
 
-            <div className="container_formulaire my-2">
-                <form onSubmit={creer_un_nouveau_exercice} className="flex gap-4 justify-center items-center">
+                <p className="text-center text-2xl font-bold">Formulaire</p>
 
-                    <div className="w-2/3">
-                        <input type="number" className="input" placeholder="Ajouter un nouveau exercice" value={annee} onChange={(e) => setAnnee(e.target.value)} required/>
-                    </div>
+                <div className="">
+                    <label className="is-block my-1">Entrer un nouveau exercice</label>
+                    <input type="number" className="input" placeholder="Ajouter un nouveau exercice" value={annee} onChange={(e) => setAnnee(e.target.value)} required/>
+                </div>
 
-                    <div>
-                        <button type="submit" className="button is-link" disabled={annee == ""}>Ajouter</button>
-                    </div>
+                <div className="my-4">
+                    <button type="submit" className="button is-link" disabled={annee == ""}>Ajouter</button>
+                </div>
 
-                </form>
-            </div>
+            </form>
 
-            <table className="table table-view is-fullwidth">
+        </div>
 
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Année</th>
-                    </tr>
-                </thead>
+        {/* Liste des donnees */}
+        <div className="container-table flex-1 mx-auto my-4 px-4">
 
-                <tbody>
-                    {
+        <p className="text-xl font-semibold p-4 bg-white rounded-sm shadow-sm">Liste des exercices</p>
 
-                        data_paginate ?
+        <p className="my-2 italic text-lg">
+            La liste des exercices disponibles pour les pièces comptables en entrées s'affichent ici
+        </p>
 
-                            data_paginate.length > 0 ?
-
-                                data_paginate.map((item, index) => (
-                                    <ExerciceItem key={index} item={item}/>
-                                ))
-
-                            : <tr>
-                                <td colSpan={2}>
-                                    <p className='text-center'>Aucune donnée à afficher</p>
-                                </td>
-                            </tr>
-
-                        : <tr>
-                            <td colSpan={2}>
-                            <p className='text-center'>En attente des données</p>
-                            </td>
-                        </tr>
-
-                    }
-                </tbody>
-
-            </table>
+        <div className="mt-4">
 
             {
-                exercices?.length > itemsPerPage.current ?
-                <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={exercices} reload={reload_data} setReload={setReloadData} description='Page'/>
-                : null
-            }
+                data_paginate ?
+
+                    data_paginate.length > 0 ?
+                        data_paginate.map((item, index) => (
+                            <ExerciceItem key={index} item={item}/>
+                        ))
+
+                    : <p className="text-center">Aucune donnée à afficher</p>
+
+                : <p className="text-center">En attente des données</p>
+            }   
+
+        </div>
+
+
+
+        {
+            exercices?.length > 0 ?
+            <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={exercices} reload={reload_data} setReload={setReloadData} description='Page'/>
+            : null
+        }
 
         </div>
 

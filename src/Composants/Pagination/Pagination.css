@@ -1,10 +1,12 @@
 #bloc-pagination{
     /* background-color: violet; */
-    position: absolute;
+    padding: 10px 0;
+    /* position: absolute; */
     width: 100%;
+    margin: 10px 0;
     /* right: 10px; */
     /* left: 50%; */
-    bottom: 5px;
+    /* bottom: 5px; */
     /* transform: translateX(-50%); */
 }
 

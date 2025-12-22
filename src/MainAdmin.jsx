@@ -21,13 +21,13 @@ export default function MainAdmin() {
 
 
   return (
-    <section id='main-admin'>
+    <section id='main-admin' className='bg-gray-50'>
 
         <NavAdmin />
       
         <SidebarAdmin />
 
-        <div className='bloc-body-admin h-screen px-6'>
+        <div className='bloc-body-admin h-screen px-4'>
             <Outlet />
         </div>
 

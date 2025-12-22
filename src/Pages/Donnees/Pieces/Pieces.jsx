@@ -119,22 +119,20 @@ export default function Pieces() {
 
 
   return (
-    <div id='piece' className='h-full'>
+    <div id='piece' className='h-full p-1'>
 
-        <button className='bg-black px-4 py-2 text-white cursor-pointer rounded-lg mx-4 my-2' onClick={() => setIsvisible(true)}>
-            <span className='icon'>
-                <i className='fas fa-plus'></i>
-            </span>
-            Ajouter une piece
-        </button>
-
-
-        <div className='container-table-pieces my-2 relative' style={{height: 'calc(100% - 80px)'}}>
-
+        <div className='container-table-pieces p-1 my-2 relative' style={{height: 'calc(100% - 80px)'}}>
             
-            <p className='text-2xl font-semibold bg-gray-100 py-4 px-6'>Liste des pieces comptables</p>
+            <p className='text-xl font-semibold bg-white rounded-sm shadow-sm my-2 p-4'>Liste des pieces comptables</p>
 
-            <table className='table table-view is-fullwidth' style={{background: 'none'}}>
+            <button className='bg-black px-4 py-2 text-white cursor-pointer rounded-lg my-2' onClick={() => setIsvisible(true)}>
+                <span className='icon'>
+                    <i className='fas fa-plus'></i>
+                </span>
+                Ajouter une pièce
+            </button>
+
+            <table className='table is-hoverable is-fullwidth is-marginless'>
                 <thead>
 
                     <tr>

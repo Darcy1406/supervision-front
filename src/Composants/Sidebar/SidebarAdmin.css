@@ -1,36 +1,47 @@
 .bloc-sidebar-admin{
-    background: #2196F3;
+    background: rgb(33, 2, 71);
     position: fixed;
-    top: 0;
-    width: 200px;
-    height: 100vh;
-    padding-left: 10px;
-    box-shadow: 7px 0 10px #eee;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 5px;
+    width: 225px;
+    height: calc(100% - 9px);
+    /* padding-left: 10px; */
+    /* box-shadow: 7px 0 10px #eee; */
 }
-    
-.bloc-sidebar-admin aside{
-    position: absolute;
-    top: 25%;
-}
-    
-.bloc-sidebar-admin .menu-list{
-    position: relative;
-    left: 17px;
-    /* border-left: 1px solid #ddd; */
+   
+
+.bloc-sidebar-admin ul{
+    /* position: relative;
+    left: 17px; */
+    /* background-color: violet; */
+    width: 100%;
 }
 
-.bloc-sidebar-admin .menu-list li a{
+.bloc-sidebar-admin ul li{
+    margin: 15px 0;
+    width: 100%;
+}
+
+
+
+.bloc-sidebar-admin ul li a{
     /* background-color: #fff; */
+    display: block;
+    padding: 10px 0;
+    color: #fff;
     margin: 15px 0;
 }
 
-.bloc-sidebar-admin .menu-list li a.is-current{
-    background-color: #fff;
+.bloc-sidebar-admin ul li a.is-current{
+    /* background-color: #fff; */
+    /* background-color: #8a009f; */
+    background-color: rgb(209, 39, 236);
     /* margin: 10px 0; */
 }
 
-.bloc-sidebar-admin .menu-list li a:hover{
-    background: #fff;
+.bloc-sidebar-admin ul li a:hover{
+    background: rgb(209, 39, 236);
 }
 
 .btn-connexion-admin{
@@ -48,4 +59,12 @@
 
 .btn-connexion-admin:hover{
     color: #333;
+}
+
+.bloc-sidebar-admin .container-info-admin{
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    padding: 25px 5px;
 }

@@ -3,39 +3,48 @@ import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import './SidebarAdmin.css';
 import { useAuthentification } from '../../hooks/useAuthentification';
+import { useUserStore } from '../../store/useUserStore';
 
 export default function SidebarAdmin() {
+    const user = useUserStore((state) => state.user);
 
     const location = useLocation();
 
-    const { logout } = useAuthentification()
-
   return (
     <div className="bloc-sidebar-admin">
-        <h4 className="title is-4 my-4">Menu : </h4>
-        <aside>
-            <p className="menu-label">
-                General
-            </p>
-            <ul className="menu-list">
+
+        <div className='container-title h-35 border-b boredr-gray-100 w-full p-1 text-white'>
+            <span className='is-block text-center text-5xl mt-5'>
+                <i className='fas fa-cogs'></i>
+            </span>
+            <p className='text-center font-light text-lg'>Administration</p>
+        </div>
+
+        <aside className='text-white'>
+
+            <ul className="w-full is-block">
                 <li>
                         
                     <Link className={location.pathname == '/admin' ? 'is-current' : ''} to="/admin">
                         <span className='icon mx-1'>
                             <i className="fas fa-clipboard-list"></i>
                         </span>
-                        Traçabilté
+                        Tableau de bord
+                    </Link>
+                    
+                </li>
+
+                <li>
+                        
+                    <Link className={location.pathname == '/admin/log' ? 'is-current' : ''} to="/admin/log">
+                        <span className='icon mx-1'>
+                            <i className="fas fa-clipboard-list"></i>
+                        </span>
+                        Traçabiltés
                     </Link>
                     
                 </li>
                 
-            </ul>
-
-            <p className="menu-label">
-                Administration
-            </p>
-
-            <ul className="menu-list">
                 <li>
                     
                     <Link className={location.pathname.includes('/admin/utilisateur') ? 'is-current' : ''} to="/admin/utilisateur">
@@ -53,7 +62,7 @@ export default function SidebarAdmin() {
                         <span className='icon mx-1'>
                             <i className="fas fa-money-check-alt"></i>
                         </span>
-                        Poste comptable
+                        Postes comptables
                     </Link>
                     
                 </li>
@@ -69,18 +78,7 @@ export default function SidebarAdmin() {
                     
                 </li>
 
-                {/* Exercice */}
-                <li>
-                    
-                    <Link className={location.pathname.includes('/admin/exercice') ? 'is-current' : ''} to="/admin/exercice">
-                        <span className='icon mx-1'>
-                            <i className="fas fa-paste"></i>
-                        </span>
-                        Exercice
-                    </Link>
-                    
-                </li>
-
+                {/* Comptes */}
                 <li>
                     <Link className={location.pathname.includes('/admin/comptes') ? 'is-current' : ''} to="/admin/comptes">
                         <span className='icon mx-1'>
@@ -90,16 +88,39 @@ export default function SidebarAdmin() {
                     </Link>
                 </li>
 
+                {/* Exercice */}
+                <li>
+                    
+                    <Link className={location.pathname.includes('/admin/exercice') ? 'is-current text-white' : 'text-white'} to="/admin/exercice">
+                        <span className='icon mx-1'>
+                            <i className="fas fa-vote-yea"></i>
+                        </span>
+                        Exercices
+                    </Link>
+                    
+                </li>
+
             </ul>
 
+
+
         </aside>
+
+
+        <div className='container-info-admin flex gap-2'>
+            <span className='text-white'>
+                <i className="fas fa-user"></i>
+            </span>
+
+            <p className='font-light text-white'>{user?.[0]['utilisateur__nom'] + " " + user?.[0]['utilisateur__prenom']}</p>
+        </div>
         
-        <button className='btn-connexion-admin' onClick={logout}>
+        {/* <button className='btn-connexion-admin' onClick={logout}>
             <span className='icon'>
                 <i className="fas fa-sign-out-alt"></i>
             </span>
             Déconnexion
-        </button>
+        </button> */}
     </div>
   )
 }

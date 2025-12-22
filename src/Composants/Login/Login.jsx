@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import { NavLink, Router, useLocation, useNavigate } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
 import './Login.css'
@@ -27,6 +27,18 @@ export default function Login() {
   // }
 
   const { login } = useAuthentification()
+
+
+  useEffect(() => {
+    const original_title = document.title
+    document.title = 'Login'
+
+    return () => {
+      document.title = original_title
+    }
+
+  })
+
 
   return (
     <section id='login'>

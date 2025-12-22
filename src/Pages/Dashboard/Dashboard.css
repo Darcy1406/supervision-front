@@ -5,6 +5,7 @@
     top: -43px;
     opacity: 0;
     pointer-events: none;
+    z-index: 100;
 }
 
 .container-logout.show{

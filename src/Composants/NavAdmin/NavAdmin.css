@@ -1,9 +1,37 @@
 #navigation-admin{
     position: fixed;
-    top: 0;
-    right: 0;
-    width: calc(100% - 200px);
-    height: 40px;
-    background: lightblue;
+    top: 5px;
+    right: 5px;
+    width: calc(100% - 235px);
+    height: 50px;
     z-index: 2;
+}
+
+
+#navigation-admin .container-description{
+    height: 50px;
+    /* width: 200px; */
+    /* position: absolute; */
+    /* right: 10px;
+    top: 50%;
+    transform: translateY(-50%); */
+    /* bottom: 0; */
+}
+
+
+#navigation-admin .container-description .container-title .fa-angle-left{
+    transition: all 0.5s ease-in;
+}
+
+#navigation-admin .container-description .container-title .fa-angle-left.rotate{
+    transform: rotate(-180deg);
+}
+
+#navigation-admin .container-description .container-btn-logout{
+    margin-right: -140px;
+    transition: all 0.5s ease-in;
+}
+
+#navigation-admin .container-description .container-btn-logout.show{
+    margin: 0 10px;
 }

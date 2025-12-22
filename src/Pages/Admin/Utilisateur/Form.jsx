@@ -190,7 +190,7 @@ export default function Form() {
             </div>
 
             {
-                fonction != "" && fonction != 'Directeur' && (
+                fonction != "" && (fonction != 'Directeur' && fonction != 'Autres') && (
 
                     <div className="field">
                         <div className="control">

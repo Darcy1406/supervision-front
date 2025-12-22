@@ -6,6 +6,7 @@ import Main from '../Main.jsx';
 import { Transcription } from '../Pages/Transcription/Transcription.jsx'
 import Analyse from "../Pages/Analyse/Analyse.jsx";
 import Dashboard from "../Pages/Dashboard/Dashboard.jsx";
+import DashboardAdmin from "../Pages/Admin/Dashboard/DashboardAdmin.jsx";
 import Data from "../Pages/Donnees/Data.jsx";
 import ComptePiece from "../Pages/ComptePiece/ComptePiece.jsx";
 import { Tsdmt } from "../Pages/Transcription/Pieces/Tsdmt/Tsdmt.jsx";
@@ -161,6 +162,10 @@ export const router = createBrowserRouter([
 
                     {
                         path: '',
+                        element: <DashboardAdmin />
+                    },
+                    {
+                        path: 'log',
                         element: <AuditLog />
                     },
                     {
