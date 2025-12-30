@@ -18,9 +18,15 @@ export default function Pagination({description="", currentPage, itemsPerPage, l
         setReload(!reload);
     }
 
+
+    const reset_pagination = () => {
+        currentPage.current = 1;
+        setReload(!reload)
+    }
+
     
   return (
-    <div id='bloc-pagination' className='flex items-center justify-center rounded-sm shadow-sm bg-white'>
+    <div id='bloc-pagination' className='flex items-center justify-center bg-white'>
 
         <div className=" flex-1 container-description flex items-center mx-4">
             <p className='text-xl'>
@@ -28,21 +34,30 @@ export default function Pagination({description="", currentPage, itemsPerPage, l
             </p>
         </div>
 
-        <div className="container-pagination flex items-center justify-center gap-2 mx-4">
+        <div className="container-pagination flex items-center justify-center gap-6 mx-4">
 
-            <button className={currentPage.current == 1 ? 'cursor-pointer duration-150 ease-in-out hover:text-blue-400 hidden' : 'cursor-pointer duration-150 ease-in-out hover:text-blue-400'} onClick={prev}>
+            <p className='text-xl'>{description + " " + currentPage.current + " sur " + Math.ceil(liste?.length / itemsPerPage.current)}</p>
+
+            <div className="contrainer-btn flex items-center gap-1">
+
+                <button className={`button`} onClick={prev} disabled={currentPage.current == 1}>
+                    <span className='icon text-2xl'>
+                        <i className="fas fa-chevron-left"></i>
+                    </span>
+                </button>
+
+                <button className='button is-link' onClick={reset_pagination}>
+                    1
+                </button>
+
+                <button className={ 'button'} onClick={next} disabled={Math.ceil(liste?.length / itemsPerPage.current) <= currentPage.current}>
                 <span className='icon text-2xl'>
-                    <i className="fas fa-arrow-left"></i>
-                </span>
-            </button>
+                        <i className="fas fa-chevron-right"></i>
+                    </span>
+                </button>
 
-            <p className='text-2xl font-semibold italic'>{description + " " + currentPage.current}</p>
+            </div>
 
-            <button className={ Math.ceil(liste?.length / itemsPerPage.current) <= currentPage.current ? 'cursor-pointer duration-150 ease-in-out hover:text-blue-400 hidden' : 'cursor-pointer duration-150 ease-in-out hover:text-blue-400'} onClick={next}>
-            <span className='icon text-2xl'>
-                    <i className="fas fa-arrow-right"></i>
-                </span>
-            </button>
 
         </div>
     </div>

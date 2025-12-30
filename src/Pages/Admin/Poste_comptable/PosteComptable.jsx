@@ -99,7 +99,7 @@ export default function PosteComptable() {
         {/* <td>{item['lieu']}</td> */}
         <td>{item['poste']}</td>
         <td>{item['responsable']}</td>
-        <td>
+        <td className='w-50'>
           <div className="flex gap-2">
 
             <button className="button is-success is-small" onClick={() => modifier_un_poste_comptable(item['id'], item['code_poste'], item['nom_poste'], item['lieu'], item['poste'], item['responsable'], item['utilisateur_id'])}>
@@ -170,26 +170,50 @@ export default function PosteComptable() {
     <>
       <div id='poste_comptable' className='h-full p-1'>
 
+        <div className='bg-white rounded-sm shadow-sm'>
 
-        <div className="container-table my-2 relative" style={{height: 'calc(100% - 35px)'}}>
+        </div>
 
-          <p className='text-xl font-semibold bg-white p-4 rounded-sm shadow-sm mt-4'>Liste des postes comptables</p>
+        {/* Titre */}
+        <div className="container-table rounded-sm shadow-sm px-2 my-4 relative bg-white">
 
-          <NavLink to='/admin/poste_comptable/form' className='button is-dark my-2'>Ajouter un poste Comptable</NavLink>
+          <div className="bg-white flex items-center p-2 px-4 border-b border-gray-200">
 
-          {/* Rechercher un poste comptable */}
-          <div className='container-recherche flex bg-white border border-gray-300 p-2 rounded-sm shadow-sm mb-2'>
+            <p className='flex-1 text-xl font-semibold'>Liste des postes comptables</p>
 
-            <span>
-              <i className='fas fa-search'></i>
-            </span>
-
-
-            <input type="text" className="outline-none w-full mx-2" placeholder='Entrer le nom du poste comptable' onChange={(e) => rechercher_poste_comptable(e.target.value)} />
+            <NavLink to='/admin/poste_comptable/form' className='button is-link my-2'>
+              <span className="icone mx-1">
+                <i className="fas fa-plus"></i>
+              </span>
+              Ajouter un poste Comptable
+            </NavLink>
 
           </div>
 
-          <table className='table is-hoverable is-fullwidth is-marginless'>
+
+          {/* Rechercher un poste comptable */}
+          <div className='border-b border-gray-200 py-2 px-4'>
+
+            <div className='bg-gray-200 p-2'>
+
+              <div className='container-recherche flex bg-white border border-gray-300 p-2 rounded-sm shadow-sm'>
+
+                <span>
+                  <i className='fas fa-search'></i>
+                </span>
+
+
+                <input type="text" className="outline-none w-full mx-2" placeholder='Entrer le nom du poste comptable' onChange={(e) => rechercher_poste_comptable(e.target.value)} />
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+          <table className='table border-b border-gray-200 is-hoverable is-fullwidth is-marginless'>
 
             <thead>
               <tr>
@@ -217,7 +241,7 @@ export default function PosteComptable() {
 
                 : <tr>
                   <td colSpan={5}>
-                    <p className='text-center'>En attente des données</p>
+                    <p className='text-center'>En attente des données ...</p>
                   </td>
                 </tr>
               }

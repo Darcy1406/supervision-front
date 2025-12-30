@@ -132,7 +132,7 @@ export default function Exercice() {
 
                     : <p className="text-center">Aucune donnée à afficher</p>
 
-                : <p className="text-center">En attente des données</p>
+                : <p className="text-center">En attente des données ...</p>
             }   
 
         </div>

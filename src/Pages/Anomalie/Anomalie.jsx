@@ -245,6 +245,7 @@ export default function Anomalie() {
                 className={` ${['résolue', 'resolue'].includes(item['statut'].toLowerCase()) ? 'cursor-pointer' : ''} ${estActive ? 'bg-blue-200' : ''} `} 
                 onClick={['résolue', 'resolue'].includes(item['statut'].toLowerCase()) ? () => { setLigneActive(item.id); voir_resolution(item['id']) } : () => {} }
             >
+
                 <td>
                     {
                         !( ['résolue', 'resolue'].includes(item['statut'].toLowerCase()) ) ? 
@@ -252,21 +253,24 @@ export default function Anomalie() {
                         : null
                     }
                 </td>
+
                 <td>{item['document__poste_comptable__nom_poste']}</td>
                 <td>{item['date_anomalie']}</td>
                 <td>{item['description']}</td>
-                <td>
+
+                <td className=''>
                     {
                         item['statut'].toLowerCase() == 'nouvelle' ?
-                            <p className='bg-red-300 p-2 rounded-xl border border-red-400 text-center'>{item['statut']}</p>
+                            <p className='bg-red-300 py-1 rounded-xl border border-red-400 text-center my-1'>{item['statut']}</p>
 
                         : item['statut'].toLowerCase() == 'en cours' ? 
-                            <p className='bg-blue-300 p-2 rounded-xl border border-blue-400 text-center'>{item['statut']}</p>
+                            <p className='bg-blue-300 py-1 rounded-xl border border-blue-400 text-center'>{item['statut']}</p>
                             
-                        : <p className='bg-green-300 p-2 rounded-xl border border-green-400 text-center'>{item['statut']}</p>
+                        : <p className='bg-green-300 py-1 rounded-xl border border-green-400 text-center'>{item['statut']}</p>
                     }
                     
                 </td>
+
                 <td>{item['created_at']}</td>
             </tr>
         )
@@ -279,8 +283,8 @@ export default function Anomalie() {
             if(result['succes']){
                 setSelectedAnomalie([])
                 setIsVisible(false);
-                fetchData(`${API_URL}/data/anomalie/get`, 'get', {}, setAnomalies);
-                fetchData(`${API_URL}/data/anomalie/get`, 'get', {}, setAnomaliesFiltered);
+                liste_des_anomalies(setAnomalies)
+                liste_des_anomalies(setAnomaliesFiltered)
                 data_filter();
             }
         }
@@ -308,21 +312,23 @@ export default function Anomalie() {
 
 
   return (
-    <div id='anomalie' className='h-full px-4'>
 
-        <p className='p-4 bg-white text-lg rounded-sm shadow-sm'>Liste des anomalies</p>
+    <div id='anomalie' className='h-full px-4 '>
 
-        {/* Filtre */}
-        <div className="bg-white rounded-sm shadow-sm recherche flex justify-center items-center my-2 p-2 gap-4">
+        <div className='bg-white rounded-sm shadow-sm'>
 
-            <div className='flex-1 flex gap-2 items-center '>
+            <p className='p-4 bg-white text-lg border-b border-gray-200'>Liste des anomalies</p>
 
-                <div className=''>
-                    <label htmlFor="" className="label">Poste comptable : </label>
-                </div>
+            {/* Filtre */}
+            <div className="bg-gray-200 rounded-sm shadow-sm recherche flex justify-center items-center my-1 p-4 gap-4">
 
-                <div className="flex-1">
-                    <input list='poste_comptable' className='input' placeholder='Choisissez un poste comptable' value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value) }/>
+                <div className='flex-1 bg-white border border-gray-300 p-2 rounded-sm flex gap-2 items-center '>
+
+                    <span className='icone'>
+                        <i className="fas fa-search"></i>
+                    </span>
+
+                    <input list='poste_comptable' className='outline-none flex-1' placeholder='Choisissez un poste comptable' value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value) }/>
                     <datalist id='poste_comptable'>
                         {
                             postes_comptables && postes_comptables.map((item, index) => (
@@ -330,174 +336,162 @@ export default function Anomalie() {
                             ))
                         }
                     </datalist>
+
                 </div>
 
-            </div>
+                <div className='flex-1 flex gap-2 items-center'>
 
-            <div className='flex-1 flex gap-2 items-center'>
-
-                <div className=''>
-                    <label htmlFor="" className="label">Type d'anomalie : </label>
-                </div>
-
-                <div className='flex-1'>
-                    <select name="" id="" className='bg-white p-2 border border-gray-300 rounded-lg w-full' value={type_analyse} onChange={ (e) => setTypeAnalyse(e.target.value) }>
-                        <option value="" disabled>------</option>
+                    <select name="" id="" className='bg-white p-2 border border-gray-300 rounded-sm w-full' value={type_analyse} onChange={ (e) => setTypeAnalyse(e.target.value) }>
+                        <option value="" disabled>Type d'anomalie</option>
                         <option value="report_sje">Report SJE</option>
                         <option value="equilibre_balance">Equilibre Balance</option>
                         <option value="solde_caisse">Verification Solde caisse</option>
                         <option value="solde_anormale">Verification Solde anormale</option>
                     </select>
+
                 </div>
 
-            </div>
-
-            <div className='flex-1 flex gap-2 items-center'>
-
-                <div className=''>
-                    <label htmlFor="" className="label">Exercice : </label>
-                </div>
-                
-                <div className='flex-1'>
-                    <select name="" id="" className='bg-white w-full p-2 rounded-lg border border-gray-300' value={exercice} onChange={(e) => {setExercice(e.target.value)}}>
-                        <option value="" disabled>------</option>
+                <div className='flex-1 flex gap-2 items-center'>
+                    
+                    <select name="" id="" className='bg-white w-full p-2 rounded-sm border border-gray-300' value={exercice} onChange={(e) => {setExercice(e.target.value)}}>
+                        <option value="" disabled>Exercice</option>
                         {
                             exercices?.map((item, index) => (
                                 <option key={index} value={item['annee']}>{item['annee']}</option>
                             ))
                         }
                     </select>
+
                 </div>
+
             </div>
 
-        </div>
+            <div className="container-table px-2 relative p-1">
 
-        <div className="container-table px-2 relative my-4 p-1" style={{height: 'calc(100% - 140px)'}}>
-
-            {
-                selected_anomalie.length > 0 ?
-                    <div className="container-btn flex gap-4 my-4">
-                        {
-                            selected_anomalie.length > 1 ?
-                                <button className='bg-blue-400 cursor-pointer px-4 py-2 rounded-sm border border-blue-500 duration-200 ease-in-out hover:bg-blue-500' onClick={change_state_anomalie}>
-                                    Traiter({selected_anomalie.length})
-                                </button>
-                            :
-                                <>
+                {
+                    selected_anomalie.length > 0 ?
+                        <div className="container-btn flex gap-4 border-b border-gray-200 p-2">
+                            {
+                                selected_anomalie.length > 1 ?
                                     <button className='bg-blue-400 cursor-pointer px-4 py-2 rounded-sm border border-blue-500 duration-200 ease-in-out hover:bg-blue-500' onClick={change_state_anomalie}>
                                         Traiter({selected_anomalie.length})
                                     </button>
+                                :
+                                    <>
+                                        <button className='bg-blue-400 cursor-pointer px-4 py-2 rounded-sm border border-blue-500 duration-200 ease-in-out hover:bg-blue-500' onClick={change_state_anomalie}>
+                                            Traiter({selected_anomalie.length})
+                                        </button>
 
-                                    <button className='bg-green-400 cursor-pointer px-4 py-2 rounded-sm border border-green-500 duration-200 ease-in-out hover:bg-green-500' onClick={() => setIsVisible(true)}>
-                                        Resoudre({selected_anomalie.length})
-                                    </button>
+                                        <button className='bg-green-400 cursor-pointer px-4 py-2 rounded-sm border border-green-500 duration-200 ease-in-out hover:bg-green-500' onClick={() => setIsVisible(true)}>
+                                            Résoudre({selected_anomalie.length})
+                                        </button>
 
-                                    <button className='button is-dark text-white' onClick={exporter_rapport}>
-                                        Exporter un rapport({selected_anomalie.length})
-                                    </button>
+                                        <button className='button is-dark text-white' onClick={exporter_rapport}>
+                                            Exporter un rapport({selected_anomalie.length})
+                                        </button>
 
-                                </>
-                        }
-                        
-                    </div>
-                : null
-            }
-
-
-            {/* Description de la resolution de l'anomalie */}
-            {
-                resolution ?
-                    resolution.length > 0 ?
-                        <fieldset className='border-2 border-green-300 px-6 py-4 mx-2 w-1/2 rounded-lg'>
-                            <legend>
-                                <span className='mx-1 icon text-red-500 cursor-pointer duration-150 ease-in-out hover:text-red-600' onClick={() => { setResolution(null); setLigneActive(null) } }>
-                                    <i className='fas fa-times-circle'></i>
-                                </span>
-                                Resoltion de l'anomalie : {resolution[0].created_at}
-                            </legend>
-
-                            <p>
-                                {resolution[0].commentaire}
-                            </p>
-                        </fieldset>
+                                    </>
+                            }
+                            
+                        </div>
                     : null
-                : null
-            }
+                }
 
 
-            {/* Va contenir les checkboxs de filtres sur les status */}
-            <div className='container-filtre is-pulled-right mx-4 my-2'>
+                {/* Description de la resolution de l'anomalie */}
+                {
+                    resolution ?
+                        resolution.length > 0 ?
+                            <fieldset className='border-2 border-green-300 px-6 py-4 mx-2 w-1/2 rounded-lg'>
+                                <legend>
+                                    <span className='mx-1 icon text-red-500 cursor-pointer duration-150 ease-in-out hover:text-red-600' onClick={() => { setResolution(null); setLigneActive(null) } }>
+                                        <i className='fas fa-times-circle'></i>
+                                    </span>
+                                    Resoltion de l'anomalie : {resolution[0].created_at}
+                                </legend>
 
-                <label htmlFor="" className='mx-4'>
-                    <input type="checkbox" value='nouvelle' name="" id="" className='checkbox' checked={isNouveau} onChange={(e) => setIsNouveau(e.target.checked)}/>
-                    Nouvelle
-                </label>
+                                <p>
+                                    {resolution[0].commentaire}
+                                </p>
+                            </fieldset>
+                        : null
+                    : null
+                }
 
-                <label htmlFor="" className='mx-4'>
-                    <input type="checkbox" value='en cours' name="" id="" className='checkbox' checked={isEnCours} onChange={(e) => setIsEncours(e.target.checked)}/>
-                    En cours
-                </label>
 
-                <label htmlFor="" className='mx-4'>
-                    <input type="checkbox" value='résolue' name="" id="" className='checkbox' checked={isResolu} onChange={(e) => setIsResolu(e.target.checked)}/>
-                    Résolue
-                </label>
+                {/* Va contenir les checkboxs de filtres sur les status */}
+                <div className='container-filtre is-pulled-right mx-4 my-2'>
+
+                    <label htmlFor="" className='mx-4'>
+                        <input type="checkbox" value='nouvelle' name="" id="" className='checkbox' checked={isNouveau} onChange={(e) => setIsNouveau(e.target.checked)}/>
+                        Nouvelle
+                    </label>
+
+                    <label htmlFor="" className='mx-4'>
+                        <input type="checkbox" value='en cours' name="" id="" className='checkbox' checked={isEnCours} onChange={(e) => setIsEncours(e.target.checked)}/>
+                        En cours
+                    </label>
+
+                    <label htmlFor="" className='mx-4'>
+                        <input type="checkbox" value='résolue' name="" id="" className='checkbox' checked={isResolu} onChange={(e) => setIsResolu(e.target.checked)}/>
+                        Résolue
+                    </label>
+
+                </div>
+
+                <table className='table border-b border-gray-200 is-fullwidth is-marginless'>
+
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Poste comptable</th>
+                            <th>Date d'anomalie</th>
+                            <th>Description</th>
+                            <th className='w-35'>Statut</th>
+                            <th>Date d'analyse</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {
+
+                            data_paginate ? 
+
+                                data_paginate.length > 0 ?
+
+                                    data_paginate.map((item, index) => (
+                                        <AnomalieItem item={item} key={index}/>
+                                    ))
+
+                                : 
+                                    <tr className='text-center'>
+                                        <td colSpan={6}>Aucune donnée à afficher</td>    
+                                    </tr>
+
+                            :   
+                            <tr className='text-center'>
+                                <td colSpan={6}>En attente des données ...</td>    
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+                {
+                    anomalies?.length > 0 ?
+                        <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={anomalies} reload={reload_data} setReload={setReloadData} description='Page'/>
+                    : null
+                }
 
             </div>
 
-            <table className='table is-fullwidth border-b-4 border-gray-300 is-marginless'>
-
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Poste comptable</th>
-                        <th>Date d'anomalie</th>
-                        <th>Description</th>
-                        <th className='w-35'>Statut</th>
-                        <th>Date d'analyse</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    {
-
-                        anomalies ? 
-
-                            anomalies.length > 0 ?
-
-                                anomalies.map((item, index) => (
-                                    <AnomalieItem item={item} key={index}/>
-                                ))
-
-                            : 
-                                <tr className='text-center'>
-                                    <td colSpan={6}>Aucune donnée à afficher</td>    
-                                </tr>
-
-                        :   
-                        <tr className='text-center'>
-                            <td colSpan={6}>En attente des données</td>    
-                        </tr>
-                    }
-
-                </tbody>
-
-            </table>
-
-            {
-                anomalies?.length > 0 ?
-                    <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={anomalies} reload={reload_data} setReload={setReloadData} description='Page'/>
-                : null
-            }
-
         </div>
-
 
         <Modal isVisible={isVisible} setIsvisible={setIsVisible}>
             <Resolution handleSubmit={resoudre_anomalie} commentaire={commentaire} setCommentaire={setCommentaire}/>
         </Modal>
-
 
         {
             result ?

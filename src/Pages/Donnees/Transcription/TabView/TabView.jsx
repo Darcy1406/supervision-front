@@ -102,7 +102,7 @@ export default function TabView({data, titre, piece}){
 
     useEffect(() => {
         if(data){
-            setIdDoc(data[0].document_id)
+            setIdDoc(data[0]?.document_id)
         }
     }, [data])
 

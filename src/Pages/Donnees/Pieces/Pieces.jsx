@@ -75,8 +75,8 @@ export default function Pieces() {
                 <td>{item['fields']['created_at']}</td>
                 <td>{item['fields']['updated_at']}</td>
     
-                <td>
-                    <div className='flex gap-4'>
+                <td className='w-60'>
+                    <div className='flex gap-2'>
 
                         <button className='button is-small is-success' onClick={() => get_data_update([{'id': item['pk'], 'nom_piece': item['fields']['nom_piece'], 'periode': item['fields']['periode']}])}>
                             <span className='icon mx-1'>
@@ -121,18 +121,24 @@ export default function Pieces() {
   return (
     <div id='piece' className='h-full p-1'>
 
-        <div className='container-table-pieces p-1 my-2 relative' style={{height: 'calc(100% - 80px)'}}>
+        <div className='container-table-pieces p-1 my-2 bg-white rounded-sm shadow-sm'>
             
-            <p className='text-xl font-semibold bg-white rounded-sm shadow-sm my-2 p-4'>Liste des pieces comptables</p>
+            <div className='flex items-center bg-white py-2 px-4 border-b border-gray-200'>
 
-            <button className='bg-black px-4 py-2 text-white cursor-pointer rounded-lg my-2' onClick={() => setIsvisible(true)}>
-                <span className='icon'>
-                    <i className='fas fa-plus'></i>
-                </span>
-                Ajouter une pièce
-            </button>
+                <p className='flex-1 text-xl font-semibold'>Liste des pieces comptables</p>
 
-            <table className='table is-hoverable is-fullwidth is-marginless'>
+                <button className=' button is-link bg-black text-white cursor-pointer p-2 rounded-sm my-2' onClick={() => setIsvisible(true)}>
+                    <span className='icone mx-1'>
+                        <i className='fas fa-plus'></i>
+                    </span>
+                    Ajouter une pièce
+                </button>
+
+            </div>
+
+
+
+            <table className='table is-hoverable is-fullwidth is-marginless border-b border-gray-200'>
                 <thead>
 
                     <tr>
@@ -163,7 +169,7 @@ export default function Pieces() {
 
                         : <tr>
                             <td colSpan={5}>
-                            <p className='text-center'>En attente des données</p>
+                            <p className='text-center'>En attente des données ...</p>
                             </td>
                         </tr>
 

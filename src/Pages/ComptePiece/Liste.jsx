@@ -72,19 +72,23 @@ export default function Liste() {
 
   return (
 
-    <section id='liste' className='h-full'>
+    <section id='liste' className=''>
 
-            <div className="container-table relative" style={{height: 'calc(100% - 75px)'}}>
+            <div className="container-table bg-white rounded-sm shadow-sm">
             
-                <div className='container-title my-2'>
-                    <p className='px-2 py-4 bg-white rounded-sm shadow-sm text-lg'>Liste des liaisons entre pièces et comptes</p>
+                <div className='bg-white p-4 flex items-center border-b border-gray-200'>
+                    <p className='flex-1 text-lg'>Liste des liaisons entre pièces et comptes</p>
+
+                    <button className='button is-link' onClick={() => navigate('/main/data/ajouter_liaison_compte_piece')}>
+                        <span className='icone mx-1'>
+                            <i className='fas fa-plus'></i>
+                        </span>
+                        Créer une liaison
+                    </button>
                 </div>
 
-                <button className='button is-dark mb-4' onClick={() => navigate('/main/data/ajouter_liaison_compte_piece')}>
-                    Créer une liaison
-                </button>
 
-                <table className='table is-hoverable w-full'>
+                <table className='table is-marginless border-b border-gray-200 is-hoverable w-full'>
 
                     <thead>
                         <tr>
@@ -116,7 +120,7 @@ export default function Liste() {
 
                             : <tr>
                                 <td colSpan={6}>
-                                    <p className='text-center'>En attente des données</p>
+                                    <p className='text-center'>En attente des données ...</p>
                                 </td>
                             </tr>
 
@@ -125,7 +129,14 @@ export default function Liste() {
                     </tbody>
                 </table>
 
-                <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={liste} reload={reload_data} setReload={setReloadData} description='Page'/>
+                {
+                    liste && liste.length > 0 ?
+                    
+                        <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={liste} reload={reload_data} setReload={setReloadData} description='Page'/>
+
+                    : null
+                }
+
 
             </div>
 

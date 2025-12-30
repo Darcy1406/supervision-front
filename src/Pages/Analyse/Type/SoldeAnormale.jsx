@@ -62,7 +62,7 @@ export default function SoldeAnormale() {
         if(anomalies.length > 0){
 
             anomalies.forEach(item => {
-                description += ` ${item.compte__numero} : ${item.compte__solde_en_cours_exo} mais ${item.nature} = ${item.montant.toLocaleString('fr-FR')} Ar\n`  
+                description += ` ${item.compte__numero} : ${item.compte__solde_en_cours_exo} mais a une ${item.nature} = ${formatNombreAvecEspaces(item.montant)} Ar\n`  
             })
 
             const anomalie = [{
@@ -131,80 +131,80 @@ export default function SoldeAnormale() {
     <div id='solde_anormale bg-green-400'>
 
         <div className='my-2'>
-            <p className='text-center my-4 text-2xl'>Verification de solde anormale</p>
+            
         </div>
 
-        <div className="bloc-form px-4 py-2 border-b border-gray-300">
+        <div className="bloc-form w-8/9 mx-auto px-4 py-2 border-b border-gray-300 bg-white rounded-sm shadow-sm">
 
             <form onSubmit={handleSubmit}>
 
-                <div className='flex items-center justify-center gap-6 my-2 px-4 py-2 bg-white rounded-sm shadow-sm'>
+                <div className='flex items-center border-b border-gray-200 py-2 px-4'>
+
+                    <p className='flex-1 text-xl font-semibold'>Verification de solde anormale</p>
+
+
+                    <div className="">
+                        <button type='submit' className="py-2 px-4 bg-blue-500 text-white rounded-sm cursor-pointer duration-150 ease-in-out hover:bg-blue-600">
+                            <span className="icone mx-1">
+                                <i className='fas fa-rocket'></i>
+                            </span>
+                            Lancer
+                        </button>
+                    </div>
+
+
+                </div>
+
+                <div className='flex items-center justify-center gap-6 my-3 p-4 bg-white rounded-sm border border-gray-300'>
 
                     {/* Poste comptable */}
-                    <div className='flex-1 flex items-center gap-2'>
+                    <div className='flex-1 flex items-center gap-2 rounded-sm border border-gray-300 p-2'>
 
-                        <div className='w-35'>
-                            <label className='label'>Poste comptable : </label>
-                        </div>
+                        <span className='icone mx-1'>
+                            <i className="fas fa-search"></i>
+                        </span>
 
-                        <div className='w-70'>
-                            <input list='poste_comptable' className='input' placeholder='Choisissez un poste comptable' value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value)} required/>
-                            <datalist id='poste_comptable'>
-                                {
-                                    postes_comptables && postes_comptables.map((item, index) => (
-                                        <option key={index} value={item['nom_poste']} />
-                                    ))
-                                }
-                            </datalist>
-                        </div>
+                        <input list='poste_comptable' className='outline-none flex-1' placeholder='Choisissez un poste comptable' value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value)} required/>
+                        <datalist id='poste_comptable'>
+                            {
+                                postes_comptables && postes_comptables.map((item, index) => (
+                                    <option key={index} value={item['nom_poste']} />
+                                ))
+                            }
+                        </datalist>
 
                     </div>
 
                     {/* Piece */}
                     <div className='flex-1 flex items-center gap-2'>
 
-                        <div className=''>
-                            <label className="label">Piece : </label>
-                        </div>
-
-                        <div className='flex-1'>
-                            <select value={piece} onChange={(e) => setPiece(e.target.value)} className='bg-white w-full p-2 rounded-sm border border-gray-300' required>
-                                <option value="">-----</option>
-                                <option value="BOD">BOD</option>
-                                <option value="BOV">BOV</option>
-                            </select>
-                        </div>
+                        <select value={piece} onChange={(e) => setPiece(e.target.value)} className='bg-white w-full p-2 rounded-sm border border-gray-300' required>
+                            <option value="" disabled>Pièces</option>
+                            <option value="BOD">BOD</option>
+                            <option value="BOV">BOV</option>
+                        </select>
 
                     </div>
 
                     {/* Proprietaire */}
                     <div className="flex-1 flex items-center gap-2">
 
-                        <div className="">
-                            <label className="label">Proprietaire : </label>
-                        </div>
+                        <select className='w-full bg-white p-2 rounded-sm border border-gray-300' value={proprietaire} onChange={(e) => setProprietaire(e.target.value)}>
+                            <option value="" disabled>Propriétaire</option>
+                            <option value="ETAT">ETAT</option>
+                            <option value="REGION">REGION</option>
+                            <option value="COMMUNE">COMMUNE</option>
+                        </select>
 
-                        <div className='flex-1'>
-                            <select className='w-full bg-white p-2 rounded-sm border border-gray-300' value={proprietaire} onChange={(e) => setProprietaire(e.target.value)}>
-                                <option value="">------</option>
-                                <option value="ETAT">ETAT</option>
-                                <option value="REGION">REGION</option>
-                                <option value="COMMUNE">COMMUNE</option>
-                            </select>
-                        </div>
 
                     </div>
 
 
                     <div className='flex-1 flex items-center gap-2'>
 
-                        <div className=''>
-                            <label className='label'>Mois : </label>
-                        </div>
-
                         <div className='flex-1'>
                             <select className='bg-white w-full p-2 border border-gray-300 rounded-sm' value={mois} onChange={(e) => setMois(e.target.value)} required>
-                                <option value="">-----</option>
+                                <option value="" disabled>Mois</option>
                                 <option value="01">Janvier</option>
                                 <option value="02">Fevrier</option>
                                 <option value="03">Mars</option>
@@ -225,34 +225,20 @@ export default function SoldeAnormale() {
 
                     <div className='flex-1 flex items-center gap-2'>
 
-                        <div className=''>
-                            <label className='label'>Exercice : </label>
-                        </div>
+                        <select className='w-full bg-white p-2 rounded-sm border border-gray-300' value={exercice} onChange={(e) => setExercice(e.target.value)}>
+                            <option value="" disabled>Exercice</option>
 
-                        <div className='flex-1'>
+                            {
+                                liste_exercices && liste_exercices.map((item , index) => (
+                                    <option key={index} value={item['annee']}>{item['annee']}</option>
+                                ))
+                            }
 
-                            <select className='w-full bg-white p-2 rounded-sm border border-gray-300' value={exercice} onChange={(e) => setExercice(e.target.value)}>
-                                <option value="">------</option>
-
-                                {
-                                    liste_exercices && liste_exercices.map((item , index) => (
-                                        <option key={index} value={item['annee']}>{item['annee']}</option>
-                                    ))
-                                }
-
-                            </select>
-
-                        </div>
+                        </select>
 
                     </div>
 
-                    <div className=''>
-                        <div className="">
-                            <button className="button is-dark">
-                                Lancer
-                            </button>
-                        </div>
-                    </div>
+                    
 
 
 
@@ -271,14 +257,19 @@ export default function SoldeAnormale() {
                         anomalies_description.length > 0 ?
                             <ul className='text-center my-4 text-lg font-semibold'>
                                 {anomalies_description.map((a, index) => (
-                                    <li className='my-4 mx-auto bg-yellow-200 p-4 w-6/7' key={index}>
-                                        ⚠️ {a.document__nom_fichier} — {a.compte__numero} : il s'agit d'un compte {a.compte__solde_en_cours_exo} mais a une {a.nature} de {formatNombreAvecEspaces(a.montant) || 0} Ar
+                                    <li className='my-4 mx-auto border-2 border-yellow-300 rounded-sm bg-white  p-4 w-6/7 text-xl' key={index}>
+
+                                        <span className='icon mx-2 text-yellow-300'>
+                                            <i className="fas fa-exclamation-triangle"></i>
+                                        </span>
+
+                                        {a.document__nom_fichier} — {a.compte__numero} : il s'agit d'un compte {a.compte__solde_en_cours_exo} mais a une {a.nature} de {formatNombreAvecEspaces(a.montant) || 0} Ar
                                     </li>
                                 ))}
                         </ul> 
                         : 
                           <div className='w-full mx-auto border border-yellow-300 p-6 rounded-xl my-6'>
-                              <p className='text-center text-lg font-semibold'>Aucune anomalie détectée ✅</p>
+                              <p className='text-center text-lg font-semibold'>Aucune anomalie détectée</p>
                           </div>
                     : 
                         null

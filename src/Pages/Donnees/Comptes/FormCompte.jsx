@@ -286,7 +286,7 @@ export function FormCompte({isVisible, setIsVisible, data=[], setData, refresh, 
 
                 {/* Button d'envoi du formulaire */}
                 <button type="submit" className={ data.length > 0 ? 'bg-black cursor-pointer px-4 py-2 text-white rounded-sm' : 'bg-blue-500 cursor-pointer px-4 py-2 text-white rounded-sm'}>
-                    <span className='icone'>
+                    <span className='icone mx-1'>
                         <i className={ data.length > 0 ? 'fas fa-check' : 'fas fa-plus'}></i>
                         { data.length > 0 ? 'Valider' : 'Ajouter' }
                     </span>

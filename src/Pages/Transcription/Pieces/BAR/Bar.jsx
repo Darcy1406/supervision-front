@@ -113,7 +113,7 @@ export default function Bar() {
           method: 'post',
           headers: {
             // "Content-Type": "application/json",
-            "X-CSRFToken": csrftoken, // ✅ envoie du token CSRF
+            "X-CSRFToken": csrftoken, // envoie du token CSRF
           },
           credentials: "include",
           body: formData
@@ -245,7 +245,7 @@ export default function Bar() {
                 <div className="w-2/6 p-2">
 
                     <div className='my-4'>
-                        <p className='p-4 text-center bg-gray-300'>Debit</p>
+                        <p className='p-4 text-center bg-gray-300'>Débit</p>
                         <table className='table is-fullwidth'>
                             <thead>
                                 <tr>
@@ -286,7 +286,7 @@ export default function Bar() {
 
                     <div className='my-4'>
 
-                        <p className='p-4 text-center bg-gray-300'>Credit</p>
+                        <p className='p-4 text-center bg-gray-300'>Crédit</p>
                         <table className='table is-fullwidth'>
 
                             <thead>

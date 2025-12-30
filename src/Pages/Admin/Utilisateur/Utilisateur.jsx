@@ -172,28 +172,49 @@ export default function Utilisateur() {
 
   return (
     <>
-        <div id='utilisateur_liste' className='h-full'>
+        <div id='utilisateur_liste' className=''>
 
-            <div className="container-table relative p-1" style={{height: 'calc(100% - 25px)'}}>
+            <div className="container-table my-4 p-2 bg-white rounded-sm shadow-sm">
 
-                <p className='text-xl font-semibold bg-white shadow-lg p-4 rounded-sm mt-4'>Liste des utilisateurs du système</p>
+                <div className='flex items-center p-4 bg-white border-b border-gray-200'>
+
+                    <p className='flex-1 text-xl font-semibold'>Liste des utilisateurs du système</p>
 
 
-                <button className='button is-dark my-2' onClick={() => navigate('/admin/utilisateur/form')}>Ajouter un utilisateur</button>
-
-                {/* Rechercher un utiisateur */}
-                <div className='container-recherche mb-1 flex bg-white p-2 border border-gray-300 rounded-sm shadow-lg'>
-
-                    {/* <label className='label'>Rechercher</label> */}
-                    <span>
-                        <i className="fas fa-search"></i>
-                    </span>
-
-                    <input type="text" className="outline-none is-inline-block mx-2 w-full" placeholder="Entrer le nom ou le prenom de l'utilisateur" onChange={(e) => rechercher_utilisateur(e.target.value)} />
+                    <button className='button is-link' onClick={() => navigate('/admin/utilisateur/form')}>
+                        <span className='icone mx-1'>
+                            <i className="fas fa-plus"></i>
+                        </span>
+                        Ajouter un utilisateur
+                    </button>
 
                 </div>
 
-                <table className="table is-marginless is-hoverable is-fullwidth">
+
+                {/* Rechercher un utiisateur */}
+
+                <div className='border-b border-gray-200 py-2 px-4'>
+
+                    <div className='bg-gray-200 p-2'>
+
+                        <div className='container-recherche flex bg-white p-2 border border-gray-300 rounded-sm shadow-sm'>
+
+                            {/* <label className='label'>Rechercher</label> */}
+                            <span>
+                                <i className="fas fa-search"></i>
+                            </span>
+
+                            <input type="text" className="outline-none is-inline-block mx-2 w-full" placeholder="Entrer le nom ou le prenom de l'utilisateur" onChange={(e) => rechercher_utilisateur(e.target.value)} />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <table className="table border-b border-gray-200 is-marginless is-hoverable is-fullwidth">
 
                     <thead>
                         <tr>
@@ -202,7 +223,9 @@ export default function Utilisateur() {
                             <th>Email</th>
                             <th>Fonction</th>
                             <th>Zone</th>
-                            <th>Peut s'authentifier ?</th>
+                            <th>
+                                <p className='text-center'>Peut s'authentifier ?</p>
+                            </th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -228,7 +251,7 @@ export default function Utilisateur() {
                             : <tr>
                                 <td colSpan={7}>
                                     <p className='text-center'>
-                                        En attente des données
+                                        En attente des données ...
                                     </p>
                                 </td>
                             </tr>

@@ -303,9 +303,9 @@ export default function CalendrierAnnuel({ data = [], setYear, year, setAnomalie
             date: dateCourante,
             description: `L'encaisse fin du ${dateAVerifierKey} (${Number(
               montantSoldePrev
-            ).toLocaleString("fr-FR")}) ne correspond pas au report du ${dateCourante} (${Number(
+            ).toLocaleString("fr-FR")} Ar) ne correspond pas au report du ${dateCourante} (${Number(
               montantReport
-            ).toLocaleString("fr-FR")}) dans le fichier "${courant.report?.fichier}"`,
+            ).toLocaleString("fr-FR")} Ar) dans le fichier "${courant.report?.fichier}"`,
             fichier: [courant.report?.fichier].filter(Boolean),
             analyse: "report_sje",
           });

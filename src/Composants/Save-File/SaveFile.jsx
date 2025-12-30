@@ -218,35 +218,54 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
 
         {/* Fichier */}
         <div className="field mt-5">
+
             <div className="control">
+
                 <label className='label'>Fichier</label>
-                <div className="flex items-center gap-4">
-                    <div className="file">
+
+                {/* <div className="flex items-center gap-4"> */}
+                    <div className="file is-fullwidth">
+
                         <label className="file-label">
-                            <input type="file" className="file-input file-input-doc" onChange={selectedFile} required/>
+
+                            <input 
+                                type="file" 
+                                className="file-input file-input-doc" 
+                                onChange={selectedFile} 
+                                required
+                            />
+
                             <span className="file-cta">
+
                                 <span className="file-icon">
                                     <i className="fas fa-upload"></i>
                                 </span>
+
                                 <span className="file-label">
                                     Choisir un fichier
                                 </span>
+
                             </span>
+
+                            <span className="file-name">
+                                {file['nom_fichier'] || 'Aucun fichier selectionné'}
+                            </span>
+
                         </label>
                     </div>
-                    {
+                    {/* {
                         file['nom_fichier'] != "" ?
                             <div className=''>
                                 <span>{file['nom_fichier']}</span>
                             </div>
                         : null
-                    }
-                </div>
+                    } */}
+                {/* </div> */}
             </div>
         </div>
 
         <div className='mt-5'>
-            <button className='bg-green-400 px-5 py-2 rounded-lg shadow-sm cursor-pointer duration-150 ease-out hover:bg-green-500'>
+            <button className='bg-orange-400 px-5 py-2 rounded-lg shadow-sm cursor-pointer duration-150 ease-out hover:bg-orange-500'>
                 Importer
             </button>
         </div>

@@ -100,41 +100,41 @@ export default function AuditLog() {
       // Interface du composant
     return (
 
-    <div className="audit_log h-full p-1">
+    <div className="audit_log p-2 bg-white my-4 rounded-sm shadow-sm">
 
-        <div className="bg-white rounded-sm shadow-sm p-4 mt-4">
+        {/* Titre */}
+        <div className="bg-white p-4 border-b border-gray-200">
             <h1 className='title is-4'>Traçabilité des actions</h1>
 
             <p className='subtitle is-6'>Les actions effectuées sur ce système vont s'afficher ici</p>
         </div>
 
-        <div className="container-table relative" style={{height: 'calc(100% - 125px)'}}>
+        <div className="container-table">
 
-            <div className="container-recherche flex p-2 bg-white items-center my-2 rounded-sm shadow-sm">
-                
-                <span className="">
-                    <i className="fas fa-search"></i>
-                </span>
+            <div className="py-2 px-4 border-b border-gray-200">
 
-                <div className="flex-1">
-                    <input type="text" className="outline-none w-full mx-2" placeholder="Entrer un utilisateur" onChange={(e) => rechercher_logs(e.target.value)}/>
+                <div className="bg-gray-200 p-2">
 
-                    
+                    <div className="container-recherche flex p-2 bg-white items-center rounded-sm shadow-sm">
+                        
+                        <span className="">
+                            <i className="fas fa-search"></i>
+                        </span>
 
-                    {/* <input list="auditeurs" className="outline-none w-full mx-2" placeholder="Entrer un utilisateur" onChange={(e) => rechercher_logs(e.target.value)}/>
+                        <div className="flex-1">
 
-                    <datalist id="auditeurs">
-                        {
-                            auditeurs && auditeurs.map((item, index) => (
-                                <option key={index} value={item['nom'] + " " + item['prenom']} />
-                            ))
-                        }
-                    </datalist> */}
+                            <input type="text" className="outline-none w-full mx-2" placeholder="Entrer un utilisateur" onChange={(e) => rechercher_logs(e.target.value)}/>
+
+                        </div>
+                    </div>
 
                 </div>
+
             </div>
 
-            <table className="table is-hoverable is-marginless is-fullwidth">
+
+
+            <table className="table border-b border-gray-200 is-hoverable is-marginless is-fullwidth">
                 
                 <thead>
                     <tr>
@@ -168,7 +168,7 @@ export default function AuditLog() {
                         : <tr>
                             <td colSpan={6}>
                                 <p className="text-center">
-                                    En attente des données
+                                    En attente des données ...
                                 </p>
                             </td>
                         </tr>

@@ -185,47 +185,64 @@ export default function Comptes() {
   return (
     <div id='compte' className='h-full p-1'>
 
-      <div className="container-table px-2 w-full mx-auto my-2 relative" style={{height: 'calc(100% - 75px)'}}>
+      <div className="container-table bg-white px-2 w-full my-2 rounded-sm shadow-sm">
 
-        <p className='text-xl font-semibold bg-white rounded-sm shadow-sm p-4'>Liste des comptes</p>
+        {/* Titre */}
+        <div className="flex items-center bg-white py-2 px-4 border-b border-gray-200">
 
-        <button className='mt-2 bg-black px-4 py-2 text-white cursor-pointer rounded-lg ' onClick={() => setIsVisible(true)}>
-          <span className='icon'>
-            <i className='fas fa-plus'></i>
-          </span>
-          Ajouter un compte
-        </button>
+          <p className='flex-1 text-xl font-semibold'>Liste des comptes</p>
+
+          <button className='button is-link' onClick={() => setIsVisible(true)}>
+            <span className='icone mx-1'>
+              <i className='fas fa-plus'></i>
+            </span>
+            Ajouter un compte
+          </button>
+
+        </div>
+
 
         {/* Filtre (recherche) */}
-        <div className='container-recherche flex justify-center items-center gap-4 my-2 bg-white p-2 rounded-sm shadow-sm'>
 
-          <span>
-            <i className='fas fa-search'></i>
-          </span>
+        <div className='py-2 px-4 border-b border-gray-200'>
 
-          <div className='flex-1'>
-            <input type="text" className="outline-none w-full" placeholder='Entrer le numero du compte' onChange={(e) => rechercher_compte(e.target.value)} />
-          </div>
+          <div className='bg-gray-200 p-2'>
+              
+            <div className='container-recherche flex justify-center items-center gap-4 bg-white p-2 rounded-sm shadow-sm'>
 
-        </div>
+              <span>
+                <i className='fas fa-search'></i>
+              </span>
 
-        {/* Filtrer par type du compte */}
-        <div className='my-4'>
-          
-          <div className='container-show-item w-4/6 is-pulled-right'>
-            <div className='inline float-right'>
+              <div className='flex-1'>
+                <input type="text" className="outline-none w-full" placeholder='Entrer le numero du compte' onChange={(e) => rechercher_compte(e.target.value)} />
+              </div>
 
-              <Checkbox label='Regroupements' isChecked={isRegroupements} setIschecked={setIsRegroupements}/>
-
-              <Checkbox label='Opérations'  isChecked={isOperations} setIschecked={setIsOperations}/>
-
-              <Checkbox label='Synthèse' isChecked={isSynthese} setIschecked={setIsSynthese}/>
             </div>
+
           </div>
 
         </div>
 
-        <table className='table is-fullwidth is-hoverable'>
+
+
+        {/* Filtrer par type du compte */} 
+        <div className='border-b border-gray-200 container-show-item w-full py-2 is-pulled-right'>
+
+          <div className='inline float-right'>
+
+            <Checkbox label='Regroupements' isChecked={isRegroupements} setIschecked={setIsRegroupements}/>
+
+            <Checkbox label='Opérations'  isChecked={isOperations} setIschecked={setIsOperations}/>
+
+            <Checkbox label='Synthèse' isChecked={isSynthese} setIschecked={setIsSynthese}/>
+          </div>
+
+        </div>
+
+
+
+        <table className='table is-marginless border-b border-gray-200 is-fullwidth is-hoverable'>
 
           <thead>
             <tr>
@@ -257,7 +274,7 @@ export default function Comptes() {
 
               : <tr>
                 <td colSpan={6}>
-                  <p className='text-center'>En attente des données</p>
+                  <p className='text-center'>En attente des données ...</p>
                 </td>
               </tr>
 

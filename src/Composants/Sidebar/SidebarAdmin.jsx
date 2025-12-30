@@ -112,7 +112,9 @@ export default function SidebarAdmin() {
                 <i className="fas fa-user"></i>
             </span>
 
-            <p className='font-light text-white'>{user?.[0]['utilisateur__nom'] + " " + user?.[0]['utilisateur__prenom']}</p>
+            <p className='font-light text-white'>
+                {`${user?.[0]['utilisateur__nom']} ${user?.[0]['utilisateur__prenom']}` || 'Admin'}
+            </p>
         </div>
         
         {/* <button className='btn-connexion-admin' onClick={logout}>

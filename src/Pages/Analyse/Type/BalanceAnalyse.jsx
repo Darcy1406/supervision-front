@@ -141,42 +141,37 @@ export default function BalanceAnalyse() {
   return (
     <div id='equilibre_balance'>
 
-        <div className="bloc-form">
+        <div className="bloc-form px-4">
 
             <form onSubmit={handleSubmit}>
 
-                <div className='flex items-center justify-center gap-4 my-2 px-4 py-2 bg-white rounded-sm shadow-sm'>
+                <div className='flex mx-auto items-center justify-center gap-4 my-2 p-4 bg-white rounded-sm shadow-sm'>
 
                     {/* Poste comptable */}
-                    <div className='flex-1 flex items-center gap-2'>
+                    <div className='flex-1 flex items-center gap-2 bg-white rounded-sm border border-gray-300 p-2'>
 
-                        <div className='w-35'>
-                            <label className='label'>Poste comptable : </label>
-                        </div>
+                        <span className='icone mx-1'>
+                            <i className='fas fa-search'></i>
+                        </span>
 
-                        <div className='w-70'>
-                            <input list='poste_comptable' className='input' placeholder='Choisissez un poste comptable' value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value)} required/>
-                            <datalist id='poste_comptable'>
-                                {
-                                    postes_comptables && postes_comptables.map((item, index) => (
-                                        <option key={index} value={item['nom_poste']} />
-                                    ))
-                                }
-                            </datalist>
-                        </div>
+                        <input list='poste_comptable' className='outline-none flex-1' placeholder='Choisissez un poste comptable' value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value)} required/>
+                        <datalist id='poste_comptable'>
+                            {
+                                postes_comptables && postes_comptables.map((item, index) => (
+                                    <option key={index} value={item['nom_poste']} />
+                                ))
+                            }
+                        </datalist>
+
                     </div>
 
 
                     {/* Piece */}
                     <div className='flex-1 flex items-center gap-2'>
 
-                        <div className=''>
-                            <label className="label">Piece : </label>
-                        </div>
-
                         <div className='flex-1'>
                             <select value={piece} onChange={(e) => setPiece(e.target.value)} className='bg-white w-full p-2 rounded-sm border border-gray-300' required>
-                                <option value="">-----</option>
+                                <option value="" disabled>Pièces</option>
                                 <option value="BOD">BOD</option>
                                 <option value="BOV">BOV</option>
                             </select>
@@ -189,31 +184,20 @@ export default function BalanceAnalyse() {
                     {/* Proprietaire */}
                     <div className="flex-1 flex items-center gap-2">
 
-                        <div className='w-35'>
-                            <label className='label'>Propriétaire : </label>
-                        </div>
-
-                        <div className=''>
-                            <select className='w-full bg-white rounded-sm border border-gray-300 p-2' value={proprietaire} onChange={(e) => setProprietaire(e.target.value)} required>
-                                <option value="">------</option>
-                                <option value="ETAT">ETAT</option>
-                                <option value="REGION">REGION</option>
-                                <option value="COMMUNE">COMMUNE</option>
-                            </select>
-                        </div>
+                        <select className='w-full bg-white rounded-sm border border-gray-300 p-2' value={proprietaire} onChange={(e) => setProprietaire(e.target.value)} required>
+                            <option value="" disabled>Propriétaire</option>
+                            <option value="ETAT">ETAT</option>
+                            <option value="REGION">REGION</option>
+                            <option value="COMMUNE">COMMUNE</option>
+                        </select>
                         
                     </div>
 
                     {/* Mois */}
                     <div className='flex-1 flex items-center gap-2'>
 
-                        <div className=''>
-                            <label className='label'>Mois : </label>
-                        </div>
-
-                        <div className='flex-1'>
                             <select className='bg-white w-full p-2 border border-gray-300 rounded-sm' value={mois} onChange={(e) => setMois(e.target.value)} required>
-                                <option value="">-----</option>
+                                <option value="" disabled>Mois</option>
                                 <option value="01">Janvier</option>
                                 <option value="02">Fevrier</option>
                                 <option value="03">Mars</option>
@@ -227,31 +211,24 @@ export default function BalanceAnalyse() {
                                 <option value="11">Novembre</option>
                                 <option value="12">Décembre</option>
                             </select>
-                        </div>
+
                     </div>
 
                     {/* Exercice */}
                     <div className='flex-1 flex items-center gap-2'>
 
-                        <div className=''>
-                            <label className='label'>Exercice : </label>
-                        </div>
+                        <select className='bg-white w-full p-2 rounded-sm shadow border border-gray-300' value={exercice} onChange={(e) => setExercice(e.target.value)}>
 
-                        <div className='flex-1'>
+                            <option value="" disabled>Exercice</option>
 
-                            <select className='bg-white w-full p-2 rounded-sm shadow border border-gray-300' value={exercice} onChange={(e) => setExercice(e.target.value)}>
+                            {
+                                liste_exercices && liste_exercices.map((item, index) => (
+                                    <option key={index} value={item['annee']}>{item['annee']}</option>
+                                ))
+                            }
 
-                                <option value="">------</option>
-
-                                {
-                                    liste_exercices && liste_exercices.map((item, index) => (
-                                        <option key={index} value={item['annee']}>{item['annee']}</option>
-                                    ))
-                                }
-
-                            </select>
+                        </select>
  
-                        </div>
                     </div>
 
 
@@ -259,7 +236,10 @@ export default function BalanceAnalyse() {
                     <div className='flex items-center justify-center gap-2'>
 
                         <div className="">
-                            <button className="button is-dark">
+                            <button className="py-2 px-4 bg-blue-500 text-white rounded-sm cursor-pointer duration-150 ease-in-out hover:bg-blue-600">
+                                <span className="icone mx-1">
+                                    <i className='fas fa-rocket'></i>
+                                </span>
                                 Lancer
                             </button>
                         </div>
@@ -271,6 +251,7 @@ export default function BalanceAnalyse() {
                 </div>
                 
             </form>
+
         </div>
 
         <div className="flex gap-4 items-center justify-center w-full h-120 py-4">

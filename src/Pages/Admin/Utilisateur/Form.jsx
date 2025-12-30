@@ -149,7 +149,12 @@ export default function Form() {
         {/* Fomrulaire */}
         <form onSubmit={handlesbumit} className='mx-auto my-2'>
 
-            <button type='button' className='button is-link my-4' onClick={() => navigate('/admin/utilisateur')}>Liste des utilisateurs</button>
+            <button type='button' className='button is-dark my-4' onClick={() => navigate('/admin/utilisateur')}>
+                <span className='icon mx-1'>
+                    <i className="fas fa-list"></i>
+                </span>
+                Liste des utilisateurs
+            </button>
 
             {/* Nom */}
             <div className='field'>

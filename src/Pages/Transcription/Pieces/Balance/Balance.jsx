@@ -87,37 +87,50 @@ export default function Balance() {
   return (
     <div id='balance'>
 
-        <div className="container-form w-1/2 mx-auto my-4">
-            <p className='p-4 bg-gray-300 text-lg'>Balance</p>
+        <div className="container-form w-1/2 mx-auto my-4 bg-white p-4 rounded-sm shadow-sm">
+
+            <p className='p-4 border-b border-gray-200 text-xl'>Balance</p>
 
             <form onSubmit={(e) => handleSubmit(e)}>
 
                 {/* Fichier */}
                 <div className="field mt-5">
+
                     <div className="control">
+
                         <label className='label'>Fichier</label>
-                        <div className="flex items-center gap-4">
-                            <div className="file">
+
+                            <div className="file is-fullwidth">
+
                                 <label className="file-label">
-                                    <input type="file" className="file-input file-input-balance" onChange={selectedFile} accept=".xls,.xlsx" required/>
+
+                                    <input 
+                                        type="file" 
+                                        className="file-input file-input-balance" 
+                                        onChange={selectedFile} 
+                                        accept=".xls,.xlsx" 
+                                        required
+                                    />
+
                                     <span className="file-cta">
+
                                         <span className="file-icon">
                                             <i className="fas fa-upload"></i>
                                         </span>
+
                                         <span className="file-label">
                                             Choisir un fichier
                                         </span>
+
                                     </span>
+
+                                    <span className='file-name'>
+                                        { fichier?.['name'] || "Aucun fichier selectionné" }
+                                    </span>
+
                                 </label>
                             </div>
-                            {
-                                fichier ?
-                                    <div className=''>
-                                        <span>{fichier['name']}</span>
-                                    </div>
-                                : null
-                            }
-                        </div>
+                            
                     </div>
                 </div>
 
@@ -160,7 +173,7 @@ export default function Balance() {
                         <BtnChoice setIsvisible={setIsVisible} isDisabled={type == ""}/>
                 }
 
-                <button className='button is-dark w-full my-6' style={{fontSize: '20px'}} disabled={!doc || proprietaire == '' || type == '' || !fichier}>
+                <button className='button is-dark w-full mt-6 mb-2' style={{fontSize: '20px'}} disabled={!doc || proprietaire == '' || type == '' || !fichier}>
                     {
                         isSubmitting ?
                             <Loading />

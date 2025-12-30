@@ -149,7 +149,12 @@ export default function Formulaire() {
 
       </p>
 
-      <NavLink className='button is-dark my-4' to='/admin/poste_comptable'>Liste des postes comptables</NavLink>
+      <NavLink className='button is-dark my-4' to='/admin/poste_comptable'>
+        <span className='icon mx-1'>
+          <i className='fas fa-list'></i>
+        </span>
+        Liste des postes comptables
+      </NavLink>
 
 
       {/* Formulaire */}

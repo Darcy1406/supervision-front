@@ -47,32 +47,29 @@ export default function SjeAnalyse() {
     }, [])
 
   return (
-    <div>
+    <div className='bg-white p-2 rounded-sm shadow-sm w-11/12 mx-auto'>
 
         {/* Lancement de l'analyse */}
         <form onSubmit={lancer_analyse}>
 
-            <div className="flex justify-center items-center gap-6 py-4">
+            <div className="flex justify-center items-center gap-6 p-2 bg-white my-2 w-8/9 mx-auto border-b border-gray-200">
 
             
 
-                <div className="container-filtre flex justify-center items-center gap-2">
+                <div className="flex-1 bg-white p-2 flex items-center gap-2 border border-gray-300 rounded-sm shadow-sm">
+                    <span>
+                        <i className='fas fa-search'></i>
+                    </span>
 
-                    <div className=''>
-                        <label htmlFor="" className="label">Poste comptable : </label>
-                    </div>
-
-                    <div className='w-70'>
-                        <input list="poste_comptable" placeholder="Choisissez un poste comptable" className="bg-white p-2 border border-gray-300 rounded-lg w-full" value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value) } required/>
-                        <datalist id="poste_comptable">
-                            {
-                                postes_comptables && postes_comptables.map((item, index) => (
-                                    <option value={item['nom_poste']} key={index} />
-                                ))
-                            }
-                            
-                        </datalist>
-                    </div>
+                    <input list="poste_comptable" placeholder="Choisissez un poste comptable" className="flex-1 outline-none" value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value) } required/>
+                    <datalist id="poste_comptable">
+                        {
+                            postes_comptables && postes_comptables.map((item, index) => (
+                                <option value={item['nom_poste']} key={index} />
+                            ))
+                        }
+                        
+                    </datalist>
 
                 </div>
 
@@ -83,7 +80,10 @@ export default function SjeAnalyse() {
                 </div>
 
                 <div>
-                    <button type='submit' className='button is-dark'>
+                    <button type='submit' className='py-2 px-4 bg-blue-500 text-white rounded-sm cursor-pointer duration-150 ease-in-out hover:bg-blue-600'>
+                        <span className="icone mx-1">
+                            <i className='fas fa-rocket'></i>
+                        </span>
                         Lancer
                     </button>
                 </div>
