@@ -79,7 +79,7 @@ export const useAuthentification = () => {
     })
     .then(res => {
       if(!res.ok){
-        throw new Error('Error HTTP' + response.status)
+        throw new Error('Error HTTP' + res.status)
       }
       return res.json();
     })
@@ -87,7 +87,7 @@ export const useAuthentification = () => {
       setUser(data);
     })
     .catch(error => {
-      console.log(error)
+      console.log(error);
       useUserStore.getState().clearUser();
       navigate("/")
       
