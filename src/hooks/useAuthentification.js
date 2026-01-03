@@ -36,8 +36,6 @@ export const useAuthentification = () => {
         body: JSON.stringify({
           identifiant,
           password,
-          captchaToken
-          // token: captchaToken
         }),
         credentials: "include", // important pour que le cookie soit envoyé
   
