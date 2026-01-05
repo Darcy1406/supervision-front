@@ -296,6 +296,7 @@ export function ListeTranscription() {
     }
 
 
+    // Recuperer tous les exercices disponibles
     const obtenir_la_liste_des_exercices = () => {
         fetchData(`${API_URL}/data/exercice/get`, 'get', {}, setExercices)
     }

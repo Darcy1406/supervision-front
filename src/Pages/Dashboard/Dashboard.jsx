@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './Dashboard.css'
 import Calendrier from '../../Composants/Calendrier/Calendrier';
 import { fetchData } from '../../functions/fetchData';
@@ -43,6 +43,9 @@ export default function Dashboard() {
 
   const [evenements, setEvenements] = useState([])
 
+  const [exercices, setExercices] = useState(null)
+  const [exercice_choisi, setExerciceChoisi] = useState("")
+
   const handleChange = (name, value, setState) => {
     setState(prev => ({
       ...prev,
@@ -77,21 +80,24 @@ export default function Dashboard() {
 
 
   const voir_statistique_poste_comptable = () => {
+
     if(poste_choisi != ""){
 
-      fetchData(`${API_URL}/data/document/count`, 'post', {'action': 'compter_nombre_documents_par_poste_comptable', 'poste_comptable': poste_choisi}, setNbDoc)
+      fetchData(`${API_URL}/data/document/count`, 'post', {'action': 'compter_nombre_documents_par_poste_comptable', 'poste_comptable': poste_choisi, 'exercice': exercice_choisi}, setNbDoc)
 
-      fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombres_anomalies_par_poste_comptable', 'poste_comptable': poste_choisi}, setNbAnomalie)
+      fetchData(`${API_URL}/data/transcription/count`, 'post', {'action': 'compter_nombre_total_transcription_par_poste_comptable', 'poste_comptable': poste_choisi, 'exercice': exercice_choisi}, setNbTranscription)
+      
+      fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombres_anomalies_par_poste_comptable', 'poste_comptable': poste_choisi, 'exercice': exercice_choisi}, setNbAnomalie)
 
-      fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombres_anomalies_resolu_par_poste_comptables', 'poste_comptable': poste_choisi}, setNbCorrige)
+      fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'compter_nombres_anomalies_resolu_par_poste_comptables', 'poste_comptable': poste_choisi, 'exercice': exercice_choisi}, setNbCorrige)
 
-      fetchData(`${API_URL}/data/transcription/count`, 'post', {'action': 'compter_nombre_total_transcription_par_poste_comptable', 'poste_comptable': poste_choisi}, setNbTranscription)
 
-      fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombre_anomalies_par_mois_par_comptable', 'poste_comptable': poste_choisi}, setDataAnomalies)
+      fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombre_anomalies_par_mois_par_comptable', 'poste_comptable': poste_choisi, 'exercice': exercice_choisi}, setDataAnomalies)
 
-      fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombres_anomalies_resolues_par_mois_par_poste_comptable', 'poste_comptable': poste_choisi}, setDataAnomalieResolues)
+      fetchData(`${API_URL}/data/anomalie/count`, 'post', {'action': 'recuperer_nombres_anomalies_resolues_par_mois_par_poste_comptable', 'poste_comptable': poste_choisi, 'exercice': exercice_choisi}, setDataAnomalieResolues)
 
     }
+
   }
 
 
@@ -143,10 +149,16 @@ export default function Dashboard() {
     }
   }
 
+  // Recuperer tous les exercices disponibles
+  const obtenir_la_liste_des_exercices = () => {
+    fetchData(`${API_URL}/data/exercice/get`, 'get', {}, setExercices)
+  }
+
 
 
   useEffect(() => {
     data_generale()
+    obtenir_la_liste_des_exercices()
   }, [])
 
 
@@ -187,7 +199,7 @@ export default function Dashboard() {
         <div className='container-count w-1/7 h-full flex flex-wrap justify-center items-center gap-4'>
 
           {/* Document */}
-          <div className='bg-white h-35 w-full rounded-sm shadow-sm border border-blue-400'>
+          <div className='h-35 w-full rounded-sm shadow-sm border border-blue-400 bg-blue-50'>
 
             <p className='font-bold text-xl text-center mt-4 '>Document(s)</p>
             <p className='text-center text-4xl/20 font-thin text-blue-400'>{ nb_doc['total_doc'] ? formatNombreAvecEspaces(nb_doc['total_doc']) : 0 }</p>
@@ -195,19 +207,19 @@ export default function Dashboard() {
           </div>
 
           {/* Transcription */}
-          <div className='bg-white h-35 w-full rounded-sm shadow-sm border border-pink-400'>
+          <div className='h-35 w-full rounded-sm shadow-sm border border-pink-400 bg-pink-50'>
             <p className='font-bold text-xl text-center mt-4'>Transcription(s)</p>
             <p className='text-center text-4xl/20 font-thin text-pink-400'>{ nb_transcription['total_transcription'] ? formatNombreAvecEspaces(nb_transcription['total_transcription']) : 0 }</p>
           </div>
           
           {/* Anomalie */}
-          <div className='bg-white h-35 w-full rounded-sm shadow-sm border border-yellow-400'>
+          <div className='h-35 w-full rounded-sm shadow-sm border border-yellow-400 bg-yellow-50'>
             <p className='font-bold text-xl text-center mt-4'>Anomalie(s)</p>
             <p className='text-center text-4xl/20 font-thin text-yellow-400'>{ nb_anomalie['total_anomalies'] ? formatNombreAvecEspaces(nb_anomalie['total_anomalies']) : 0 }</p>
           </div>
 
           {/* Correction */}
-          <div className='bg-white h-35 w-full rounded-sm shadow-sm border border-green-400'>
+          <div className='h-35 w-full rounded-sm shadow-sm border border-green-400 bg-green-50'>
             <p className='font-bold text-xl text-center mt-4'>Correction(s)</p>
             <p className='text-center text-4xl/20 font-thin text-green-400'>{ nb_corrige['total_anomalies_resolu'] ? formatNombreAvecEspaces(nb_corrige['total_anomalies_resolu']) : 0 }</p>
           </div>  
@@ -218,16 +230,17 @@ export default function Dashboard() {
         {/* Item - 2 */}
         <div className='container-chart w-4/7 h-full flex flex-col justify-center flex-wrap gap-1 p-1'>
 
-          {/* Filtrer le tableau de bord par poste comptable */}
-          <div className='flex items-center gap-4 p-2'>
+          {/* Filtrer le tableau de bord par poste comptable et par annee */}
+          <div className='flex items-center gap-4 p-2 bg-gray-200 rounded-sm'>
 
-            <div>
-              <label className='label'>Poste comptable : </label>
-            </div>
+            {/* Poste comptable */}
+            <div className='flex-1 flex items-center gap-2 bg-white rounded-sm shadow-sm border border-gray-300 p-2'>
 
-            <div>
+              <span className='icone'>
+                <i className="fas fa-search"></i>
+              </span>
 
-              <input list='poste_comptable' className='input' placeholder='Poste comptable' value={poste_choisi} onChange={(e) => {setPosteChoisi(e.target.value)} }/>
+              <input list='poste_comptable' className='w-full outline-none' placeholder='Choisissez un poste comptable' value={poste_choisi} onChange={(e) => {setPosteChoisi(e.target.value)} }/>
               <datalist id='poste_comptable'>
                 {
                   poste_comptables && poste_comptables.map((item, index) => (
@@ -238,9 +251,21 @@ export default function Dashboard() {
 
             </div>
 
+            {/* Annee */}
+            <div className='flex-1'>
+                <select className='w-full rounded-sm shadow-sm bg-white p-2 border border-gray-300' value={exercice_choisi} onChange={(e) => setExerciceChoisi(e.target.value)}>
+                  <option value="" disabled>Exercice</option>
+                    {
+                      exercices?.map((item, index) => (
+                          <option key={index} value={item['annee']}>{item['annee']}</option>
+                      ))
+                    }
+                </select>
+            </div>
+
             <div>
 
-              <button className='button is-dark' disabled={poste_choisi == ""} onClick={voir_statistique_poste_comptable}>
+              <button className='button is-dark' disabled={poste_choisi == "" || exercice_choisi == ""} onClick={voir_statistique_poste_comptable}>
                 Voir
               </button>
 
@@ -252,13 +277,7 @@ export default function Dashboard() {
           <div className='w-full text-xl font-semibold text-gray-400'>
 
             <p className='italic tracking-widest'>
-              {
-                user ?
-                  user[0]['utilisateur__fonction'].toUpperCase() == 'chef_unite'.toUpperCase() ?
-                    `Tableau de bord zone ${user[0]['utilisateur__zone__nom_zone'].toLowerCase()}`
-                  : `Tableau de bord ${poste_choisi}`
-                : null
-              }
+              {`Tableau de bord ${poste_choisi} ${exercice_choisi}`}
               
             </p>
 

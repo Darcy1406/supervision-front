@@ -22,7 +22,7 @@
 
 
 #main .container-main .container-notification.show{
-    width: 255px;
+    width: 225px;
     /* width: 0; */
 }
 
@@ -39,7 +39,7 @@
 
 
 #main .container-main .bloc-main.minimize{
-    width: calc(100vw - 255px);
+    width: calc(100vw - 225px);
     /* width: 100vw; */
 }
 
