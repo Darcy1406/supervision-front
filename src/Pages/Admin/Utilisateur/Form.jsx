@@ -135,9 +135,9 @@ export default function Form() {
 
 
   return (
-    <div className='form-user w-1/2 p-6 mx-auto h-full border-l border-r border-gray-300'>
+    <div className='form-user w-3/4 py-4 px-6 mx-auto h-full'>
 
-        <p className='text-center my-2 text-xl font-semibold'>
+        <p className='text-center my-2 text-xl font-semibold bg-white rounded-sm shadow-sm p-4'>
             {
                 data_user ?
                     'Modifier un utilisateur'
@@ -147,7 +147,7 @@ export default function Form() {
         </p>
 
         {/* Fomrulaire */}
-        <form onSubmit={handlesbumit} className='mx-auto my-2'>
+        <form onSubmit={handlesbumit} className='mx-auto my-2 bg-white p-4 rounded-sm shadow-sm'>
 
             <button type='button' className='button is-dark my-4' onClick={() => navigate('/admin/utilisateur')}>
                 <span className='icon mx-1'>
@@ -156,20 +156,20 @@ export default function Form() {
                 Liste des utilisateurs
             </button>
 
-            {/* Nom */}
-            <div className='field'>
-                <div className="control">
+            <div className="flex gap-2 items-center justify-center mb-2">
+
+                {/* Nom */}
+                <div className='flex-1'>
                     <label className='label'>Nom</label>
                     <input type="text" name='nom' className="input" placeholder="Entrer le nom de l'utilisateur" value={nom} onChange={(e) => setNom(e.target.value)} required/>
                 </div>
-            </div>
 
-            {/* Prénom(s) */}
-            <div className='field'>
-                <div className="control">
+                {/* Prénom(s) */}
+                <div className='flex-1'>
                     <label className='label'>Prénom(s)</label>
                     <input type="text" name='prenom' className="input" placeholder="Entrer le prenom de l'utilisateur" value={prenom} onChange={(e) => setPrenom(e.target.value)}/>
                 </div>
+
             </div>
 
             {/* Email */}

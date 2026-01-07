@@ -4,6 +4,7 @@ import { API_URL } from "../../../Config"
 import { DoughnutChart } from "../../../Composants/Graphique/DoughnutChart"
 import { LineChart } from "../../../Composants/Graphique/LineChart"
 import { getRandomColor } from "../../../functions/Function"
+import { BarChart } from "../../../Composants/Graphique/BarChart"
 
 export default function DashboardAdmin() {
   const [users_count, setUsersCount] = useState(null)
@@ -110,11 +111,11 @@ export default function DashboardAdmin() {
           />
         </div>
 
-        <div className="w-1/2 bg-white rounded-sm shadow-sm p-2">
+        <div className="w-1/2 flex justify-center items-center bg-white rounded-sm shadow-sm p-2">
 
-          <DoughnutChart 
+          <BarChart 
             info={users_authenticated_by_moth}
-            tabColor={getRandomColor(12)}
+            tabColor={getRandomColor(1)}
             labels={["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']}
             object='Utilisateurs authentifiés'
             title="Nombre d'authentification par mois"

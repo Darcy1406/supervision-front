@@ -138,8 +138,9 @@ export default function Formulaire() {
 
 
   return (
-    <div id='form-poste-comptable' className='border border-gray-300 w-1/2 mx-auto p-4'>
-      <p className='text-center text-xl mx-auto my-2'>
+    <div id='form-poste-comptable' className='w-3/4 mx-auto p-4'>
+
+      <p className='text-center text-xl mx-auto my-2 font-semibold bg-white rounded-sm shadow-sm p-2'>
 
         {
           poste_comptable ?
@@ -149,55 +150,63 @@ export default function Formulaire() {
 
       </p>
 
-      <NavLink className='button is-dark my-4' to='/admin/poste_comptable'>
-        <span className='icon mx-1'>
-          <i className='fas fa-list'></i>
-        </span>
-        Liste des postes comptables
-      </NavLink>
 
 
       {/* Formulaire */}
-      <form onSubmit={ (e) => { handlesbumit(e); e.target.reset() } }>
+      <form onSubmit={ (e) => { handlesbumit(e); e.target.reset() } } className='bg-white p-4 rounded-sm shadow-sm'>
 
-        {/* Code poste comptable */}
-        <div className="field">
-          <div className="control">
-            <label className="label">Code</label>
-            <input type="text" name='code_poste' className='input' placeholder='Entrer le code du poste comptable' required ref={ref_code_poste}/>
+        <NavLink className='button is-dark my-4' to='/admin/poste_comptable'>
+          <span className='icon mx-1'>
+            <i className='fas fa-list'></i>
+          </span>
+          Liste des postes comptables
+        </NavLink>
+
+        <div className='flex mb-2 gap-4 items-center justify-center'>
+
+          {/* Code poste comptable */}
+          <div className="flex-1">
+            {/* <div className="control"> */}
+              <label className="label">Code</label>
+              <input type="text" name='code_poste' className='input' placeholder='Entrer le code du poste comptable' required ref={ref_code_poste}/>
+            {/* </div> */}
           </div>
+
+          {/* Nom poste comptable */}
+          <div className="flex-1">
+            {/* <div className="control"> */}
+              <label className="label">Nom</label>
+              <input type="text" name='nom_poste' className='input' placeholder='Entrer le nom du poste comptable' required ref={ref_nom_poste}/>
+            {/* </div> */}
+          </div>
+
         </div>
 
-        {/* Nom poste comptable */}
-        <div className="field">
-          <div className="control">
-            <label className="label">Nom</label>
-            <input type="text" name='nom_poste' className='input' placeholder='Entrer le nom du poste comptable' required ref={ref_nom_poste}/>
-          </div>
-        </div>
 
-        {/* Lieu poste comptable */}
-        <div className="field">
-          <div className="control">
-            <label className="label">Lieu</label>
-            <input type="text" name='lieu' className='input' placeholder='Entrer le lieu du poste comptable' required ref={ref_lieu}/>
+        <div className='flex gap-4'>
+
+          {/* Lieu poste comptable */}
+          <div className="flex-1">
+              <label className="label">Lieu</label>
+              <input type="text" name='lieu' className='input' placeholder='Entrer le lieu du poste comptable' required ref={ref_lieu}/>
           </div>
+          
+          {/* Poste */}
+          <div className="flex-1">
+              <label className="label">Poste</label>
+
+              <input list="poste" className="input" placeholder='Veuillez choisir un poste'/>
+              <datalist id='poste'>
+                {
+                  postes && postes.map((item, index) => (
+                    <option key={index} value={item['poste']} />
+                  ))
+                }
+              </datalist>
+          </div>
+
         </div>
         
-        {/* Poste */}
-        <div className="field">
-          <div className="control">
-            <label className="label">Poste</label>
-            <select name="poste" className='bg-white p-2 w-full rounded-sm border border-gray-300' required ref={ref_poste} value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value)}>
-              <option value="" disabled>-----</option>
-              {
-                postes && postes.map((item, index) => (
-                  <option key={index} value={item['poste']}>{item['poste']}</option>
-                ))
-              }
-            </select>
-          </div>
-        </div>
 
         {/* Responsable */}
         <div className="field">

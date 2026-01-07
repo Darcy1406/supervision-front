@@ -287,20 +287,20 @@ export default function Dashboard() {
           {/* Les graphiques (anomalies) */}
           <div className='w-full h-65 flex justify-center items-center gap-2'>
            
-            <div className='w-2/3 h-full flex justify-center items-center chart-1 rounded-sm shadow-sm bg-white'>
+            <div className='w-1/2 h-full flex justify-center items-center chart-1 rounded-sm shadow-sm bg-white'>
 
               <BarChart 
                 info={data_anomalies} 
                 tabColor={getRandomColor(1)}
-                labels={['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']}
+                labels={["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']}
                 object='Anomlies'
                 title='Anomalies detectées par mois'
               />
 
             </div>
 
-            <div className="w-1/3 h-full chart-2 rounded-sm shadow-sm bg-white">
-              <DoughnutChart 
+            <div className="flex-1 h-full flex justify-center items-center chart-2 rounded-sm shadow-sm bg-white">
+              <BarChart 
                 info={data_anomalies}
                 tabColor={getRandomColor(12)}
                 labels={["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']}
@@ -315,20 +315,20 @@ export default function Dashboard() {
           {/* Les graphiques (correction) */}
           <div className='w-full h-66 flex gap-2 w-full'>
 
-            <div className='w-2/3 flex justify-center items-center rounded-sm shadow-sm bg-white'>
+            <div className='w-1/2 flex justify-center items-center rounded-sm shadow-sm bg-white'>
 
               <LineChart 
                 info={data_anomalie_resolues} 
                 tabColor={getRandomColor(1)}
-                labels={['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']}
+                labels={["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']}
                 object='Anomalies resolues'
                 title='Anomalies resolues par mois'
               />
 
             </div> 
 
-            <div className='w-1/3 h-full chart-4 rounded-sm shadow-sm bg-white'>
-              <DoughnutChart 
+            <div className='flex-1 flex justify-center items-center h-full chart-4 rounded-sm shadow-sm bg-white'>
+              <BarChart 
                 info={data_anomalie_resolues}
                 tabColor={getRandomColor(12)}
                 labels={["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']}

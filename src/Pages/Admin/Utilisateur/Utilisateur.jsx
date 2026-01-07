@@ -142,10 +142,14 @@ export default function Utilisateur() {
 
     // Executer la fonction pour paginer les donnees au moment du rendu (dependances : users, reload_data)
     useEffect(() => {
-        if(users.length > 0){
+        if(users){
             paginateData(currentPage.current, itemsPerPage.current, users, setDataPaginate);
         }
     }, [users, reload_data])
+
+    useEffect(() => {
+        console.log('data pagiante : ', data_paginate);
+    }, [])
 
 
     // Executer la recuperation de tous les utilisateurs au moment du rendu (dependances : result)
