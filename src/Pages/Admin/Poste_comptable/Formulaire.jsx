@@ -195,7 +195,7 @@ export default function Formulaire() {
           <div className="flex-1">
               <label className="label">Poste</label>
 
-              <input list="poste" className="input" placeholder='Veuillez choisir un poste' value={poste_choisi} onChange={(e) => setPosteChoisi(e.target.value)} required/>
+              <input list="poste" name='poste' className="input" placeholder='Veuillez choisir un poste'/>
               <datalist id='poste'>
                 {
                   postes && postes.map((item, index) => (
