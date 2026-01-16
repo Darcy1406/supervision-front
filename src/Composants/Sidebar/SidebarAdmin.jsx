@@ -113,7 +113,7 @@ export default function SidebarAdmin() {
             </span>
 
             <p className='font-light text-white'>
-                {`${user?.[0]['utilisateur__nom']} ${user?.[0]['utilisateur__prenom']}` || 'Admin'}
+                { user?.[0]['utilisateur__nom'] || 'Admin'}
             </p>
         </div>
         

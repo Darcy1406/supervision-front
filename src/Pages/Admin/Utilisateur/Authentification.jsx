@@ -55,9 +55,9 @@ export default function Authentification({email, id_user, setIsVisible, setMessa
     }, [result])
 
 
-    useEffect(() => {
-        console.log('id user', id_user);
-    }, [id_user])
+    // useEffect(() => {
+    //     console.log('id user', id_user);
+    // }, [id_user])
 
 
   return (
@@ -97,7 +97,7 @@ export default function Authentification({email, id_user, setIsVisible, setMessa
                 {
                     isSubmitting ?
                         <Loading />
-                    : 'Creer'
+                    : 'Créer'
                 }
             </button>
 

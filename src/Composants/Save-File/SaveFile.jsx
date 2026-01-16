@@ -134,32 +134,13 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
                 <div className="control">
                     <label className="label">Période</label>
                     <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['periode']} onChange={() => {} } required>
-                        <option value="" disabled></option>
+                        <option value="" disabled>----------</option>
                         <option value="Journalière">Journalière</option>
                         <option value="Décadaire">Décadaire</option>
                         <option value="Mensuelle">Mensuelle</option>
                     </select>
                 </div>
             </div>
-
-            {/* Exercice */}
-            {
-                file['periode'] != 'Journalière' && (
-                    <div className="field w-1/3">
-                        <div className="control">
-                            <label className="label">Exercice</label>
-                            <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['exercice']} onChange={(e) => handleChange('exercice', e.target.value)} required={file['periode'] != 'Journalière'}>
-                                <option value="" disabled></option>
-                                {
-                                    exercices?.map((item, index) => (
-                                        <option key={index} value={item['annee']}>{item['annee']}</option>
-                                    ))
-                                }
-                            </select>
-                        </div>
-                    </div>
-                )
-            }
 
             {/* Mois */}
             {
@@ -169,7 +150,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
                         <div className="control">
                             <label className="label">Mois</label>
                             <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['mois']} onChange={(e) => handleChange('mois', e.target.value)} required={file['periode'] != 'Journalière'}>
-                                <option value="" disabled></option>
+                                <option value="" disabled>----------</option>
                                 <option value="01">Janvier</option>
                                 <option value="02">Février</option>
                                 <option value="03">Mars</option>
@@ -187,7 +168,26 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
                     </div>
 
                 )
-            }   
+            }  
+
+            {/* Exercice */}
+            {
+                file['periode'] != 'Journalière' && (
+                    <div className="field w-1/3">
+                        <div className="control">
+                            <label className="label">Exercice</label>
+                            <select name="" id="" className='border border-gray-300 rounded-sm w-full p-2 cursor-pointer' value={file['exercice']} onChange={(e) => handleChange('exercice', e.target.value)} required={file['periode'] != 'Journalière'}>
+                                <option value="" disabled>----------</option>
+                                {
+                                    exercices?.map((item, index) => (
+                                        <option key={index} value={item['annee']}>{item['annee']}</option>
+                                    ))
+                                }
+                            </select>
+                        </div>
+                    </div>
+                )
+            } 
 
         </div>
 
@@ -265,7 +265,7 @@ export default function SaveFile({type_piece, setFichier, onRegisterResetFile}) 
         </div>
 
         <div className='mt-5'>
-            <button className='bg-orange-400 px-5 py-2 rounded-lg shadow-sm cursor-pointer duration-150 ease-out hover:bg-orange-500'>
+            <button className='bg-orange-400 text-white px-5 py-2 rounded-lg shadow-sm cursor-pointer duration-150 ease-out hover:bg-orange-500'>
                 Importer
             </button>
         </div>

@@ -70,7 +70,11 @@ export default function TsdmtView({data}) {
                     : <td colSpan={2}>{item['nature']}</td>
                 }
 
-                <td className='w-35'>{ item['montant'] == 0 ? "0" : formatNombreAvecEspaces(item['montant'].toFixed(2))} Ar</td>
+                <td className='w-35'>
+                    <p className='text-right'>
+                        { item['montant'] == 0 ? "0" : formatNombreAvecEspaces(parseFloat(item['montant']).toFixed(2))} Ar
+                    </p>
+                </td>
             </tr>
         )
     }
@@ -81,6 +85,8 @@ export default function TsdmtView({data}) {
             arranger_les_donnees()
         }
     }, [data])
+
+    console.log('montant', montant);
 
 
   return (
@@ -98,7 +104,11 @@ export default function TsdmtView({data}) {
 
                 <tr className='font-semibold text-lg'>
                     <td colSpan={2}>Encaise de la décade précédente</td>
-                    <td className='text-blue-500'>{formatNombreAvecEspaces(montant['report'].toFixed(2)) || '0,00'} Ar</td>
+                    <td className='text-blue-500'>
+                        <p className='text-right'>
+                            {formatNombreAvecEspaces(parseInt(montant['report'], 10).toFixed(2)) || '0,00'} Ar
+                        </p>
+                    </td>
                 </tr>
 
                 {
@@ -109,7 +119,11 @@ export default function TsdmtView({data}) {
 
                 <tr className='font-semibold text-lg'>
                     <td colSpan={2}>Total Recettes</td>
-                    <td>{formatNombreAvecEspaces(montant['total_recettes'].toFixed(2)) || '0,00'} Ar</td>
+                    <td>
+                        <p className='text-right'>
+                            {formatNombreAvecEspaces(parseFloat(montant['total_recettes']).toFixed(2)) || '0,00'} Ar
+                        </p>
+                    </td>
                 </tr>
 
                 
@@ -121,12 +135,20 @@ export default function TsdmtView({data}) {
 
                 <tr className='font-semibold text-lg'>
                     <td colSpan={2}>Total Dépenses</td>
-                    <td className='text-red-500'>{formatNombreAvecEspaces(montant['total_depenses'].toFixed(2)) || '0,00'} Ar</td>
+                    <td className='text-red-500'>
+                        <p className="text-right">
+                            {formatNombreAvecEspaces(parseFloat(montant['total_depenses']).toFixed(2)) || '0,00'} Ar
+                        </p>
+                    </td>
                 </tr>
                 
                 <tr className='font-semibold text-lg'>
                     <td colSpan={2}>Encaisse fin de la décade </td>
-                    <td className='text-green-500'>{formatNombreAvecEspaces(montant['solde'].toFixed(2)) || '0,00'} Ar</td>
+                    <td className='text-green-500 w-70 '>
+                        <p className='text-right'>
+                            {formatNombreAvecEspaces(parseFloat(montant['solde']).toFixed(2)) || '0,00'} Ar
+                        </p>
+                    </td>
                 </tr>
 
             </tbody>

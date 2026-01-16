@@ -4,6 +4,8 @@ import { API_URL } from "../../../Config"
 import { Alert } from "../../../Composants/Alert/Alert"
 import Pagination from "../../../Composants/Pagination/Pagination"
 import { paginateData } from "../../../functions/Function"
+import Modal from "../../../Composants/Modal/Modal"
+import Confirmation from "../../../Composants/Confirmation/Confirmation"
 
 export default function Exercice() {
 
@@ -12,6 +14,9 @@ export default function Exercice() {
     const [reload_data, setReloadData] = useState(false)
     const [annee, setAnnee] = useState("")
     const [result, setResult] = useState(null)
+
+    const [isVisible, setIsVisible] = useState(false);
+    const [id_exercice, setIdExercice] = useState(0);
 
     const currentPage = useRef(1)
     const itemsPerPage = useRef(5)
@@ -24,6 +29,27 @@ export default function Exercice() {
     const creer_un_nouveau_exercice = (e) => {
         e.preventDefault()
         fetchData(`${API_URL}/data/exercice/create`, 'post', {'annee': annee}, setResult)
+    }
+
+
+    // Cette fonction va afficher la fenetre modale de confirmation
+    const confirmation_suppresion = (id) => {
+        setIdExercice(id);
+        setIsVisible(true);
+    }
+
+
+    // Cette fonction va demander de supprimer un exercice
+    const supprimer_un_exercice = () => {
+        fetchData(
+            `${API_URL}/data/exercice/delete`, 
+            'delete', 
+            {
+              'id': id_exercice
+            },
+            setResult
+        )
+        setIsVisible(false)
     }
 
 
@@ -41,21 +67,12 @@ export default function Exercice() {
                 <p className="text-center text-lg">{item['annee']}</p>
 
                 <div className="container-button flex gap-2 mx-2" style={{position: 'absolute', right: '10px', bottom: '5px'}}>
-
-                   
-
-                        <button className="text-green-400 cursor-pointer duration-150 ease-in-out hover:text-green-500">
-                            <span>
-                                <i className="fas fa-edit"></i>
-                            </span>
-                        </button>
-
-                        <button className="text-red-400 cursor-pointer duration-150 ease-in-out hover:text-red-500">
-                            <span>
-                                <i className="fas fa-trash"></i>
-                            </span>
-                        </button>
-
+    
+                    <button className="text-red-400 cursor-pointer duration-150 ease-in-out hover:text-red-500" onClick={() => confirmation_suppresion(item['id'])}>
+                        <span className="text-xl">
+                            <i className="fas fa-trash-alt"></i>
+                        </span>
+                    </button>
 
                 </div>
             </div>
@@ -99,12 +116,17 @@ export default function Exercice() {
                 <p className="text-center text-2xl font-bold">Formulaire</p>
 
                 <div className="">
-                    <label className="is-block my-1">Entrer un nouveau exercice</label>
+                    <label className="is-block my-1">Entrer un exercice</label>
                     <input type="number" className="input" placeholder="Ajouter un nouveau exercice" value={annee} onChange={(e) => setAnnee(e.target.value)} required/>
                 </div>
 
                 <div className="my-4">
-                    <button type="submit" className="button is-link" disabled={annee == ""}>Ajouter</button>
+                    <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-sm my-2 cursor-pointer duration-150 ease-in-out " disabled={annee == ""}>
+                        <span className="icone mx-1">
+                            <i className="fas fa-plus"></i>
+                        </span>
+                        Ajouter
+                    </button>
                 </div>
 
             </form>
@@ -146,6 +168,15 @@ export default function Exercice() {
         }
 
         </div>
+
+
+        {
+            <Modal isVisible={isVisible} setIsvisible={setIsVisible} width_children="w-1/3">
+                <Confirmation supprimer={supprimer_un_exercice} setIsvisible={setIsVisible}/>
+
+            </Modal>
+        }
+
 
         {/* Mesage d'alert */}
         {

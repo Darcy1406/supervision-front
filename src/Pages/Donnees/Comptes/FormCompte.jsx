@@ -128,7 +128,9 @@ export function FormCompte({isVisible, setIsVisible, data=[], setData, refresh, 
         handleChange('solde_fin_gest', data[0].solde_fin_gest)
         handleChange('type', data[0].type)
         handleChange('proprietaire', data[0].proprietaire)
+        // console.log('data', data);
     }
+
 
 
     useEffect(() => {
@@ -285,11 +287,8 @@ export function FormCompte({isVisible, setIsVisible, data=[], setData, refresh, 
                 
 
                 {/* Button d'envoi du formulaire */}
-                <button type="submit" className={ data.length > 0 ? 'bg-black cursor-pointer px-4 py-2 text-white rounded-sm' : 'bg-blue-500 cursor-pointer px-4 py-2 text-white rounded-sm'}>
-                    <span className='icone mx-1'>
-                        <i className={ data.length > 0 ? 'fas fa-check' : 'fas fa-plus'}></i>
-                        { data.length > 0 ? 'Valider' : 'Ajouter' }
-                    </span>
+                <button type="submit" className={` ${data.length > 0 ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600'} text-white px-4 py-2 rounded-sm my-4 cursor-pointer duration-150 ease-in-out`}>
+                    { data.length > 0 ? 'Appliquer' : 'Ajouter' }
                 </button>
 
             </form>

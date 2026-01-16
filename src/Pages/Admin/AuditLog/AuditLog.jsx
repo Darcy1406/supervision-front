@@ -178,7 +178,7 @@ export default function AuditLog() {
             </table>
 
             {
-                logs?.length > itemsPerPage.current ?
+                logs?.length > 0 ?
                 <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={logs} reload={reload_data} setReload={setReloadData} description='Page'/>
                 : null
             }

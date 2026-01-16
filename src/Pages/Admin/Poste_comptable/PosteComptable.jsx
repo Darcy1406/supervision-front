@@ -115,7 +115,7 @@ export default function PosteComptable() {
             <button className="button is-danger is-small" onClick={() => show_confirmation(item['id'])}>
 
               <span className='mx-1'>
-                <i className='fas fa-trash'></i>
+                <i className='fas fa-trash-alt'></i>
               </span>
               
               Supprimer
@@ -250,7 +250,7 @@ export default function PosteComptable() {
           </table>
 
           {
-            poste_comptables?.length > itemsPerPage.current ?
+            poste_comptables?.length > 0 ?
               <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={poste_comptables} reload={reload_data} setReload={setReloadData} description='Page'/>
             : null
           }

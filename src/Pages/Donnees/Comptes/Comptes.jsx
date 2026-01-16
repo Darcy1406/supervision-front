@@ -135,11 +135,18 @@ export default function Comptes() {
 
           <div className='flex gap-2'>
 
-            <button className="button is-success is-small" onClick={() => get_data_update([{'id': item['id'], 'classe': item['classe'], 'rubrique': item['rubrique'], 'poste': item['poste'], 'numero': item['numero'], 'libelle': item['libelle'], 'acte_reglementaire': item['acte_reglementaire'], 'solde_en_cours_exo': item['solde_en_cours_exo'], 'solde_fin_gest': item['solde_fin_gest'], 'type': item['type'], 'proprietaire': item['proprietaire_id']}])}>
+            <button 
+              className="button is-success is-small" onClick={() => get_data_update([{'id': item['id'], 'classe': item['classe'], 'rubrique': item['rubrique'], 'poste': item['poste'], 'numero': item['numero'], 'libelle': item['libelle'], 'acte_reglementaire': item['acte_reglementaire'], 'solde_en_cours_exo': item['solde_en_cours_exo'], 'solde_fin_gest': item['solde_fin_gest'], 'type': item['type'], 'proprietaire': item['proprietaire_id']}])}>
+              <span className='icon mx-1'>
+                <i className='fas fa-edit'></i>
+              </span>
               Modifier
             </button>
 
             <button className='button is-danger is-small' onClick={() => confirmation_suppresion(item['id'])}>
+              <span className='icon mx-1'>
+                <i className="fas fa-trash-alt"></i>
+              </span>
               Suprrimer
             </button>
 
@@ -284,7 +291,7 @@ export default function Comptes() {
         </table>
 
         {
-          comptes?.length > itemsPerPage.current ?
+          comptes?.length > 0 ?
           <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={comptes} reload={reload_data} setReload={setReloadData} description='Page'/>
           : null
         }

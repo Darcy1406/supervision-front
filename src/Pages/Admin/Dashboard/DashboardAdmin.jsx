@@ -62,7 +62,7 @@ export default function DashboardAdmin() {
   return (
     <section id="dashboard-admin" className="h-full p-1">
 
-      <p className="my-4 text-2xl">Tableau de bord administrateur</p>
+      <p className="my-6 text-3xl font-semibold">Tableau de bord administrateur</p>
 
       {/* Nombre total (count) */}
       <div className="container-count flex justify-center items-center gap-4 my-4">
@@ -98,7 +98,7 @@ export default function DashboardAdmin() {
       </div>
 
       {/* Graphique */}
-      <div className="container-chart flex gap-2 my-6" style={{height: 'calc(100% - 230px)'}}>
+      <div className="container-chart flex gap-2 my-6">
 
         <div className="w-1/2 flex justify-center items-center bg-white rounded-sm shadow-sm p-2">
           <LineChart 

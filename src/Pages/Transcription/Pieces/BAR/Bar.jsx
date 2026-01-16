@@ -195,9 +195,9 @@ export default function Bar() {
 
         <form onSubmit={(e) => send_document(e)}>
 
-            <div className='flex gap-4 justify-center'>
+            <div className='flex gap-4 justify-center pt-5'>
                 
-                <div className='w-2/6 p-2'>
+                <div className='w-2/6 p-5 rounded-sm shadow-sm bg-white'>
 
                     {/* Numero ordre */}
                     <div className="field">
@@ -242,9 +242,9 @@ export default function Bar() {
 
                 </div>
 
-                <div className="w-2/6 p-2">
+                <div className="w-2/6 px-2">
 
-                    <div className='my-4'>
+                    <div className=''>
                         <p className='p-4 text-center bg-gray-300'>Débit</p>
                         <table className='table is-fullwidth'>
                             <thead>
@@ -328,7 +328,7 @@ export default function Bar() {
 
                 <div className="w-2/6">
 
-                    <p className='my-4 text-center text-xl'>BAR</p>
+                    <p className='text-center text-xl bg-white py-5 rounded-sm shadow-sm'>BAR</p>
                     
                     {
                         doc ?

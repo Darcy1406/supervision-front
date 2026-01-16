@@ -46,7 +46,7 @@ export default function Form() {
                     'fonction': fonction,
                     'zone': zone_choisi
                 }, setIdUser)
-            setIsVisible(true);
+                setResult(id_user)
         }
         else{
             fetchData(`${API_URL}/users/update_user`,
@@ -122,6 +122,8 @@ export default function Form() {
           data_a_modifier();
         }
     }, [data_user]);
+
+    
 
 
     // Titre de l'interface
@@ -219,10 +221,10 @@ export default function Form() {
 
             <div className="flex gap-4 my-4">
                 <div>
-                    <button className={`${data_user ? 'bg-yellow-300' : 'bg-blue-300'} px-6 py-2 rounded-lg cursor-pointer duration-150 ease-in-out ${data_user ? 'hover:bg-yellow-400' : 'hover:bg-blue-400'}`}>
+                    <button className={`${data_user ? 'bg-green-500' : 'bg-blue-500'} text-white p-2 px-4 rounded-sm cursor-pointer duration-150 ease-in-out ${data_user ? 'hover:bg-green-600' : 'hover:bg-blue-600'}`}>
                         {
                         data_user ?
-                            'Valider'
+                            'Appliquer'
                             : 'Ajouter'
                         }
                     </button>

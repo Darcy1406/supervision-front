@@ -28,13 +28,13 @@ export default function Analyse({salutation}) {
   return (
     <div id='analyse' className='w-full h-full'>
 
-      <div className='container_type_analyse py-2 w-8/9 mx-auto'>
+      <div className='container_type_analyse p-2 mx-auto'>
 
-        <div className='bg-white p-2 w-95 rounded-sm'>
+        <div className='bg-white p-2 w-95 rounded-sm border border-gray-300'>
 
           <label className='mx-2'>Type d'analyse : </label>
           
-          <select name="" id="" value={url_children} className='p-1' onChange={(e) => { setUrlChildren(e.target.value); navigate(`/main/analysis/${e.target.value}`) } }>
+          <select name="" id="" value={url_children} className='p-1 cursor-pointer outline-none' onChange={(e) => { setUrlChildren(e.target.value); navigate(`/main/analysis/${e.target.value}`) } }>
             <option value="">Report SJE</option>
             <option value="equilibre_balance">Equilibre balance</option>
             <option value="solde_caisse">Verification Solde caisse</option>

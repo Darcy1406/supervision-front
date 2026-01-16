@@ -21,7 +21,7 @@ export default function MainAdmin() {
 
 
   return (
-    <section id='main-admin' className='bg-gray-50'>
+    <section id='main-admin' className='bg-gray-100'>
 
         <NavAdmin />
       

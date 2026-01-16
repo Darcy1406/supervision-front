@@ -102,9 +102,9 @@ export default function SoldeCaisse() {
 
 
   return (
-    <div id='solde_caisse'>
+    <div id='solde_caisse' className='p-2'>
 
-        <div className="bloc-form w-8/9 mx-auto bg-white p-2 my-2 rounded-sm shadow-sm">
+        <div className="bloc-form mx-auto bg-white p-2 my-2 rounded-sm shadow-sm">
 
             <form onSubmit={handleSubmit}>
 
@@ -149,7 +149,7 @@ export default function SoldeCaisse() {
                     {/* Propriétaire */}
                     <div className='flex-1'>
                       
-                            <select className='w-full bg-white p-2 rounded-sm border border-gray-300' value={proprietaire} onChange={(e) => setProprietaire(e.target.value)}>
+                            <select className='w-full bg-white p-2 rounded-sm border border-gray-300' value={proprietaire} onChange={(e) => setProprietaire(e.target.value)} required>
                                 <option value="" disabled>Propriétaire</option>
                                 <option value="ETAT">ETAT</option>
                                 <option value="REGION">REGION</option>
@@ -183,7 +183,7 @@ export default function SoldeCaisse() {
                     {/* Exercice */}
                     <div className='flex-1 flex items-center gap-2'>
 
-                            <select className='w-full bg-white p-2 rounded-sm border border-gray-300' value={exercice} onChange={(e) => setExercice(e.target.value)}>
+                            <select className='w-full bg-white p-2 rounded-sm border border-gray-300' value={exercice} onChange={(e) => setExercice(e.target.value)} required>
                                 <option value="">Exercice</option>
 
                                 {
@@ -269,7 +269,7 @@ export default function SoldeCaisse() {
                     </div>
 
                 : 
-                    <div className='w-6/7 mx-auto border-2 border-yellow-300 p-6 rounded-lg mt-6'>
+                    <div className='mx-auto border-2 border-yellow-300 p-6 rounded-lg mt-6'>
                         <p className='text-center text-xl font-semibold'>
                             <span className='mx-2 text-3xl'>
                                 <i className="fas fa-database"></i>
@@ -278,7 +278,7 @@ export default function SoldeCaisse() {
                         </p>
                     </div>
             : 
-            <div className='w-6/7 mx-auto border-2 border-gray-300 p-6 rounded-lg mt-6'>
+            <div className='mx-auto border-2 border-gray-300 p-6 rounded-lg mt-6'>
                 <p className='text-center text-xl font-semibold'>
                     <span className='mx-2 text-3xl'>
                         <i className="fas fa-rocket"></i>

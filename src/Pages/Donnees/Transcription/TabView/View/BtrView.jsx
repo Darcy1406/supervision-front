@@ -94,9 +94,21 @@ export default function BtrView({data}) {
             <tr>
                 <td>{num_compte}</td>
                 <td>{libelle[num_compte]}</td>
-                <td className='text-lg font-semibold w-35'>{formatNombreAvecEspaces(anterieur[num_compte]) || '0,00'} Ar</td>
-                <td className='text-lg font-semibold w-35'>{formatNombreAvecEspaces(en_cours[num_compte]) || '0,00'} Ar</td>
-                <td className='text-lg font-semibold w-35'>{formatNombreAvecEspaces(cumule[num_compte]) || '0,00'} Ar</td>
+                <td className='text-lg font-semibold w-50'>
+                    <p className='text-right'>
+                        {formatNombreAvecEspaces(anterieur[num_compte]) || '0,00'} Ar
+                    </p>
+                </td>
+                <td className='text-lg font-semibold w-50'>
+                    <p className="text-right">
+                        {formatNombreAvecEspaces(en_cours[num_compte]) || '0,00'} Ar
+                    </p>
+                </td>
+                <td className='text-lg font-semibold w-50'>
+                    <p className='text-right'>
+                        {formatNombreAvecEspaces(cumule[num_compte]) || '0,00'} Ar
+                    </p>
+                </td>
 
             </tr>
         )
@@ -122,9 +134,25 @@ export default function BtrView({data}) {
                 <tr>
                     <th>Compte</th>
                     <th>Nature des opérations</th>
-                    <th>Antérieur</th>
-                    <th>En cours</th>
-                    <th>Cumulé</th>
+
+                    <th>
+                        <p className='text-right'>
+                            Antérieur
+                        </p>
+                    </th>
+
+                    <th>
+                        <p className='text-right'>
+                            En cours    
+                        </p>
+                    </th>
+
+                    <th>
+                        <p className='text-right'>
+                            Cumulé
+                        </p>
+                    </th>
+
                 </tr>
             </thead> 
 
@@ -138,17 +166,30 @@ export default function BtrView({data}) {
 
                 <tr>
                     <td colSpan={4}>Total anterieur</td>
-                    <td className='font-semibold text-lg text-blue-500'>{formatNombreAvecEspaces(total['anterieur']) || '0,00'} Ar</td>
+                    <td className='font-semibold text-lg text-blue-500'>
+                        <p className='text-right'>
+                            {formatNombreAvecEspaces(total['anterieur']) || '0,00'} Ar
+                        </p>
+                        
+                    </td>
                 </tr>
 
                 <tr>
                     <td colSpan={4}>Total en cours</td>
-                    <td className='font-semibold text-lg text-yellow-500'>{formatNombreAvecEspaces(total['en_cours']) || '0,00'} Ar</td>
+                    <td className='font-semibold text-lg text-yellow-500'>
+                        <p className="text-right">
+                            {formatNombreAvecEspaces(total['en_cours']) || '0,00'} Ar    
+                        </p>
+                    </td>
                 </tr>
 
                 <tr>
                     <td colSpan={4}>Total cumule</td>
-                    <td className='font-semibold text-lg text-green-500'>{formatNombreAvecEspaces(total['cumule']) || '0,00'} Ar</td>
+                    <td className='font-semibold text-lg text-green-500'>
+                        <p className="text-right">
+                            {formatNombreAvecEspaces(total['cumule']) || '0,00'} Ar
+                        </p>
+                    </td>
                 </tr>
 
             </tbody>

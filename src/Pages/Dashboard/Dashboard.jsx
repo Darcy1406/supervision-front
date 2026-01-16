@@ -287,7 +287,7 @@ export default function Dashboard() {
           {/* Les graphiques (anomalies) */}
           <div className='w-full h-65 flex justify-center items-center gap-2'>
            
-            <div className='w-1/2 h-full flex justify-center items-center chart-1 rounded-sm shadow-sm bg-white'>
+            <div className='w-1/2 h-full flex justify-center items-center chart-1 rounded-sm shadow-sm bg-white p-2'>
 
               <BarChart 
                 info={data_anomalies} 
@@ -299,7 +299,7 @@ export default function Dashboard() {
 
             </div>
 
-            <div className="flex-1 h-full flex justify-center items-center chart-2 rounded-sm shadow-sm bg-white">
+            <div className="w-1/2 h-full flex justify-center items-center chart-2 rounded-sm shadow-sm bg-white p-2">
               <BarChart 
                 info={data_anomalies}
                 tabColor={getRandomColor(12)}
@@ -313,9 +313,9 @@ export default function Dashboard() {
           </div>
 
           {/* Les graphiques (correction) */}
-          <div className='w-full h-66 flex gap-2 w-full'>
+          <div className='w-full h-66 flex gap-2'>
 
-            <div className='w-1/2 flex justify-center items-center rounded-sm shadow-sm bg-white'>
+            <div className='w-1/2 flex justify-center items-center rounded-sm shadow-sm bg-white p-2'>
 
               <LineChart 
                 info={data_anomalie_resolues} 
@@ -327,7 +327,7 @@ export default function Dashboard() {
 
             </div> 
 
-            <div className='flex-1 flex justify-center items-center h-full chart-4 rounded-sm shadow-sm bg-white'>
+            <div className='w-1/2 flex justify-center items-center h-full chart-4 rounded-sm shadow-sm bg-white p-2'>
               <BarChart 
                 info={data_anomalie_resolues}
                 tabColor={getRandomColor(12)}

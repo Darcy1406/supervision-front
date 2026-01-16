@@ -42,7 +42,8 @@ export default function BarView({info_supplementaire, data=[]}) {
 
   return (
     <div>
-      <p className='mx-2 text-lg font-semibold w-1/3 py-2 border-b border-gray-300' style={{ whiteSpace: 'pre-line', lineHeight: '35px' }}>
+      
+      <p className='mx-2 text-lg text-center font-semibold py-2 border-b border-gray-300' style={{ whiteSpace: 'pre-line', lineHeight: '35px' }}>
         {
           info_supplementaire
         }
@@ -50,7 +51,7 @@ export default function BarView({info_supplementaire, data=[]}) {
 
 
       <div className='container-credit mx-auto mt-4 mb-6'>
-          <p className='text-center py-2 text-lg bg-gray-300'>Credit</p>
+          <p className='text-center py-2 text-lg bg-gray-300'>Crédit</p>
 
           <table className='table is-fullwidth'>
             <thead>
@@ -74,7 +75,7 @@ export default function BarView({info_supplementaire, data=[]}) {
       </div>
 
       <div className='container-debit mx-auto mt-6'>
-          <p className='text-center py-2 text-lg bg-gray-300'>Debit</p>
+          <p className='text-center py-2 text-lg bg-gray-300'>Débit</p>
           <table className='table is-fullwidth'>
             <thead>
               <tr>

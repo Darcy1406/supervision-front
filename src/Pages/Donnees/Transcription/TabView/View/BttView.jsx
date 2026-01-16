@@ -3,12 +3,6 @@ import { formatNombreAvecEspaces } from "../../../../../functions/Function";
 
 export default function BttView({data}) {
 
-    useEffect(() => {
-        if(data){
-            console.log('data', data);
-        }
-    }, [data])
-
     const BtdItem = ({item}) => {
         return(
             
@@ -20,7 +14,7 @@ export default function BttView({data}) {
 
                             <td>{item['compte__libelle']}</td>
 
-                            <td className="w-40 text-lg font-semibold">
+                            <td className="w-50 text-lg font-semibold">
                                 <p className="text-right">
                                     {
                                         item['nature'] == 'Credit' ?
@@ -31,7 +25,7 @@ export default function BttView({data}) {
                 
                             </td>
 
-                            <td className="w-40 text-lg font-semibold">
+                            <td className="w-50 text-lg font-semibold">
                                 <p className="text-right">
                                     {
                                         item['nature'] == 'Debit' ?
@@ -45,7 +39,7 @@ export default function BttView({data}) {
                     : 
                         <>
                             <td colSpan={3}>{item['nature']}</td>
-                            <td className="w-40 text-lg font-semibold">
+                            <td className="w-50 text-lg font-semibold">
                                 <p className="text-right">
                                     {formatNombreAvecEspaces(item['montant']) || 0} Ar
                                 </p>
@@ -65,8 +59,18 @@ export default function BttView({data}) {
                 <tr>
                     <th>Compte</th>
                     <th>Libelle</th>
-                    <th>Credit</th>
-                    <th>Debit</th>
+
+                    <th>
+                        <p className="text-right">
+                            Crédit
+                        </p>
+                    </th>
+
+                    <th>
+                        <p className="text-right">
+                            Débit
+                        </p>
+                    </th>
                 </tr>
             </thead>
 

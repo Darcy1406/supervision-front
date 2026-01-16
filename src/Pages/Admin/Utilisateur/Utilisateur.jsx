@@ -120,7 +120,7 @@ export default function Utilisateur() {
 
                         <button className="button is-danger is-small" onClick={() => show_confirmation(item['id'])}>
                             <span className='mx-1'>
-                                <i className='fas fa-trash'></i>
+                                <i className='fas fa-trash-alt'></i>
                             </span>
                             Supprimer
                         </button>
@@ -147,9 +147,9 @@ export default function Utilisateur() {
         }
     }, [users, reload_data])
 
-    useEffect(() => {
-        console.log('data pagiante : ', data_paginate);
-    }, [])
+    // useEffect(() => {
+    //     console.log('data pagiante : ', data_paginate);
+    // }, [])
 
 
     // Executer la recuperation de tous les utilisateurs au moment du rendu (dependances : result)
@@ -265,7 +265,7 @@ export default function Utilisateur() {
                 </table>
 
                 {
-                    users?.length > itemsPerPage.current ?
+                    users?.length > 0 ?
                     <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={users} reload={reload_data} setReload={setReloadData} description='Page'/>
                     : null
                 }

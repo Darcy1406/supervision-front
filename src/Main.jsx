@@ -69,7 +69,7 @@ export default function Main() {
     <>
     {
       user ?
-        <section id='main' className='bg-gray-50'>
+        <section id='main' className='bg-gray-100'>
 
           <div className='container-main'>
 

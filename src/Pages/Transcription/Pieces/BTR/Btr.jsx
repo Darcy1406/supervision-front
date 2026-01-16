@@ -213,15 +213,6 @@ export default function Btr() {
     }, [id_doc])
 
 
-    // useEffect(() => {
-    //     if(cumule && anterieur && en_cours){
-    //         console.log('cumule', cumule);
-    //         console.log('anterieur', anterieur);
-    //         console.log('en cours', en_cours);
-    //     }
-    // }, [en_cours, anterieur, cumule])
-
-
   return (
     <div className='btr'>
 

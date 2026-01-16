@@ -128,13 +128,13 @@ export default function SoldeAnormale() {
 
 
   return (
-    <div id='solde_anormale bg-green-400'>
+    <div id='solde_anormale' className='p-2'>
 
         <div className='my-2'>
             
         </div>
 
-        <div className="bloc-form w-8/9 mx-auto px-4 py-2 border-b border-gray-300 bg-white rounded-sm shadow-sm">
+        <div className="bloc-form mx-auto px-4 py-2 border-b border-gray-300 bg-white rounded-sm shadow-sm">
 
             <form onSubmit={handleSubmit}>
 
@@ -274,7 +274,7 @@ export default function SoldeAnormale() {
                     : 
                         null
 
-                : <div className='w-6/7 mx-auto border-2 border-yellow-300 p-6 rounded-xl my-6'>
+                : <div className='mx-auto border-2 border-yellow-300 p-6 rounded-xl my-6'>
                     <p className='text-center text-lg font-semibold'>
                         <span className='mx-2 text-3xl'>
                             <i className="fas fa-database"></i>
@@ -284,7 +284,7 @@ export default function SoldeAnormale() {
                 </div>
 
             : 
-                <div className='w-6/7  mx-auto border-2 border-gray-300 p-6 rounded-xl my-6'>
+                <div className='mx-auto border-2 border-gray-300 p-6 rounded-xl my-6'>
                     <p className='text-center text-lg font-semibold'>
                         <span className='mx-2 text-3xl'>
                             <i className="fas fa-rocket"></i>

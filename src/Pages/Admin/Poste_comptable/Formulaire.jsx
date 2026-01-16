@@ -94,7 +94,7 @@ export default function Formulaire() {
       ref_nom_poste.current.value = poste_comptable.nom_poste || ""
       ref_lieu.current.value = poste_comptable.lieu || ""
       ref_responsable.current.value = poste_comptable.responsable || ""
-      setPosteChoisi(poste_comptable.poste);
+      ref_poste.current.value = poste_comptable.poste || "";
 
       auditeurs.forEach((item) => {
         if(item['id'] == poste_comptable.auditeur){
@@ -195,7 +195,7 @@ export default function Formulaire() {
           <div className="flex-1">
               <label className="label">Poste</label>
 
-              <input list="poste" name='poste' className="input" placeholder='Veuillez choisir un poste'/>
+              <input list="poste" name='poste' className="input" placeholder='Veuillez choisir un poste' ref={ref_poste}/>
               <datalist id='poste'>
                 {
                   postes && postes.map((item, index) => (
@@ -231,10 +231,10 @@ export default function Formulaire() {
         </div>
 
         
-        <button type="submit" className={`${poste_comptable ? 'bg-green-400' : 'bg-blue-400'} px-4 py-2 rounded-sm my-4 cursor-pointer duration-150 ease-in-out hover:bg-blue-500`}>
+        <button type="submit" className={`${poste_comptable ? 'bg-green-500' : 'bg-blue-500'} text-white px-4 py-2 rounded-sm my-4 cursor-pointer duration-150 ease-in-out ${poste_comptable ? 'hover:bg-green-600' : 'hover:bg-blue-600'}`}>
           {
             poste_comptable ?
-              'Valider'
+              'Appliquer'
             : 'Ajouter'
           }
         </button>

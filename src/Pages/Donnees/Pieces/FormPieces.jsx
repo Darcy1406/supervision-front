@@ -197,11 +197,8 @@ export function FormPieces({setIsVisible, isVisible, data=[], setData, refresh, 
                     </div>
                 </div>
 
-                <button className={ data.length > 0 ? 'button is-dark' : 'button is-link'} ref={btn_form} disabled={nom_piece == "" || periode=="" || type_poste_comptable.length == 0}>
-                    <span className='icone mx-1'>
-                        <i className={ data.length > 0 ? 'fas fa-check' : 'fas fa-plus'}></i>
-                    </span>     
-                    { data.length > 0 ? 'Valider' : 'Ajouter' }
+                <button className={`${data.length > 0 ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600'} text-white px-4 py-2 rounded-sm my-4 cursor-pointer duration-150 ease-in-out`} ref={btn_form} disabled={nom_piece == "" || periode=="" || type_poste_comptable.length == 0}>   
+                    { data.length > 0 ? 'Appliquer' : 'Ajouter' }
                 </button>
             </form>
     </>

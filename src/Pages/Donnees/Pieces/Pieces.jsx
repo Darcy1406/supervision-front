@@ -57,7 +57,6 @@ export default function Pieces() {
         )
         setIsvisible(false)
         setIsDelete(false)
-        setRefresh(!refresh)
     }
 
     
@@ -87,7 +86,7 @@ export default function Pieces() {
 
                         <button className='button is-danger is-small' onClick={() => confirmation_suppresion(item['pk'])}>
                             <span className='icon mx-1'>
-                                <i className='fas fa-trash'></i>
+                                <i className='fas fa-trash-alt'></i>
                             </span>
                             Supprimer
                         </button>
@@ -112,10 +111,13 @@ export default function Pieces() {
     }, [pieces, reload_data])
 
 
-    // useEffect(() => {
-    //     console.log(location.pathname.split('/')[3]);
-    //     set
-    // }, [location.pathname])
+    useEffect(() => {
+        if(result){
+            if(result['succes']){
+                setRefresh(!refresh)
+            }
+        }
+    }, [result])
 
 
   return (
@@ -179,7 +181,7 @@ export default function Pieces() {
             </table>
             
             {
-                pieces && pieces.length > itemsPerPage.current ?
+                pieces && pieces.length > 0 ?
                     <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} liste={pieces} reload={reload_data} setReload={setReloadData} description='Page'/>
                 : null
             }

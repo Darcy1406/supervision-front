@@ -47,12 +47,12 @@ export default function SjeAnalyse() {
     }, [])
 
   return (
-    <div className='bg-white p-2 rounded-sm shadow-sm w-11/12 mx-auto'>
+    <div className='p-2 mx-auto'>
 
         {/* Lancement de l'analyse */}
         <form onSubmit={lancer_analyse}>
 
-            <div className="flex justify-center items-center gap-6 p-2 bg-white my-2 w-8/9 mx-auto border-b border-gray-200">
+            <div className="flex justify-center items-center gap-6 py-2 px-4 rounded-sm shadow-sm mb-2 mx-auto border-b border-gray-200 bg-white">
 
             
 

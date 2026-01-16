@@ -141,7 +141,7 @@ export default function BalanceAnalyse() {
   return (
     <div id='equilibre_balance'>
 
-        <div className="bloc-form px-4">
+        <div className="bloc-form px-2">
 
             <form onSubmit={handleSubmit}>
 
@@ -217,7 +217,7 @@ export default function BalanceAnalyse() {
                     {/* Exercice */}
                     <div className='flex-1 flex items-center gap-2'>
 
-                        <select className='bg-white w-full p-2 rounded-sm shadow border border-gray-300' value={exercice} onChange={(e) => setExercice(e.target.value)}>
+                        <select className='bg-white w-full p-2 rounded-sm shadow border border-gray-300' value={exercice} onChange={(e) => setExercice(e.target.value)} required>
 
                             <option value="" disabled>Exercice</option>
 

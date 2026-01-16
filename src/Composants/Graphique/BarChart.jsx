@@ -18,6 +18,7 @@ export const BarChart = ({labels, object, title, info, tabColor}) => {
         borderColor: "rgba(75,192,192,1)",
         backgroundColor: tabColor,
         tension: 0.4, // courbe lissée
+        fill: true
       },
     ],
   };
