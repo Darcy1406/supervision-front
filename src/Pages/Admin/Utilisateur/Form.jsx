@@ -13,8 +13,6 @@ export default function Form() {
     const data_user = useDataUserStore((state) => state.data_user)
     const clearDataUser = useDataUserStore((state) => state.clearDataUser)
 
-    console.log('data user', data_user);
-
     const [isVisible, setIsVisible] = useState(false);
 
     const [nom, setNom] = useState("");
@@ -46,7 +44,13 @@ export default function Form() {
                     'fonction': fonction,
                     'zone': zone_choisi
                 }, setIdUser)
-                setResult(id_user)
+                
+                // if(){
+
+                // }
+                // else{
+                //     setResult(id_user)
+                // }
         }
         else{
             fetchData(`${API_URL}/users/update_user`,
@@ -124,6 +128,16 @@ export default function Form() {
     }, [data_user]);
 
     
+    useEffect(() => {
+        if(id_user){
+            if(id_user['user_id']){
+                setIsVisible(true)
+            }
+            else{
+                setResult(id_user)
+            }
+        }
+    }, [id_user])
 
 
     // Titre de l'interface
