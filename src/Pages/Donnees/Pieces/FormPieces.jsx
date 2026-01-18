@@ -4,7 +4,7 @@ import { sendData } from '../../../functions/sendData';
 import { API_URL } from '../../../Config';
 import { getCSRFToken } from '../../../utils/csrf';
 import { fetchData } from '../../../functions/fetchData';
-// import { isVisible } from '@testing-library/user-event/dist/utils';
+
 
 export function FormPieces({setIsVisible, isVisible, data=[], setData, refresh, setRefresh, setMessage, message}) {
     // const [refresh, setRefresh] = useState(true); // State utile pour relancer les fetch()

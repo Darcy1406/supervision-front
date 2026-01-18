@@ -64,9 +64,13 @@ export default function BarView({info_supplementaire, data=[]}) {
 
             <tbody>
               {
-                credit.length > 0 && credit.map((item, index) => (
-                  <DataItem key={index} item={item} />
-                ))
+                credit.length > 0 ? 
+                  credit.map((item, index) => (
+                    <DataItem key={index} item={item} />
+                  ))
+                : <tr className='text-center'>
+                    <td colSpan={3}>Aucun crédit</td>
+                </tr>
               }
             </tbody>
 
@@ -87,9 +91,13 @@ export default function BarView({info_supplementaire, data=[]}) {
 
             <tbody>
               {
-                debit.length > 0 && debit.map((item, index) => (
-                  <DataItem key={index} item={item} />
-                ))
+                debit.length > 0 ?
+                  debit.map((item, index) => (
+                    <DataItem key={index} item={item} />
+                  ))
+                : <tr className='text-center'>
+                    <td colSpan={3}>Aucun débit</td>
+                  </tr>
               }
             </tbody>
 

@@ -23,7 +23,7 @@ export default function PosteComptable() {
   const [result, setResult] = useState(null);
 
 
-  const [isVisible, setIsvisible] = useState(false); // State utilie pour une confirmation avant suppression
+  const [isVisible, setIsvisible] = useState(false); // State utile pour une confirmation avant suppression
 
   const currentPage = useRef(1)
   const itemsPerPage = useRef(7)

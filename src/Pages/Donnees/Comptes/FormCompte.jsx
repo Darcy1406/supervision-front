@@ -1,7 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import './FormCompte.css';
-import Checkbox from '../../../Composants/Form/Checkbox';
-import { sendData } from '../../../functions/sendData';
 import { API_URL } from '../../../Config';
 import { fetchData } from '../../../functions/fetchData';
 
@@ -159,19 +156,6 @@ export function FormCompte({isVisible, setIsVisible, data=[], setData, refresh, 
             }
         }
     }, [result])
-
-
-    // useEffect(() => {
-    //     if(isVisible){
-    //         show_form();
-    //     }
-    //     else{
-    //         close_form();
-    //     }
-    //     if(data.length > 0){
-    //         get_data();
-    //     }
-    // }, [isVisible, data])
 
 
   return (

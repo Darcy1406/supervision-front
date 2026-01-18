@@ -18,29 +18,6 @@ export default function TabView({data, titre, piece}){
     const [id_doc, setIdDoc] = useState(null);
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false);
-    // const TabItem = ({item}) => {
-    //     return(
-    //         <tr className={item['compte__numero'] == null ? 'bg-gray-300' : null}>
-
-    //             {
-    //                 item['compte__numero'] ?
-    //                 <>
-    //                     <td>{item['compte__numero']}</td>
-    //                     <td>{item['compte__libelle']}</td>
-    //                     {/* <td><strong>{item['nature']}</strong></td> */}
-    //                 </>
-    //                 : <td colSpan={2}>{item['nature']}</td>
-    //             }
-
-    //             <td className='w-35'>{ item['montant'] == 0 ? "0" : formatNumber(item['montant'])} Ar</td>
-    //         </tr>
-    //     )
-    // }
-
-    // const telecharger_fichier = () => {
-    //     setLoading(true)
-    //     fetchData(`${API_URL}/data/document/telecharger`, 'post', {'action': 'telecharger_document', 'id_document': id_doc}, setResult)
-    // }
 
 
     const telecharger_fichier = () => {

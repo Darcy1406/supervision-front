@@ -89,18 +89,18 @@ export default function Login() {
                   </select>
                 </div> */}
 
-                <div className='flex justify-center items-center'>
+                {/* <div className='flex justify-center items-center'>
 
                   <ReCAPTCHA 
                     sitekey='6LeVF8srAAAAALAiB0y2lXFh1y8facfBKsJU-Foq'
                     onChange={setCaptchaToken}
                   />
 
-                </div>
+                </div> */}
 
                 {/* <NavLink to='/inscription' style={{ textDecoration: 'underline' }} className='block my-4 float-right'>S'inscrire</NavLink> */}
 
-                <div className='w-3/4 mx-auto  my-4'>
+                <div className='mx-auto  mt-5'>
 
                   <button className='bg-black text-white w-full py-2 rounded-xl cursor-pointer duration-150 hover:text-lg'>
                     { isSubmitting ? "Connexion..." : "Se connecter" }
