@@ -159,7 +159,7 @@ export default function PosteComptable() {
   // Titre de l'interface
   useEffect(() => {
     const original_title = document.title
-    document.title = 'Poste comptable'
+    document.title = 'Liste des postes comptables'
     return () => {
         document.title = original_title
     }

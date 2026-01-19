@@ -167,7 +167,7 @@ export default function Utilisateur() {
     // Titre de l'interface
     useEffect(() => {
         const original_title = document.title
-        document.title = 'Utilisateur'
+        document.title = 'Liste des utilisateurs'
         return () => {
             document.title = original_title
         }

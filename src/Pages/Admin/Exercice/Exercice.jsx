@@ -81,7 +81,12 @@ export default function Exercice() {
 
 
     useEffect(() => {
+        const original_title = document.title
+        document.title = 'Liste des exercices'
         obtenir_la_liste_des_exercices()
+        return () => {
+            document.title = original_title
+        }
     }, [])
 
 

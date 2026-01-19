@@ -160,8 +160,14 @@ export default function Comptes() {
 
 
   useEffect(() => {
+    const original_title = document.title
+    document.title = 'Liste des comptes'
     recuperer_tous_les_comptes(setComptes)
     recuperer_tous_les_comptes(setComptesCopie)
+
+    return () => {
+      document.title = original_title
+    }
   }, [])
 
 

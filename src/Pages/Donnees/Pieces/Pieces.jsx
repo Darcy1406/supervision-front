@@ -100,7 +100,12 @@ export default function Pieces() {
 
 
     useEffect(() => {
+        const original_title = document.title
+        document.title = 'Liste des pièces'
         fetchData(`${API_URL}/data/piece/get_pieces`, 'get', {}, setPieces);
+        return () => {
+            document.title = original_title
+        }
     }, [refresh])
 
 

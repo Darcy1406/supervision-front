@@ -289,7 +289,7 @@ export default function Dashboard() {
            
             <div className='w-1/2 h-full flex justify-center items-center chart-1 rounded-sm shadow-sm bg-white p-2'>
 
-              <BarChart 
+              <LineChart 
                 info={data_anomalies} 
                 tabColor={getRandomColor(1)}
                 labels={["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']}
