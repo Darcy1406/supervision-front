@@ -372,11 +372,12 @@ export default function Anomalie() {
                     selected_anomalie.length > 0 ?
                         <div className="container-btn flex gap-4 border-b border-gray-200 p-2">
                             {
-                                selected_anomalie.length > 1 ?
+                                selected_anomalie.length > 1 && user[0]['utilisateur__fonction'].toUpperCase() == 'auditeur'.toUpperCase() ?
                                     <button className='bg-blue-400 cursor-pointer px-4 py-2 rounded-sm border border-blue-500 duration-200 ease-in-out hover:bg-blue-500' onClick={change_state_anomalie}>
                                         Traiter({selected_anomalie.length})
                                     </button>
-                                :
+
+                                : user[0]['utilisateur__fonction'].toUpperCase() == 'auditeur'.toUpperCase() ?
                                     <>
                                         <button className='bg-blue-400 cursor-pointer px-4 py-2 rounded-sm border border-blue-500 duration-200 ease-in-out hover:bg-blue-500' onClick={change_state_anomalie}>
                                             Traiter({selected_anomalie.length})
@@ -391,6 +392,12 @@ export default function Anomalie() {
                                         </button>
 
                                     </>
+
+                                : selected_anomalie.length > 0 && selected_anomalie.length <= 1 ? 
+                                    <button className='button is-dark text-white' onClick={exporter_rapport}>
+                                        Exporter un rapport({selected_anomalie.length})
+                                    </button>
+                                : null
                             }
                             
                         </div>
